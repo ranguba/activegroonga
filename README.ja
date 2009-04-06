@@ -1,0 +1,44 @@
+# -*- rd -*-
+
+= はじめに
+
+== 名前
+
+ActiveGroonga
+
+== 説明
+
+ActivveRecord風のAPIを使ってgroongaを使うためのライブラリです。
+
+  * Ruby/groonga: http://groonga.rubyforge.org/
+  * groonga: http://groonga.org/
+
+== 作者
+
+Kouhei Sutou <kou@clear-code.com>
+
+== ライセンス
+
+LGPL 2.1です。詳しくはlicense/LGPLを見てください。
+
+== 依存ソフトウェア
+
+  * Ruby/groonga
+
+== インストール
+
+  % sudo gem install activegroonga
+
+== ドキュメント
+
+  * ...
+
+== メーリングリスト
+
+質問、要望、バグ報告などはgroongaのMLにお願いします。
+
+http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
+
+== 感謝
+
+  * ...

@@ -1,0 +1,42 @@
+# -*- rd -*-
+
+= README
+
+== Name
+
+ActiveGroonga
+
+== Description
+
+A library to use groonga with ActiveRecord like API.
+
+  * Ruby/groonga: http://groonga.rubyforge.org/
+  * groonga: http://groonga.org/
+
+== Author
+
+Kouhei Sutou <kou@clear-code.com>
+
+== License
+
+LGPL 2.1. See license/LGPL for details.
+
+== Dependencies
+
+  * Ruby/groonga
+
+== Install
+
+  % sudo gem install activegroonga
+
+== Documents
+
+  * ...
+
+== Mailing list
+
+Use groonga's ML.
+
+== Thanks
+
+  * ...
