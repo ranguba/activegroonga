@@ -14,8 +14,18 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'rubygems'
 require 'active_support'
 require 'active_record'
+
+base_dir = File.dirname(__FILE__)
+ruby_groonga_dir = File.join(base_dir, "..", "..", "groonga")
+ruby_groonga_dir = File.expand_path(ruby_groonga_dir)
+if File.exist?(ruby_groonga_dir)
+  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "src"))
+  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "src", "lib"))
+end
+require 'groonga'
 
 module ActiveGroonga
   def self.load_all!
