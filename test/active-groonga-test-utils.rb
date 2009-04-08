@@ -31,6 +31,9 @@ module ActiveGroongaTestUtils
     Groonga::Context.default = nil
     @context = Groonga::Context.default
     setup_tmp_directory
+    setup_tables_directory
+    setup_columns_directory
+
     setup_database
     setup_table
     setup_records
@@ -43,44 +46,56 @@ module ActiveGroongaTestUtils
     FileUtils.mkdir_p(@tmp_dir.to_s)
   end
 
+  def setup_tables_directory
+    @tables_dir = @tmp_dir + "tables"
+    FileUtils.mkdir_p(@tables_dir.to_s)
+  end
+
+  def setup_columns_directory
+    @columns_dir = @tmp_dir + "columns"
+    FileUtils.mkdir_p(@columns_dir.to_s)
+  end
+
   def setup_database
     @db_path = @tmp_dir + "db"
     @database = Groonga::Database.create(:path => @db_path.to_s)
   end
 
   def setup_table
-    @tables_dir = @tmp_dir + "tables"
-    @tables_dir.mkdir
-
     @bookmarks_path = @tables_dir + "bookmarks"
-    @bookmarks = Groonga::Array.create(:name => "bookmarks",
-                                       :path => @bookmarks_path.to_s)
+    @bookmarks = Groonga::Hash.create(:name => "bookmarks",
+                                      :path => @bookmarks_path.to_s)
 
     @uri_column = @bookmarks.define_column("uri", "<shorttext>")
     @comment_column = @bookmarks.define_column("comment", "<text>")
-#     @content_column = @bookmarks.define_column("content", "<longtext>",
-#                                                :type => "index",
-#                                                :with_section => true,
-#                                                :with_weight => true,
-#                                                :with_position => true)
+
+    @content_column_path = @columns_dir + "content"
+    @content_column =
+      @bookmarks.define_column("content", "<longtext>",
+                               :type => "index",
+                               :with_section => true,
+                               :with_weight => true,
+                               :with_position => true,
+                               :path => @content_column_path.to_s)
   end
 
   def setup_records
     @bookmark_records = {}
 
-    @bookmark_records[:groonga] = groonga_id = @bookmarks.add
-    @uri_column[groonga_id] = "http://groonga.org/"
-    @comment_column[groonga_id] = "fulltext search engine"
-#     @content_column[groonga_id] = "<html>...</html>"
+    @bookmark_records[:groonga] = groonga = @bookmarks.add("groonga")
+    groonga["uri"] = "http://groonga.org/"
+    groonga["comment"] = "fulltext search engine"
+    groonga["content"] = "<html>...</html>"
 
-    @bookmark_records[:cutter] = cutter_id = @bookmarks.add
-    @uri_column[cutter_id] = "http://cutter.souceforge.net/"
-    @comment_column[cutter_id] = "a unit testing framework for C"
-#     @content_column[cutter_id] = "<html>xxx</html>"
+    @bookmark_records[:cutter] = cutter = @bookmarks.add("cutter")
+    cutter["uri"] = "http://cutter.souceforge.net/"
+    cutter["comment"] = "a unit testing framework for C"
+    cutter["content"] = "<html>xxx</html>"
   end
 
   def setup_class
     @bookmark_class = Class.new(ActiveGroonga::Base)
+    @bookmark_class.table_name = "bookmarks"
   end
 
   def teardown_sand_box

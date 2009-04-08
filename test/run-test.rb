@@ -17,8 +17,21 @@
 
 base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
 test_unit_dir = File.join(base_dir, "test-unit", "lib")
+ruby_groonga_dir = File.expand_path(File.join(base_dir, "..", "groonga"))
 lib_dir = File.join(base_dir, "lib")
 test_dir = File.join(base_dir, "test")
+
+if File.exist?(ruby_groonga_dir)
+  make = nil
+  if system("which gmake > /dev/null")
+    make = "gmake"
+  elsif system("which make > /dev/null")
+    make = "make"
+  end
+  if make
+    system("cd #{ruby_groonga_dir.dump} && #{make} > /dev/null") or exit(1)
+  end
+end
 
 $LOAD_PATH.unshift(test_unit_dir)
 
