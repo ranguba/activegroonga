@@ -179,11 +179,9 @@ module ActiveGroonga
 
       # Returns an array of column objects for the table associated with this class.
       def columns
-        unless defined?(@columns) && @columns
-          @columns = connection.columns(table_name, "#{name} Columns")
-          @columns.each { |column| column.primary = column.name == primary_key }
+        @columns ||= table.columns.collect do |column|
+          Column.new(column)
         end
-        @columns
       end
 
       # Returns a hash of column objects for the table associated with this class.
@@ -470,7 +468,12 @@ module ActiveGroonga
             allocate
           end
 
-        object.instance_variable_set("@attributes", record)
+        attributes = {}
+        record.table.columns.each do |column|
+          _, column_name = column.name.split(/\A#{record.table.name}\./, 2)
+          attributes[column_name] = column[record.id]
+        end
+        object.instance_variable_set("@attributes", attributes)
         object.instance_variable_set("@attributes_cache", Hash.new)
 
         if object.respond_to_without_attributes?(:after_find)
@@ -484,5 +487,7 @@ module ActiveGroonga
         object
       end
     end
+
+    include AttributeMethods
   end
 end

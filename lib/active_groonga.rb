@@ -45,6 +45,7 @@ module ActiveGroonga
   autoload :Batches, 'active_groonga/batches'
   autoload :Calculations, 'active_groonga/calculations'
   autoload :Callbacks, 'active_groonga/callbacks'
+  autoload :Column, 'active_groonga/column'
   autoload :Dirty, 'active_groonga/dirty'
   autoload :DynamicFinderMatch, 'active_groonga/dynamic_finder_match'
   autoload :DynamicScopeMatch, 'active_groonga/dynamic_scope_match'

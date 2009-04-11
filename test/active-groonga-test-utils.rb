@@ -36,6 +36,7 @@ module ActiveGroongaTestUtils
 
     setup_database
     setup_table
+    setup_index_table
     setup_records
     setup_class
   end
@@ -63,34 +64,50 @@ module ActiveGroongaTestUtils
 
   def setup_table
     @bookmarks_path = @tables_dir + "bookmarks"
-    @bookmarks = Groonga::Hash.create(:name => "bookmarks",
-                                      :path => @bookmarks_path.to_s)
+    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+                                       :path => @bookmarks_path.to_s)
 
     @uri_column = @bookmarks.define_column("uri", "<shorttext>")
     @comment_column = @bookmarks.define_column("comment", "<text>")
 
     @content_column_path = @columns_dir + "content"
-    @content_column =
-      @bookmarks.define_column("content", "<longtext>",
-                               :type => "index",
-                               :with_section => true,
-                               :with_weight => true,
-                               :with_position => true,
-                               :path => @content_column_path.to_s)
+    @content_column = @bookmarks.define_column("content", "<longtext>")
+  end
+
+  def setup_index_table
+    @bookmarks_index_path = @tables_dir + "bookmarks-index"
+    @bookmarks_index = Groonga::Hash.create(:name => "bookmarks-index",
+                                            :path => @bookmarks_index_path.to_s)
+
+    @bookmark_id_column_path = @columns_dir + "bookmark-id"
+    @bookmark_id_column =
+      @bookmarks_index.define_column("bookmark_id", @bookmarks,
+                                     :path => @bookmark_id_column_path)
+
+    @content_index_column_path = @columns_dir + "content-index"
+    @content_index_column =
+      @bookmarks_index.define_column("content", "<shorttext>",
+                                     :type => "index",
+                                     :with_section => true,
+                                     :with_weight => true,
+                                     :with_position => true,
+                                     :path => @content_index_column_path.to_s)
   end
 
   def setup_records
     @bookmark_records = {}
 
-    @bookmark_records[:groonga] = groonga = @bookmarks.add("groonga")
-    groonga["uri"] = "http://groonga.org/"
-    groonga["comment"] = "fulltext search engine"
-    groonga["content"] = "<html>...</html>"
+    @bookmark_records[:groonga] =
+      create_bookmark("groonga",
+                      "http://groonga.org/",
+                      "fulltext search engine",
+                      "<html><body>groonga</body></html>")
 
-    @bookmark_records[:cutter] = cutter = @bookmarks.add("cutter")
-    cutter["uri"] = "http://cutter.souceforge.net/"
-    cutter["comment"] = "a unit testing framework for C"
-    cutter["content"] = "<html>xxx</html>"
+    @bookmark_records[:cutter] =
+      create_bookmark("cutter",
+                      "http://cutter.souceforge.net/",
+                      "a unit testing framework for C",
+                      "<html><body>Cutter</body></html>")
   end
 
   def setup_class
@@ -106,4 +123,17 @@ module ActiveGroongaTestUtils
     FileUtils.rm_rf(@tmp_dir.to_s)
   end
 
+  private
+  def create_bookmark(name, uri, comment, content)
+    bookmark = @bookmarks.add
+    bookmark["uri"] = uri
+    bookmark["comment"] = comment
+    bookmark["content"] = content
+
+    bookmark_content_index = @bookmarks_index.add(name)
+    bookmark_content_index["bookmark_id"] = bookmark.id
+    bookmark_content_index["content"] = content
+
+    bookmark
+  end
 end

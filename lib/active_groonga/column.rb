@@ -2,8 +2,7 @@
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License.
+# License version 2.1 as published by the Free Software Foundation.
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,12 +13,16 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class BaseTest < Test::Unit::TestCase
-  include ActiveGroongaTestUtils
+module ActiveGroonga
+  class Column
+    attr_reader :name
 
-  def test_find
-    bookmarks = @bookmark_class.find(:all)
-    assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"],
-                 bookmarks.collect(&:uri))
+    # Instantiates a new column in the table.
+    #
+    # +column+ is the Groonga::Column.
+    def initialize(column)
+      @column = column
+      @name = column.name.split(/\./, 2)[1]
+    end
   end
 end
