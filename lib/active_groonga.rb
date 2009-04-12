@@ -71,4 +71,8 @@ module ActiveGroonga
   end
 end
 
-I18n.load_path << File.dirname(__FILE__) + '/active_groonga/locale/en.yml'
+# I18n.load_path << File.dirname(__FILE__) + '/active_groonga/locale/en.yml'
+
+if defined?(Rails::Configuration)
+  require 'active_groonga/rails_support'
+end

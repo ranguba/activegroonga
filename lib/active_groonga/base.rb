@@ -46,12 +46,43 @@ module ActiveGroonga
   class RecordNotFound < ActiveGroongaError
   end
 
+  # Raised when database not specified (or configuration file <tt>config/groonga.yml</tt> misses database field).
+  class DatabaseNotSpecified < ActiveGroongaError
+  end
+
   class Base
     ##
     # :singleton-method:
     # Accepts a logger conforming to the interface of Log4r or the default Ruby 1.8+ Logger class, which is then passed
     # on to any new database connections made and which can be retrieved on both a class and instance level by calling +logger+.
     cattr_accessor :logger, :instance_writer => false
+
+    ##
+    # :singleton-method:
+    # Contains the groonga configuration - as is typically stored in config/groonga.yml -
+    # as a Hash.
+    #
+    # For example, the following groonga.yml...
+    # 
+    #   development:
+    #     database: db/development.groonga
+    #   
+    #   production:
+    #     adapter: groonga
+    #     database: db/production.groonga
+    #
+    # ...would result in ActiveGroonga::Base.configurations to look like this:
+    #
+    #   {
+    #      'development' => {
+    #         'database' => 'db/development.groonga'
+    #      },
+    #      'production' => {
+    #         'database' => 'db/production.groonga'
+    #      }
+    #   }
+    cattr_accessor :configurations, :instance_writer => false
+    @@configurations = {}
 
     ##
     # :singleton-method:
@@ -330,6 +361,39 @@ module ActiveGroonga
           # use eval instead of a block to work around a memory leak in dev
           # mode in fcgi
           sing.class_eval "def #{name}; #{value.to_s.inspect}; end"
+        end
+      end
+
+      def setup_database(spec=nil)
+        case spec
+        when nil
+          raise DatabaseNotSpecified unless defined? RAILS_ENV
+          setup_database(RAILS_ENV)
+        when Symbol, String
+          if configuration = configurations[spec.to_s]
+            setup_database(configuration)
+          else
+            raise DatabaseNotSpecified, "#{spec} database is not configured"
+          end
+        else
+          spec = spec.symbolize_keys
+          unless spec.key?(:database)
+            raise DatabaseNotSpecified, "groonga configuration does not specify database"
+          end
+          database_directory = spec[:database]
+
+          Groonga::Context.default = nil
+          Groonga::Context.default_options = {:encoding => spec[:encoding]}
+          unless File.exist?(database_directory)
+            FileUtils.mkdir_p(database_directory)
+          end
+          database_file = File.join(database_directory, "db")
+          if File.exist?(database_file)
+            @@database = Groonga::Database.new(database_file)
+          else
+            @@database = Groonga::Database.create(:path => database_file)
+          end
+          @@database_directory = database_directory
         end
       end
 
