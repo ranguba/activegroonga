@@ -134,6 +134,17 @@ module ActiveGroonga
     @@database_directory = nil
 
     class << self
+       # Attributes listed as readonly can be set for a new record, but will be ignored in database updates afterwards.
+       def attr_readonly(*attributes)
+         write_inheritable_attribute(:attr_readonly, Set.new(attributes.map(&:to_s)) + (readonly_attributes || []))
+       end
+
+      # Returns an array of all the attributes that have been specified as readonly.
+      def readonly_attributes
+        read_inheritable_attribute(:attr_readonly)
+      end
+
+
       # If you have an attribute that needs to be saved to the database as an object, and retrieved as the same object,
       # then specify the name of that attribute using this method and it will be handled automatically.
       # The serialization is done through YAML. If +class_name+ is specified, the serialized object must be of that
@@ -359,11 +370,11 @@ module ActiveGroonga
       end
 
       def context
-        @@context ||= Groonga::Context.default
+        Groonga::Context.default
       end
 
       def table
-        @@table ||= context[table_name]
+        context[table_name]
       end
 
       # Defines an "attribute" method (like +inheritance_column+ or
@@ -604,6 +615,7 @@ module ActiveGroonga
             allocate
           end
 
+        object.instance_variable_set("@id", record.id)
         attributes = {}
         record.table.columns.each do |column|
           _, column_name = column.name.split(/\A#{record.table.name}\./, 2)
@@ -760,14 +772,15 @@ module ActiveGroonga
       result != false
     end
 
-    # Initializes the attributes array with keys matching the columns from the linked table and
-    # the values matching the corresponding default value of that column, so
-    # that a new instance, or one populated from a passed-in Hash, still has all the attributes
-    # that instances loaded from the database would.
-    def attributes_from_column_definition
-      self.class.columns.inject({}) do |attributes, column|
-        # attributes[column.name] = column.default
-        attributes
+    # Updates the associated record with values matching those of the instance attributes.
+    # Returns the number of affected rows.
+    def update(attribute_names=@attributes.keys)
+      attribute_names = remove_readonly_attributes(attribute_names)
+      table = self.class.table
+      attribute_names.each do |name|
+        column = table.column(name)
+        next if column.nil?
+        column[id] =  read_attribute(name)
       end
     end
 
@@ -792,6 +805,26 @@ module ActiveGroonga
     def ensure_proper_type
       unless self.class.descends_from_active_groonga?
         write_attribute(self.class.inheritance_column, self.class.sti_name)
+      end
+    end
+
+    # Removes attributes which have been marked as readonly.
+    def remove_readonly_attributes(attributes)
+      if self.class.readonly_attributes.nil?
+        attributes
+      else
+        attributes.delete_if { |name| self.class.readonly_attributes.include?(name.gsub(/\(.+/,"")) }
+      end
+    end
+
+    # Initializes the attributes array with keys matching the columns from the linked table and
+    # the values matching the corresponding default value of that column, so
+    # that a new instance, or one populated from a passed-in Hash, still has all the attributes
+    # that instances loaded from the database would.
+    def attributes_from_column_definition
+      self.class.columns.inject({}) do |attributes, column|
+        # attributes[column.name] = column.default
+        attributes
       end
     end
   end

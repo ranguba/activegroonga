@@ -41,13 +41,14 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_update
-    groonga = @bookmark_class.find(@groonga.id)
+    groonga_id = @bookmark_records[:groonga].id
+    groonga = @bookmark_class.find(groonga_id)
     groonga.comment = "a search engine"
-    assert_equal(@groonga.id, groonga.id)
+    assert_equal(groonga_id, groonga.id)
     groonga.save
-    assert_not_nil(@groonga.id, groonga.id)
+    assert_not_nil(groonga_id, groonga.id)
 
-    reloaded_google = @bookmark_class.find(google.id)
-    assert_equal("http://google.com/", reloaded_google.uri)
+    reloaded_groonga = @bookmark_class.find(groonga.id)
+    assert_equal("a search engine", reloaded_groonga.comment)
   end
 end
