@@ -30,6 +30,10 @@ module ActiveGroonga
       nil
     end
 
+    def number?
+      [:integer, :unsigned_integer, :decimal, :float].include?(@type)
+    end
+
     private
     def detect_type
       case @column.range

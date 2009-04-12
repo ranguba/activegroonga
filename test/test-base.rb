@@ -27,4 +27,27 @@ class BaseTest < Test::Unit::TestCase
     groonga = @bookmark_class.find(@bookmark_records[:groonga].id)
     assert_equal("http://groonga.org/", groonga.uri)
   end
+
+  def test_create
+    google = @bookmark_class.new
+    google.uri = "http://google.com/"
+    google.comment = "a search engine"
+    assert_nil(google.id)
+    google.save
+    assert_not_nil(google.id)
+
+    reloaded_google = @bookmark_class.find(google.id)
+    assert_equal("http://google.com/", reloaded_google.uri)
+  end
+
+  def test_update
+    groonga = @bookmark_class.find(@groonga.id)
+    groonga.comment = "a search engine"
+    assert_equal(@groonga.id, groonga.id)
+    groonga.save
+    assert_not_nil(@groonga.id, groonga.id)
+
+    reloaded_google = @bookmark_class.find(google.id)
+    assert_equal("http://google.com/", reloaded_google.uri)
+  end
 end

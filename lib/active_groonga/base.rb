@@ -287,6 +287,15 @@ module ActiveGroonga
         end
       end
 
+      # True if this isn't a concrete subclass needing a STI type condition.
+      def descends_from_active_groonga?
+        if superclass.abstract_class?
+          superclass.descends_from_active_groonga?
+        else
+          superclass == Base || !columns_hash.include?(inheritance_column)
+        end
+      end
+
       # Log and benchmark multiple statements in a single block. Example:
       #
       #   Project.benchmark("Creating project") do
@@ -321,6 +330,15 @@ module ActiveGroonga
       # through some arbitrarily deep hierarchy, B.base_class will return A.
       def base_class
         class_of_active_groonga_descendant(self)
+      end
+
+      # Set this to true if this is an abstract class (see <tt>abstract_class?</tt>).
+      attr_accessor :abstract_class
+
+      # Returns whether this class is a base AR class.  If A is a base class and
+      # B descends from A, then B.base_class will return B.
+      def abstract_class?
+        defined?(@abstract_class) && @abstract_class == true
       end
 
       def find(*args)
@@ -604,8 +622,177 @@ module ActiveGroonga
 
         object
       end
+
+      # Test whether the given method and optional key are scoped.
+      def scoped?(method, key = nil) #:nodoc:
+        if current_scoped_methods && (scope = current_scoped_methods[method])
+          !key || !scope[key].nil?
+        end
+      end
     end
 
     include AttributeMethods
+
+    def initialize(attributes=nil)
+      @id = nil
+      @attributes = attributes_from_column_definition
+      @attributes_cache = {}
+      @new_record = true
+      ensure_proper_type
+      self.attributes = attributes unless attributes.nil?
+      self.class.send(:scope, :create).each { |att,value| self.send("#{att}=", value) } if self.class.send(:scoped?, :create)
+      result = yield self if block_given?
+      callback(:after_initialize) if respond_to_without_attributes?(:after_initialize)
+      result
+    end
+
+    # A model instance's primary key is always available as model.id
+    # whether you name it the default 'id' or set it to something else.
+    def id
+      @id
+    end
+
+    # Returns a String, which Action Pack uses for constructing an URL to this
+    # object. The default implementation returns this record's id as a String,
+    # or nil if this record's unsaved.
+    #
+    # For example, suppose that you have a User model, and that you have a
+    # <tt>map.resources :users</tt> route. Normally, +user_path+ will
+    # construct a path with the user object's 'id' in it:
+    #
+    #   user = User.find_by_name('Phusion')
+    #   user_path(user)  # => "/users/1"
+    #
+    # You can override +to_param+ in your model to make +user_path+ construct
+    # a path using the user's name instead of the user's id:
+    #
+    #   class User < ActiveRecord::Base
+    #     def to_param  # overridden
+    #       name
+    #     end
+    #   end
+    #   
+    #   user = User.find_by_name('Phusion')
+    #   user_path(user)  # => "/users/Phusion"
+    def to_param
+      # We can't use alias_method here, because method 'id' optimizes itself on the fly.
+      (id = self.id) ? id.to_s : nil # Be sure to stringify the id for routes
+    end
+
+    # Sets the primary ID.
+    def id=(value)
+      @id = value
+    end
+
+    # Returns true if this object hasn't been saved yet -- that is, a record for the object doesn't exist yet; otherwise, returns false.
+    def new_record?
+      @new_record || false
+    end
+
+    # :call-seq:
+    #   save(perform_validation = true)
+    #
+    # Saves the model.
+    #
+    # If the model is new a record gets created in the database, otherwise
+    # the existing record gets updated.
+    #
+    # If +perform_validation+ is true validations run. If any of them fail
+    # the action is cancelled and +save+ returns +false+. If the flag is
+    # false validations are bypassed altogether. See
+    # ActiveRecord::Validations for more information.
+    #
+    # There's a series of callbacks associated with +save+. If any of the
+    # <tt>before_*</tt> callbacks return +false+ the action is cancelled and
+    # +save+ returns +false+. See ActiveRecord::Callbacks for further
+    # details.
+    def save
+      create_or_update
+    end
+
+    # Saves the model.
+    #
+    # If the model is new a record gets created in the database, otherwise
+    # the existing record gets updated.
+    #
+    # With <tt>save!</tt> validations always run. If any of them fail
+    # ActiveGroonga::RecordInvalid gets raised. See ActiveRecord::Validations
+    # for more information.
+    #
+    # There's a series of callbacks associated with <tt>save!</tt>. If any of
+    # the <tt>before_*</tt> callbacks return +false+ the action is cancelled
+    # and <tt>save!</tt> raises ActiveGroonga::RecordNotSaved. See
+    # ActiveRecord::Callbacks for further details.
+    def save!
+      create_or_update || raise(RecordNotSaved)
+    end
+
+    # Returns the column object for the named attribute.
+    def column_for_attribute(name)
+      self.class.columns_hash[name.to_s]
+    end
+
+    # Freeze the attributes hash such that associations are still accessible, even on destroyed records.
+    def freeze
+      @attributes.freeze; self
+    end
+
+    # Returns +true+ if the attributes hash has been frozen.
+    def frozen?
+      @attributes.frozen?
+    end
+
+    # Returns +true+ if the record is read only. Records loaded through joins with piggy-back
+    # attributes will be marked as read only since they cannot be saved.
+    def readonly?
+      defined?(@readonly) && @readonly == true
+    end
+
+    # Marks this record as read only.
+    def readonly!
+      @readonly = true
+    end
+
+    private
+    def create_or_update
+      raise ReadOnlyRecord if readonly?
+      result = new_record? ? create : update
+      result != false
+    end
+
+    # Initializes the attributes array with keys matching the columns from the linked table and
+    # the values matching the corresponding default value of that column, so
+    # that a new instance, or one populated from a passed-in Hash, still has all the attributes
+    # that instances loaded from the database would.
+    def attributes_from_column_definition
+      self.class.columns.inject({}) do |attributes, column|
+        # attributes[column.name] = column.default
+        attributes
+      end
+    end
+
+    # Creates a record with values matching those of the instance attributes
+    # and returns its id.
+    def create
+      table = self.class.table
+      record = table.add
+      record.table.columns.each do |column|
+        column = Column.new(column)
+        record[column.name] = @attributes[column.name]
+      end
+      self.id = record.id
+      @new_record = false
+      id
+    end
+
+    # Sets the attribute used for single table inheritance to this class name if this is not the ActiveRecord::Base descendant.
+    # Considering the hierarchy Reply < Message < ActiveRecord::Base, this makes it possible to do Reply.new without having to
+    # set <tt>Reply[Reply.inheritance_column] = "Reply"</tt> yourself. No such attribute would be set for objects of the
+    # Message class in that example.
+    def ensure_proper_type
+      unless self.class.descends_from_active_groonga?
+        write_attribute(self.class.inheritance_column, self.class.sti_name)
+      end
+    end
   end
 end
