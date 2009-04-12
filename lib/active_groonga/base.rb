@@ -405,7 +405,7 @@ module ActiveGroonga
       end
 
       def find_one(id, options)
-        result = context[id]
+        result = instantiate(Groonga::Record.new(table, id))
         if result.nil?
           raise RecordNotFound, "Couldn't find #{name} with ID=#{id}"
         end

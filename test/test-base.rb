@@ -22,4 +22,9 @@ class BaseTest < Test::Unit::TestCase
     assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
                  bookmarks.collect(&:uri).sort)
   end
+
+  def test_find_by_id
+    groonga = @bookmark_class.find(@bookmark_records[:groonga].id)
+    assert_equal("http://groonga.org/", groonga.uri)
+  end
 end
