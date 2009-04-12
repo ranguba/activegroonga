@@ -73,6 +73,14 @@ module ActiveGroonga
         @columns << column unless @columns.include?(column)
         self
       end
+
+      def references(*args)
+        options = args.extract_options!
+        args.each do |col|
+          column("#{col}_id", Base.context[col.to_s.pluralize], options)
+        end
+      end
+      alias :belongs_to :references
     end
 
     class ColumnDefinition
@@ -99,6 +107,7 @@ module ActiveGroonga
       end
 
       def normalize_type(type)
+        return type if type.is_a?(Groonga::Object)
         case type.to_s
         when "string"
           "<shorttext>"

@@ -35,8 +35,10 @@ module ActiveGroonga
         tbl.puts "  create_table #{table.inspect}, :force => true do |t|"
         column_specs = columns.map do |column|
           spec = {}
-          spec[:name]      = column.name.inspect
-          spec[:type]      = column.type.to_s
+          spec[:type] = column.type.to_s
+          name = column.name
+          name = name.sub(/_id$/, '') if spec[:type] == "references"
+          spec[:name] = name.inspect
           spec
         end.compact
 

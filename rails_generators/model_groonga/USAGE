@@ -22,7 +22,7 @@ Examples:
             Fixtures:   test/fixtures/accounts.yml
             Migration:  db/migrate/XXX_add_accounts.rb
 
-    `./script/generate model_groonga Post title:string content:text user_id:integer`
+    `./script/generate model_groonga Post title:string content:text user:references`
 
         creates a Post model with a string title, text content, and user who posts.
 
