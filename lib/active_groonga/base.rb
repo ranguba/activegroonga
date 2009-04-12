@@ -89,6 +89,30 @@ module ActiveGroonga
     self.default_scoping = []
 
     class << self
+      # If you have an attribute that needs to be saved to the database as an object, and retrieved as the same object,
+      # then specify the name of that attribute using this method and it will be handled automatically.
+      # The serialization is done through YAML. If +class_name+ is specified, the serialized object must be of that
+      # class on retrieval or SerializationTypeMismatch will be raised.
+      #
+      # ==== Parameters
+      #
+      # * +attr_name+ - The field name that should be serialized.
+      # * +class_name+ - Optional, class name that the object type should be equal to.
+      #
+      # ==== Example
+      #   # Serialize a preferences attribute
+      #   class User
+      #     serialize :preferences
+      #   end
+      def serialize(attr_name, class_name = Object)
+        serialized_attributes[attr_name.to_s] = class_name
+      end
+
+      # Returns a hash of all the attributes that have been specified for serialization as keys and their class restriction as values.
+      def serialized_attributes
+        read_inheritable_attribute(:attr_serialized) or write_inheritable_attribute(:attr_serialized, {})
+      end
+
       # Guesses the table name (in forced lower-case) based on the name of the class in the inheritance hierarchy descending
       # directly from ActiveGroonga::Base. So if the hierarchy looks like: Reply < Message < ActiveGroonga::Base, then Message is used
       # to guess the table name even when called on Reply. The rules used to do the guess are handled by the Inflector class
@@ -175,6 +199,10 @@ module ActiveGroonga
       # Indicates whether the table associated with this class exists
       def table_exists?
         not table.nil?
+      end
+
+      def primary_key
+        "id"
       end
 
       # Returns an array of column objects for the table associated with this class.

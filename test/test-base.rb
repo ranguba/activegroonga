@@ -19,7 +19,7 @@ class BaseTest < Test::Unit::TestCase
 
   def test_find
     bookmarks = @bookmark_class.find(:all)
-    assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"],
-                 bookmarks.collect(&:uri))
+    assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
+                 bookmarks.collect(&:uri).sort)
   end
 end

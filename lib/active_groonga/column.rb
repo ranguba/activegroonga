@@ -15,7 +15,7 @@
 
 module ActiveGroonga
   class Column
-    attr_reader :name
+    attr_reader :name, :type
 
     # Instantiates a new column in the table.
     #
@@ -23,6 +23,11 @@ module ActiveGroonga
     def initialize(column)
       @column = column
       @name = column.name.split(/\./, 2)[1]
+      @type = :string
+    end
+
+    def type_cast_code(var_name)
+      nil
     end
   end
 end

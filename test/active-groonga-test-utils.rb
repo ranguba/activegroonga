@@ -105,7 +105,7 @@ module ActiveGroongaTestUtils
 
     @bookmark_records[:cutter] =
       create_bookmark("cutter",
-                      "http://cutter.souceforge.net/",
+                      "http://cutter.sourceforge.net/",
                       "a unit testing framework for C",
                       "<html><body>Cutter</body></html>")
   end
