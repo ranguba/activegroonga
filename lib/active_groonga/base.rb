@@ -119,6 +119,20 @@ module ActiveGroonga
     class_inheritable_accessor :default_scoping, :instance_writer => false
     self.default_scoping = []
 
+    ##
+    # :singleton-method:
+    # Specifies the format to use when dumping the database schema with Rails'
+    # Rakefile.  If :sql, the schema is dumped as (potentially database-
+    # specific) SQL statements.  If :ruby, the schema is dumped as an
+    # ActiveRecord::Schema file which can be loaded into any database that
+    # supports migrations.  Use :ruby if you want to have different database
+    # adapters for, e.g., your development and test environments.
+    cattr_accessor :schema_format , :instance_writer => false
+    @@schema_format = :ruby
+
+    cattr_accessor :database_directory, :instance_writer => false
+    @@database_directory = nil
+
     class << self
       # If you have an attribute that needs to be saved to the database as an object, and retrieved as the same object,
       # then specify the name of that attribute using this method and it will be handled automatically.
@@ -393,8 +407,20 @@ module ActiveGroonga
           else
             @@database = Groonga::Database.create(:path => database_file)
           end
-          @@database_directory = database_directory
+          self.database_directory = database_directory
         end
+      end
+
+      def tables_directory
+        directory = File.join(database_directory, "tables")
+        FileUtils.mkdir_p(directory) unless File.exist?(directory)
+        directory
+      end
+
+      def columns_directory(table_name)
+        directory = File.join(tables_directory, table_name, "columns")
+        FileUtils.mkdir_p(directory) unless File.exist?(directory)
+        directory
       end
 
       protected
