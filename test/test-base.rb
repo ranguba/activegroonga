@@ -97,4 +97,15 @@ class BaseTest < Test::Unit::TestCase
     Bookmark.find_by_uri("http://groonga.org/").destroy
     assert_equal(before_count - 1, Bookmark.count)
   end
+
+  def test_inspect
+    assert_equal("Bookmark(user_id: references, uri: string, " +
+                 "content: text, comment: text)",
+                 Bookmark.inspect)
+
+    assert_equal("#<Bookmark user_id: 1, uri: \"http://groonga.org/\", " +
+                 "content: \"<html><body>groonga</body></html>\", " +
+                 "comment: \"fulltext search engine\">",
+                 Bookmark.find_by_uri("http://groonga.org/").inspect)
+  end
 end

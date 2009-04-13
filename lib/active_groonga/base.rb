@@ -379,6 +379,20 @@ module ActiveGroonga
         end
       end
 
+      # Returns a string like 'Post id:integer, title:string, body:text'
+      def inspect
+        if self == Base
+          super
+        elsif abstract_class?
+          "#{super}(abstract)"
+        elsif table_exists?
+          attr_list = columns.map { |c| "#{c.name}: #{c.type}" } * ', '
+          "#{super}(#{attr_list})"
+        else
+          "#{super}(Table doesn't exist)"
+        end
+      end
+
       # Log and benchmark multiple statements in a single block. Example:
       #
       #   Project.benchmark("Creating project") do
@@ -1219,6 +1233,16 @@ module ActiveGroonga
     # Marks this record as read only.
     def readonly!
       @readonly = true
+    end
+
+    # Returns the contents of the record as a nicely formatted string.
+    def inspect
+      attributes_as_nice_string = self.class.column_names.collect { |name|
+        if has_attribute?(name) || new_record?
+          "#{name}: #{attribute_for_inspect(name)}"
+        end
+      }.compact.join(", ")
+      "#<#{self.class} #{attributes_as_nice_string}>"
     end
 
     private
