@@ -129,7 +129,9 @@ module ActiveGroonga
       @migrated_versions ||= []
       if down?
         @migrated_versions.delete(version.to_i)
-        p table.column("version")[version]
+        table.records.each do |record|
+          record.delete if record["version"] == version.to_s
+        end
       else
         @migrated_versions.push(version.to_i).sort!
         record = table.add

@@ -34,7 +34,6 @@ module ActiveGroonga
   autoload :VERSION, 'active_groonga/version'
 
   autoload :ActiveGroongaError, 'active_groonga/base'
-  autoload :ConnectionNotEstablished, 'active_groonga/base'
 
   autoload :Aggregations, 'active_groonga/aggregations'
   autoload :AssociationPreload, 'active_groonga/association_preload'

@@ -40,6 +40,10 @@ module ActiveGroonga
         table_definition.create
       end
 
+      def drop_table(name, options={})
+        Base.context[name].remove
+      end
+
       def add_column(table_name, column_name, type, options={})
         column = ColumnDefinition.new(table_name, column_name)
         column.type = type
