@@ -34,6 +34,7 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_create
+    assert_predicate(Task.count, :zero?)
     send_mail = Task.new
     send_mail.name = "send mails"
     assert_nil(send_mail.id)
@@ -54,5 +55,40 @@ class BaseTest < Test::Unit::TestCase
 
     reloaded_groonga = Bookmark.find(groonga.id)
     assert_equal("a search engine", reloaded_groonga.comment)
+  end
+
+  def test_mass_assignments
+    google = Bookmark.new
+    google.attributes = {
+      "uri" => "http://google.com/",
+      "comment" => "a search engine"
+    }
+    assert_true(google.save)
+
+    reloaded_google = Bookmark.find(google.id)
+    assert_equal({
+                   "uri" => "http://google.com/",
+                   "comment" => "a search engine",
+                   "content" => nil,
+                   "user_id" => 0,
+                 },
+                 reloaded_google.attributes)
+  end
+
+  def test_mass_updates
+    groonga = Bookmark.find_by_uri("http://groonga.org/")
+    groonga.update_attributes({
+                                "uri" => "http://google.com/",
+                                "comment" => "a search engine",
+                              })
+
+    google = Bookmark.find(groonga.id)
+    assert_equal({
+                   "uri" => "http://google.com/",
+                   "comment" => "a search engine",
+                   "content" => groonga.content,
+                   "user_id" => groonga.user_id,
+                 },
+                 google.attributes)
   end
 end

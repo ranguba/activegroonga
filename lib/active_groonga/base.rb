@@ -140,6 +140,72 @@ module ActiveGroonga
     @@database_directory = nil
 
     class << self
+      # Attributes named in this macro are protected from mass-assignment,
+      # such as <tt>new(attributes)</tt>,
+      # <tt>update_attributes(attributes)</tt>, or
+      # <tt>attributes=(attributes)</tt>.
+      #
+      # Mass-assignment to these attributes will simply be ignored, to assign
+      # to them you can use direct writer methods. This is meant to protect
+      # sensitive attributes from being overwritten by malicious users
+      # tampering with URLs or forms.
+      #
+      #   class Customer < ActiveRecord::Base
+      #     attr_protected :credit_rating
+      #   end
+      #
+      #   customer = Customer.new("name" => David, "credit_rating" => "Excellent")
+      #   customer.credit_rating # => nil
+      #   customer.attributes = { "description" => "Jolly fellow", "credit_rating" => "Superb" }
+      #   customer.credit_rating # => nil
+      #
+      #   customer.credit_rating = "Average"
+      #   customer.credit_rating # => "Average"
+      #
+      # To start from an all-closed default and enable attributes as needed,
+      # have a look at +attr_accessible+.
+      def attr_protected(*attributes)
+        write_inheritable_attribute(:attr_protected, Set.new(attributes.map(&:to_s)) + (protected_attributes || []))
+      end
+
+      # Returns an array of all the attributes that have been protected from mass-assignment.
+      def protected_attributes # :nodoc:
+        read_inheritable_attribute(:attr_protected)
+      end
+
+      # Specifies a white list of model attributes that can be set via
+      # mass-assignment, such as <tt>new(attributes)</tt>,
+      # <tt>update_attributes(attributes)</tt>, or
+      # <tt>attributes=(attributes)</tt>
+      #
+      # This is the opposite of the +attr_protected+ macro: Mass-assignment
+      # will only set attributes in this list, to assign to the rest of
+      # attributes you can use direct writer methods. This is meant to protect
+      # sensitive attributes from being overwritten by malicious users
+      # tampering with URLs or forms. If you'd rather start from an all-open
+      # default and restrict attributes as needed, have a look at
+      # +attr_protected+.
+      #
+      #   class Customer < ActiveRecord::Base
+      #     attr_accessible :name, :nickname
+      #   end
+      #
+      #   customer = Customer.new(:name => "David", :nickname => "Dave", :credit_rating => "Excellent")
+      #   customer.credit_rating # => nil
+      #   customer.attributes = { :name => "Jolly fellow", :credit_rating => "Superb" }
+      #   customer.credit_rating # => nil
+      #
+      #   customer.credit_rating = "Average"
+      #   customer.credit_rating # => "Average"
+      def attr_accessible(*attributes)
+        write_inheritable_attribute(:attr_accessible, Set.new(attributes.map(&:to_s)) + (accessible_attributes || []))
+      end
+
+      # Returns an array of all the attributes that have been made accessible to mass-assignment.
+      def accessible_attributes # :nodoc:
+        read_inheritable_attribute(:attr_accessible)
+      end
+
       # Attributes listed as readonly can be set for a new record, but will be ignored in database updates afterwards.
       def attr_readonly(*attributes)
         write_inheritable_attribute(:attr_readonly, Set.new(attributes.map(&:to_s)) + (readonly_attributes || []))
@@ -476,6 +542,10 @@ module ActiveGroonga
         directory
       end
 
+      def count
+        table.size
+      end
+
       private
       def find_initial(options)
         options.update(:limit => 1)
@@ -526,7 +596,7 @@ module ActiveGroonga
       end
 
       def find_one(id, options)
-        result = instantiate(Groonga::Record.new(table, id))
+        result = instantiate(Groonga::Record.new(table, Integer(id)))
         if result.nil?
           raise RecordNotFound, "Couldn't find #{name} with ID=#{id}"
         end
@@ -953,6 +1023,27 @@ module ActiveGroonga
       create_or_update || raise(RecordNotSaved)
     end
 
+    # Updates a single attribute and saves the record without going through the normal validation procedure.
+    # This is especially useful for boolean flags on existing records. The regular +update_attribute+ method
+    # in Base is replaced with this when the validations module is mixed in, which it is by default.
+    def update_attribute(name, value)
+      send(name.to_s + '=', value)
+      save(false)
+    end
+
+    # Updates all the attributes from the passed-in Hash and saves the record. If the object is invalid, the saving will
+    # fail and false will be returned.
+    def update_attributes(attributes)
+      self.attributes = attributes
+      save
+    end
+
+    # Updates an object just like Base.update_attributes but calls save! instead of save so an exception is raised if the record is invalid.
+    def update_attributes!(attributes)
+      self.attributes = attributes
+      save!
+    end
+
     # Returns the value of the attribute identified by <tt>attr_name</tt> after it has been typecast (for example,
     # "2004-12-12" in a data column is cast to a date object, like Date.new(2004, 12, 12)).
     # (Alias for the protected read_attribute method).
@@ -964,6 +1055,103 @@ module ActiveGroonga
     # (Alias for the protected write_attribute method).
     def []=(attr_name, value)
       write_attribute(attr_name, value)
+    end
+
+    # Allows you to set all the attributes at once by passing in a hash with keys
+    # matching the attribute names (which again matches the column names).
+    #
+    # If +guard_protected_attributes+ is true (the default), then sensitive
+    # attributes can be protected from this form of mass-assignment by using
+    # the +attr_protected+ macro. Or you can alternatively specify which
+    # attributes *can* be accessed with the +attr_accessible+ macro. Then all the
+    # attributes not included in that won't be allowed to be mass-assigned.
+    #
+    #   class User < ActiveGroonga::Base
+    #     attr_protected :is_admin
+    #   end
+    #   
+    #   user = User.new
+    #   user.attributes = { :username => 'Phusion', :is_admin => true }
+    #   user.username   # => "Phusion"
+    #   user.is_admin?  # => false
+    #   
+    #   user.send(:attributes=, { :username => 'Phusion', :is_admin => true }, false)
+    #   user.is_admin?  # => true
+    def attributes=(new_attributes, guard_protected_attributes = true)
+      return if new_attributes.nil?
+      attributes = new_attributes.dup
+      attributes.stringify_keys!
+
+      multi_parameter_attributes = []
+      attributes = remove_attributes_protected_from_mass_assignment(attributes) if guard_protected_attributes
+
+      attributes.each do |k, v|
+        if k.include?("(")
+          multi_parameter_attributes << [ k, v ]
+        else
+          respond_to?(:"#{k}=") ? send(:"#{k}=", v) : raise(UnknownAttributeError, "unknown attribute: #{k}")
+        end
+      end
+
+      assign_multiparameter_attributes(multi_parameter_attributes)
+    end
+
+    # Returns a hash of all the attributes with their names as keys and the values of the attributes as values.
+    def attributes
+      self.attribute_names.inject({}) do |attrs, name|
+        attrs[name] = read_attribute(name)
+        attrs
+      end
+    end
+
+    # Returns a hash of attributes before typecasting and deserialization.
+    def attributes_before_type_cast
+      self.attribute_names.inject({}) do |attrs, name|
+        attrs[name] = read_attribute_before_type_cast(name)
+        attrs
+      end
+    end
+
+    # Returns an <tt>#inspect</tt>-like string for the value of the
+    # attribute +attr_name+. String attributes are elided after 50
+    # characters, and Date and Time attributes are returned in the
+    # <tt>:db</tt> format. Other attributes return the value of
+    # <tt>#inspect</tt> without modification.
+    #
+    #   person = Person.create!(:name => "David Heinemeier Hansson " * 3)
+    #
+    #   person.attribute_for_inspect(:name)
+    #   # => '"David Heinemeier Hansson David Heinemeier Hansson D..."'
+    #
+    #   person.attribute_for_inspect(:created_at)
+    #   # => '"2009-01-12 04:48:57"'
+    def attribute_for_inspect(attr_name)
+      value = read_attribute(attr_name)
+
+      if value.is_a?(String) && value.length > 50
+        "#{value[0..50]}...".inspect
+      elsif value.is_a?(Date) || value.is_a?(Time)
+        %("#{value.to_s(:db)}")
+      else
+        value.inspect
+      end
+    end
+
+    # Returns true if the specified +attribute+ has been set by the user or by a database load and is neither
+    # nil nor empty? (the latter only applies to objects that respond to empty?, most notably Strings).
+    def attribute_present?(attribute)
+      value = read_attribute(attribute)
+      !value.blank?
+    end
+
+    # Returns true if the given attribute is in the attributes hash
+    def has_attribute?(attr_name)
+      @attributes.has_key?(attr_name.to_s)
+    end
+
+    # Returns an array of names for the attributes available on this object sorted alphabetically.
+    def attribute_names
+      @attributes.keys.sort
     end
 
     # Returns the column object for the named attribute.
@@ -1054,13 +1242,45 @@ module ActiveGroonga
       end
     end
 
+    def remove_attributes_protected_from_mass_assignment(attributes)
+      safe_attributes =
+        if self.class.accessible_attributes.nil? && self.class.protected_attributes.nil?
+          attributes.reject { |key, value| attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+        elsif self.class.protected_attributes.nil?
+          attributes.reject { |key, value| !self.class.accessible_attributes.include?(key.gsub(/\(.+/, "")) || attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+        elsif self.class.accessible_attributes.nil?
+          attributes.reject { |key, value| self.class.protected_attributes.include?(key.gsub(/\(.+/,"")) || attributes_protected_by_default.include?(key.gsub(/\(.+/, "")) }
+        else
+          raise "Declare either attr_protected or attr_accessible for #{self.class}, but not both."
+        end
+
+      removed_attributes = attributes.keys - safe_attributes.keys
+
+      if removed_attributes.any?
+        log_protected_attribute_removal(removed_attributes)
+      end
+
+      safe_attributes
+    end
+
     # Removes attributes which have been marked as readonly.
     def remove_readonly_attributes(attributes)
-      if self.class.readonly_attributes.nil?
-        attributes
+      unless self.class.readonly_attributes.nil?
+        attributes.delete_if { |key, value| self.class.readonly_attributes.include?(key.gsub(/\(.+/,"")) }
       else
-        attributes.delete_if { |name| self.class.readonly_attributes.include?(name.gsub(/\(.+/,"")) }
+        attributes
       end
+    end
+
+    def log_protected_attribute_removal(*attributes)
+      logger.debug "WARNING: Can't mass-assign these protected attributes: #{attributes.join(', ')}"
+    end
+
+    # The primary key and inheritance column can never be set by mass-assignment for security reasons.
+    def attributes_protected_by_default
+      default = [ self.class.primary_key, self.class.inheritance_column ]
+      default << 'id' unless self.class.primary_key.eql? 'id'
+      default
     end
 
     # Initializes the attributes array with keys matching the columns from the linked table and
@@ -1073,6 +1293,67 @@ module ActiveGroonga
         attributes
       end
     end
+
+    # Instantiates objects for all attribute classes that needs more than one constructor parameter. This is done
+    # by calling new on the column type or aggregation type (through composed_of) object with these parameters.
+    # So having the pairs written_on(1) = "2004", written_on(2) = "6", written_on(3) = "24", will instantiate
+    # written_on (a date type) with Date.new("2004", "6", "24"). You can also specify a typecast character in the
+    # parentheses to have the parameters typecasted before they're used in the constructor. Use i for Fixnum, f for Float,
+    # s for String, and a for Array. If all the values for a given attribute are empty, the attribute will be set to nil.
+    def assign_multiparameter_attributes(pairs)
+      execute_callstack_for_multiparameter_attributes(
+        extract_callstack_for_multiparameter_attributes(pairs)
+      )
+    end
+
+    def execute_callstack_for_multiparameter_attributes(callstack)
+      errors = []
+      callstack.each do |name, values|
+        klass = (self.class.reflect_on_aggregation(name.to_sym) || column_for_attribute(name)).klass
+        if values.empty?
+          send(name + "=", nil)
+        else
+          begin
+            value = if Time == klass
+              instantiate_time_object(name, values)
+            elsif Date == klass
+              begin
+                Date.new(*values)
+              rescue ArgumentError => ex # if Date.new raises an exception on an invalid date
+                instantiate_time_object(name, values).to_date # we instantiate Time object and convert it back to a date thus using Time's logic in handling invalid dates
+              end
+            else
+              klass.new(*values)
+            end
+
+            send(name + "=", value)
+          rescue => ex
+            errors << AttributeAssignmentError.new("error on assignment #{values.inspect} to #{name}", ex, name)
+          end
+        end
+      end
+      unless errors.empty?
+        raise MultiparameterAssignmentErrors.new(errors), "#{errors.size} error(s) on assignment of multiparameter attributes"
+      end
+    end
+
+    def extract_callstack_for_multiparameter_attributes(pairs)
+      attributes = { }
+
+      for pair in pairs
+        multiparameter_name, value = pair
+        attribute_name = multiparameter_name.split("(").first
+        attributes[attribute_name] = [] unless attributes.include?(attribute_name)
+
+        unless value.empty?
+          attributes[attribute_name] <<
+            [ find_parameter_position(multiparameter_name), type_cast_attribute_value(multiparameter_name, value) ]
+        end
+      end
+
+      attributes.each { |name, values| attributes[name] = values.sort_by{ |v| v.first }.collect { |v| v.last } }
+    end
+
 
     include Validations
     include AttributeMethods
