@@ -115,6 +115,10 @@ module ActiveGroonga
     cattr_accessor :colorize_logging, :instance_writer => false
     @@colorize_logging = true
 
+    # Determine whether to store the full constant name including namespace when using STI
+    superclass_delegating_accessor :store_full_sti_class
+    self.store_full_sti_class = false
+
     # Stores the default scope for the class
     class_inheritable_accessor :default_scoping, :instance_writer => false
     self.default_scoping = []
@@ -134,10 +138,10 @@ module ActiveGroonga
     @@database_directory = nil
 
     class << self
-       # Attributes listed as readonly can be set for a new record, but will be ignored in database updates afterwards.
-       def attr_readonly(*attributes)
-         write_inheritable_attribute(:attr_readonly, Set.new(attributes.map(&:to_s)) + (readonly_attributes || []))
-       end
+      # Attributes listed as readonly can be set for a new record, but will be ignored in database updates afterwards.
+      def attr_readonly(*attributes)
+        write_inheritable_attribute(:attr_readonly, Set.new(attributes.map(&:to_s)) + (readonly_attributes || []))
+      end
 
       # Returns an array of all the attributes that have been specified as readonly.
       def readonly_attributes
@@ -360,8 +364,8 @@ module ActiveGroonga
         case args.first
         when :first
           find_initial(options)
-#         when :last
-#           find_last(options)
+        when :last
+          find_last(options)
         when :all
           find_every(options)
         else
@@ -452,34 +456,6 @@ module ActiveGroonga
         directory
       end
 
-      protected
-      # Retrieve the scope for the given method and optional key.
-      def scope(method, key = nil) #:nodoc:
-        if current_scoped_methods && (scope = current_scoped_methods[method])
-          key ? scope[key] : scope
-        end
-      end
-
-      def scoped_methods #:nodoc:
-        Thread.current[:"#{self}_scoped_methods"] ||= default_scoping.dup
-      end
-
-      def current_scoped_methods #:nodoc:
-        scoped_methods.last
-      end
-
-      # Returns the class descending directly from ActiveGroonga::Base or an
-      # abstract class, if any, in the inheritance hierarchy.
-      def class_of_active_groonga_descendant(klass)
-        if klass.superclass == Base || klass.superclass.abstract_class?
-          klass
-        elsif klass.superclass.nil?
-          raise ActiveGroongaError, "#{name} doesn't belong in a hierarchy descending from ActiveRecord"
-        else
-          class_of_active_record_descendant(klass.superclass)
-        end
-      end
-
       private
       def find_initial(options)
         options.update(:limit => 1)
@@ -487,6 +463,8 @@ module ActiveGroonga
       end
 
       def find_every(options)
+        limit = options[:limit] ||= -1
+        conditions = options[:conditions] || {}
         include_associations = merge_includes(scope(:find, :include), options[:include])
 
         if include_associations.any? && references_eager_loaded_tables?(options)
@@ -494,7 +472,11 @@ module ActiveGroonga
         else
           records = []
           table.open_cursor do |cursor|
-            records = cursor.collect {|id| instantiate(id)}
+            cursor.each_with_index do |record, i|
+              break if limit >= 0 and records.size >= limit
+              next unless conditions.all? {|name, value| record[name] == value}
+              records << instantiate(record)
+            end
           end
           if include_associations.any?
             preload_associations(records, include_associations)
@@ -559,7 +541,7 @@ module ActiveGroonga
         end
       end
 
-      VALID_FIND_OPTIONS = [:readonly]
+      VALID_FIND_OPTIONS = [:conditions, :readonly]
       def validate_find_options(options)
         options.assert_valid_keys(VALID_FIND_OPTIONS)
       end
@@ -635,15 +617,227 @@ module ActiveGroonga
         object
       end
 
+      # Enables dynamic finders like <tt>find_by_user_name(user_name)</tt> and <tt>find_by_user_name_and_password(user_name, password)</tt>
+      # that are turned into <tt>find(:first, :conditions => ["user_name = ?", user_name])</tt> and
+      # <tt>find(:first, :conditions => ["user_name = ? AND password = ?", user_name, password])</tt> respectively. Also works for
+      # <tt>find(:all)</tt> by using <tt>find_all_by_amount(50)</tt> that is turned into <tt>find(:all, :conditions => ["amount = ?", 50])</tt>.
+      #
+      # It's even possible to use all the additional parameters to +find+. For example, the full interface for +find_all_by_amount+
+      # is actually <tt>find_all_by_amount(amount, options)</tt>.
+      #
+      # Also enables dynamic scopes like scoped_by_user_name(user_name) and scoped_by_user_name_and_password(user_name, password) that
+      # are turned into scoped(:conditions => ["user_name = ?", user_name]) and scoped(:conditions => ["user_name = ? AND password = ?", user_name, password])
+      # respectively.
+      #
+      # Each dynamic finder, scope or initializer/creator is also defined in the class after it is first invoked, so that future
+      # attempts to use it do not run through method_missing.
+      def method_missing(method_id, *arguments, &block)
+        if match = ActiveRecord::DynamicFinderMatch.match(method_id)
+          attribute_names = match.attribute_names
+          super unless all_attributes_exists?(attribute_names)
+          if match.finder?
+            finder = match.finder
+            bang = match.bang?
+            # def self.find_by_login_and_activated(*args)
+            #   options = args.extract_options!
+            #   attributes = construct_attributes_from_arguments(
+            #     [:login,:activated],
+            #     args
+            #   )
+            #   finder_options = { :conditions => attributes }
+            #   validate_find_options(options)
+            #   set_readonly_option!(options)
+            #
+            #   if options[:conditions]
+            #     with_scope(:find => finder_options) do
+            #       find(:first, options)
+            #     end
+            #   else
+            #     find(:first, options.merge(finder_options))
+            #   end
+            # end
+            self.class_eval <<-EOC, __FILE__, __LINE__
+              def self.#{method_id}(*args)
+                options = args.extract_options!
+                attributes = construct_attributes_from_arguments(
+                  [:#{attribute_names.join(',:')}],
+                  args
+                )
+                finder_options = { :conditions => attributes }
+                validate_find_options(options)
+                set_readonly_option!(options)
+
+                #{'result = ' if bang}if options[:conditions]
+                  with_scope(:find => finder_options) do
+                    find(:#{finder}, options)
+                  end
+                else
+                  find(:#{finder}, options.merge(finder_options))
+                end
+                #{'result || raise(RecordNotFound, "Couldn\'t find #{name} with #{attributes.to_a.collect {|pair| "#{pair.first} = #{pair.second}"}.join(\', \')}")' if bang}
+              end
+            EOC
+            send(method_id, *arguments)
+          elsif match.instantiator?
+            instantiator = match.instantiator
+            # def self.find_or_create_by_user_id(*args)
+            #   guard_protected_attributes = false
+            #
+            #   if args[0].is_a?(Hash)
+            #     guard_protected_attributes = true
+            #     attributes = args[0].with_indifferent_access
+            #     find_attributes = attributes.slice(*[:user_id])
+            #   else
+            #     find_attributes = attributes = construct_attributes_from_arguments([:user_id], args)
+            #   end
+            #
+            #   options = { :conditions => find_attributes }
+            #   set_readonly_option!(options)
+            #
+            #   record = find(:first, options)
+            #
+            #   if record.nil?
+            #     record = self.new { |r| r.send(:attributes=, attributes, guard_protected_attributes) }
+            #     yield(record) if block_given?
+            #     record.save
+            #     record
+            #   else
+            #     record
+            #   end
+            # end
+            self.class_eval <<-EOC, __FILE__, __LINE__
+              def self.#{method_id}(*args)
+                guard_protected_attributes = false
+
+                if args[0].is_a?(Hash)
+                  guard_protected_attributes = true
+                  attributes = args[0].with_indifferent_access
+                  find_attributes = attributes.slice(*[:#{attribute_names.join(',:')}])
+                else
+                  find_attributes = attributes = construct_attributes_from_arguments([:#{attribute_names.join(',:')}], args)
+                end
+
+                options = { :conditions => find_attributes }
+                set_readonly_option!(options)
+
+                record = find(:first, options)
+
+                if record.nil?
+                  record = self.new { |r| r.send(:attributes=, attributes, guard_protected_attributes) }
+                  #{'yield(record) if block_given?'}
+                  #{'record.save' if instantiator == :create}
+                  record
+                else
+                  record
+                end
+              end
+            EOC
+            send(method_id, *arguments, &block)
+          end
+        elsif match = ActiveRecord::DynamicScopeMatch.match(method_id)
+          attribute_names = match.attribute_names
+          super unless all_attributes_exists?(attribute_names)
+          if match.scope?
+            self.class_eval <<-EOC, __FILE__, __LINE__
+              def self.#{method_id}(*args)                        # def self.scoped_by_user_name_and_password(*args)
+                options = args.extract_options!                   #   options = args.extract_options!
+                attributes = construct_attributes_from_arguments( #   attributes = construct_attributes_from_arguments(
+                  [:#{attribute_names.join(',:')}], args          #     [:user_name, :password], args
+                )                                                 #   )
+                                                                  # 
+                scoped(:conditions => attributes)                 #   scoped(:conditions => attributes)
+              end                                                 # end
+            EOC
+            send(method_id, *arguments)
+          end
+        else
+          super
+        end
+      end
+
+      def construct_attributes_from_arguments(attribute_names, arguments)
+        attributes = {}
+        attribute_names.each_with_index { |name, idx| attributes[name] = arguments[idx] }
+        attributes
+      end
+
+      # Similar in purpose to +expand_hash_conditions_for_aggregates+.
+      def expand_attribute_names_for_aggregates(attribute_names)
+        expanded_attribute_names = []
+        attribute_names.each do |attribute_name|
+          unless (aggregation = reflect_on_aggregation(attribute_name.to_sym)).nil?
+            aggregate_mapping(aggregation).each do |field_attr, aggregate_attr|
+              expanded_attribute_names << field_attr
+            end
+          else
+            expanded_attribute_names << attribute_name
+          end
+        end
+        expanded_attribute_names
+      end
+
+      def all_attributes_exists?(attribute_names)
+        attribute_names = expand_attribute_names_for_aggregates(attribute_names)
+        attribute_names.all? { |name| column_methods_hash.include?(name.to_sym) }
+      end
+
+      # Nest the type name in the same module as this class.
+      # Bar is "MyApp::Business::Bar" relative to MyApp::Business::Foo
+      def type_name_with_module(type_name)
+        if store_full_sti_class
+          type_name
+        else
+          (/^::/ =~ type_name) ? type_name : "#{parent.name}::#{type_name}"
+        end
+      end
+
       # Test whether the given method and optional key are scoped.
       def scoped?(method, key = nil) #:nodoc:
         if current_scoped_methods && (scope = current_scoped_methods[method])
           !key || !scope[key].nil?
         end
       end
-    end
 
-    include AttributeMethods
+      # Retrieve the scope for the given method and optional key.
+      def scope(method, key = nil) #:nodoc:
+        if current_scoped_methods && (scope = current_scoped_methods[method])
+          key ? scope[key] : scope
+        end
+      end
+
+      def scoped_methods #:nodoc:
+        Thread.current[:"#{self}_scoped_methods"] ||= default_scoping.dup
+      end
+
+      def current_scoped_methods #:nodoc:
+        scoped_methods.last
+      end
+
+      # Returns the class type of the record using the current module as a prefix. So descendants of
+      # MyApp::Business::Account would appear as MyApp::Business::AccountSubclass.
+      def compute_type(type_name)
+        modularized_name = type_name_with_module(type_name)
+        silence_warnings do
+          begin
+            class_eval(modularized_name, __FILE__, __LINE__)
+          rescue NameError
+            class_eval(type_name, __FILE__, __LINE__)
+          end
+        end
+      end
+
+      # Returns the class descending directly from ActiveGroonga::Base or an
+      # abstract class, if any, in the inheritance hierarchy.
+      def class_of_active_groonga_descendant(klass)
+        if klass.superclass == Base || klass.superclass.abstract_class?
+          klass
+        elsif klass.superclass.nil?
+          raise ActiveGroongaError, "#{name} doesn't belong in a hierarchy descending from ActiveRecord"
+        else
+          class_of_active_record_descendant(klass.superclass)
+        end
+      end
+    end
 
     def initialize(attributes=nil)
       @id = nil
@@ -739,9 +933,41 @@ module ActiveGroonga
       create_or_update || raise(RecordNotSaved)
     end
 
+    # Returns the value of the attribute identified by <tt>attr_name</tt> after it has been typecast (for example,
+    # "2004-12-12" in a data column is cast to a date object, like Date.new(2004, 12, 12)).
+    # (Alias for the protected read_attribute method).
+    def [](attr_name)
+      read_attribute(attr_name)
+    end
+
+    # Updates the attribute identified by <tt>attr_name</tt> with the specified +value+.
+    # (Alias for the protected write_attribute method).
+    def []=(attr_name, value)
+      write_attribute(attr_name, value)
+    end
+
     # Returns the column object for the named attribute.
     def column_for_attribute(name)
       self.class.columns_hash[name.to_s]
+    end
+
+    # Returns true if the +comparison_object+ is the same object, or is of the same type and has the same id.
+    def ==(comparison_object)
+      comparison_object.equal?(self) ||
+        (comparison_object.instance_of?(self.class) &&
+         comparison_object.id == id &&
+         !comparison_object.new_record?)
+    end
+
+    # Delegates to ==
+    def eql?(comparison_object)
+      self == (comparison_object)
+    end
+
+    # Delegates to id in order to allow two records of the same type and id to work with something like:
+    #   [ Person.find(1), Person.find(2), Person.find(3) ] & [ Person.find(1), Person.find(4) ] # => [ Person.find(1) ]
+    def hash
+      id.hash
     end
 
     # Freeze the attributes hash such that associations are still accessible, even on destroyed records.
@@ -827,5 +1053,8 @@ module ActiveGroonga
         attributes
       end
     end
+
+    include AttributeMethods
+    include Reflection, Associations
   end
 end

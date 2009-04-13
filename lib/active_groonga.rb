@@ -47,8 +47,6 @@ module ActiveGroonga
   autoload :Callbacks, 'active_groonga/callbacks'
   autoload :Column, 'active_groonga/column'
   autoload :Dirty, 'active_groonga/dirty'
-  autoload :DynamicFinderMatch, 'active_groonga/dynamic_finder_match'
-  autoload :DynamicScopeMatch, 'active_groonga/dynamic_scope_match'
   autoload :Migration, 'active_groonga/migration'
   autoload :Migrator, 'active_groonga/migration'
   autoload :NamedScope, 'active_groonga/named_scope'

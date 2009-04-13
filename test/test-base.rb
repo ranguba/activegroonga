@@ -18,37 +18,42 @@ class BaseTest < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
   def test_find
-    bookmarks = @bookmark_class.find(:all)
+    bookmarks = Bookmark.find(:all)
     assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
                  bookmarks.collect(&:uri).sort)
   end
 
   def test_find_by_id
-    groonga = @bookmark_class.find(@bookmark_records[:groonga].id)
+    groonga = Bookmark.find(@bookmark_records[:groonga].id)
     assert_equal("http://groonga.org/", groonga.uri)
   end
 
+  def test_find_by_attribute
+    daijiro = User.find_by_name("daijiro")
+    assert_equal("daijiro", daijiro.name)
+  end
+
   def test_create
-    google = @bookmark_class.new
+    google = Bookmark.new
     google.uri = "http://google.com/"
     google.comment = "a search engine"
     assert_nil(google.id)
     google.save
     assert_not_nil(google.id)
 
-    reloaded_google = @bookmark_class.find(google.id)
+    reloaded_google = Bookmark.find(google.id)
     assert_equal("http://google.com/", reloaded_google.uri)
   end
 
   def test_update
     groonga_id = @bookmark_records[:groonga].id
-    groonga = @bookmark_class.find(groonga_id)
+    groonga = Bookmark.find(groonga_id)
     groonga.comment = "a search engine"
     assert_equal(groonga_id, groonga.id)
     groonga.save
     assert_not_nil(groonga_id, groonga.id)
 
-    reloaded_groonga = @bookmark_class.find(groonga.id)
+    reloaded_groonga = Bookmark.find(groonga.id)
     assert_equal("a search engine", reloaded_groonga.comment)
   end
 end
