@@ -169,9 +169,9 @@ module ActiveGroongaTestUtils
       remove_const(:Bookmark) if const_defined?(:Bookmark)
       remove_const(:Task) if const_defined?(:Task)
     end
-    load (base_dir + 'user.rb').to_s
-    load (base_dir + 'bookmark.rb').to_s
-    load (base_dir + 'task.rb').to_s
+    load((base_dir + 'user.rb').to_s)
+    load((base_dir + 'bookmark.rb').to_s)
+    load((base_dir + 'task.rb').to_s)
   end
 
   def teardown_sand_box

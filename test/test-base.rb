@@ -91,4 +91,10 @@ class BaseTest < Test::Unit::TestCase
                  },
                  google.attributes)
   end
+
+  def test_destroy
+    before_count = Bookmark.count
+    Bookmark.find_by_uri("http://groonga.org/").destroy
+    assert_equal(before_count - 1, Bookmark.count)
+  end
 end

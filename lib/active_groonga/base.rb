@@ -1023,6 +1023,28 @@ module ActiveGroonga
       create_or_update || raise(RecordNotSaved)
     end
 
+    # Deletes the record in the database and freezes this instance to
+    # reflect that no changes should be made (since they can't be
+    # persisted). Returns the frozen instance.
+    #
+    # The row is simply removed with a SQL +DELETE+ statement on the
+    # record's primary key, and no callbacks are executed.
+    #
+    # To enforce the object's +before_destroy+ and +after_destroy+
+    # callbacks, Observer methods, or any <tt>:dependent</tt> association
+    # options, use <tt>#destroy</tt>.
+    def delete
+      self.class.delete(id) unless new_record?
+      freeze
+    end
+
+    # Deletes the record in the database and freezes this instance to reflect that no changes should
+    # be made (since they can't be persisted).
+    def destroy
+      self.class.table.delete(id) unless new_record?
+      freeze
+    end
+
     # Updates a single attribute and saves the record without going through the normal validation procedure.
     # This is especially useful for boolean flags on existing records. The regular +update_attribute+ method
     # in Base is replaced with this when the validations module is mixed in, which it is by default.
