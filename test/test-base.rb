@@ -34,15 +34,14 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_create
-    google = Bookmark.new
-    google.uri = "http://google.com/"
-    google.comment = "a search engine"
-    assert_nil(google.id)
-    google.save
-    assert_not_nil(google.id)
+    send_mail = Task.new
+    send_mail.name = "send mails"
+    assert_nil(send_mail.id)
+    assert_true(send_mail.save)
+    assert_not_nil(send_mail.id)
 
-    reloaded_google = Bookmark.find(google.id)
-    assert_equal("http://google.com/", reloaded_google.uri)
+    reloaded_send_mail = Task.find(send_mail.id)
+    assert_equal("send mails", send_mail.name)
   end
 
   def test_update

@@ -36,7 +36,9 @@ module ActiveGroongaTestUtils
     setup_database
     setup_users_table
     setup_bookmarks_table
-    setup_index_table
+    setup_bookmarks_index_table
+    setup_tasks_table
+
     setup_user_records
     setup_bookmark_records
     setup_class
@@ -99,7 +101,7 @@ module ActiveGroongaTestUtils
                                :path => @user_id_column_path.to_s)
   end
 
-  def setup_index_table
+  def setup_bookmarks_index_table
     @bookmarks_index_path = @tables_dir + "bookmarks-index.groonga"
     @bookmarks_index = Groonga::Hash.create(:name => "bookmarks-index",
                                             :path => @bookmarks_index_path.to_s)
@@ -120,6 +122,19 @@ module ActiveGroongaTestUtils
                                      :with_weight => true,
                                      :with_position => true,
                                      :path => @content_index_column_path.to_s)
+  end
+
+  def setup_tasks_table
+    @tasks_path = @tables_dir + "tasks.groonga"
+    @tasks = Groonga::Array.create(:name => "tasks",
+                                   :path => @tasks_path.to_s)
+
+    columns_dir = @tables_dir + "tasks" + "columns"
+    columns_dir.mkpath
+
+    @name_column_path = columns_dir + "name.groonga"
+    @name_column = @tasks.define_column("name", "<shorttext>",
+                                        :path => @name_column_path.to_s)
   end
 
   def setup_user_records
@@ -149,8 +164,14 @@ module ActiveGroongaTestUtils
 
   def setup_class
     base_dir = Pathname(__FILE__).parent + "fixtures"
+    Object.class_eval do
+      remove_const(:User) if const_defined?(:User)
+      remove_const(:Bookmark) if const_defined?(:Bookmark)
+      remove_const(:Task) if const_defined?(:Task)
+    end
     load (base_dir + 'user.rb').to_s
     load (base_dir + 'bookmark.rb').to_s
+    load (base_dir + 'task.rb').to_s
   end
 
   def teardown_sand_box

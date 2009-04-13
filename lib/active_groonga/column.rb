@@ -13,8 +13,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'active_record/connection_adapters/abstract/schema_definitions'
-
 module ActiveGroonga
   class Column < ActiveRecord::ConnectionAdapters::Column
     # Instantiates a new column in the table.

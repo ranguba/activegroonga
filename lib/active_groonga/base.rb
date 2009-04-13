@@ -37,6 +37,8 @@
 #   OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 #   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+require 'active_record/base'
+
 module ActiveGroonga
   # Generic ActiveGroonga exception class.
   class ActiveGroongaError < StandardError
@@ -371,6 +373,24 @@ module ActiveGroonga
         else
           find_from_ids(args, options)
         end
+      end
+
+      # A convenience wrapper for <tt>find(:first, *args)</tt>. You can pass in all the
+      # same arguments to this method as you can to <tt>find(:first)</tt>.
+      def first(*args)
+        find(:first, *args)
+      end
+
+      # A convenience wrapper for <tt>find(:last, *args)</tt>. You can pass in all the
+      # same arguments to this method as you can to <tt>find(:last)</tt>.
+      def last(*args)
+        find(:last, *args)
+      end
+
+      # This is an alias for find(:all).  You can pass in all the same arguments to this method as you can
+      # to find(:all)
+      def all(*args)
+        find(:all, *args)
       end
 
       def context
@@ -1049,11 +1069,12 @@ module ActiveGroonga
     # that instances loaded from the database would.
     def attributes_from_column_definition
       self.class.columns.inject({}) do |attributes, column|
-        # attributes[column.name] = column.default
+        attributes[column.name] = column.default
         attributes
       end
     end
 
+    include Validations
     include AttributeMethods
     include Reflection, Associations
   end
