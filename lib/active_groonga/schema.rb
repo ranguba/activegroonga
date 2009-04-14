@@ -92,6 +92,7 @@ module ActiveGroonga
         table_name = Base.table_name_prefix + table_name + Base.table_name_suffix
         groonga_table_name = Base.groonga_table_name(table_name)
         table = Base.context[groonga_table_name]
+        column_name = column_name.to_s
         column = table.column(column_name)
 
         name = "<index:#{table_name}:#{column_name}>"
@@ -171,9 +172,11 @@ module ActiveGroonga
         table_name = Migrator.schema_migrations_table_name
         groonga_table_name = Migrator.groonga_schema_migrations_table_name
         if Base.context[groonga_table_name].nil?
-          create_table(table_name) do |table|
-            table.string(:version)
-          end
+          table_file = File.join(Base.metadata_directory,
+                                 "#{table_name}.groonga")
+          Groonga::Hash.create(:name => groonga_table_name,
+                               :path => table_file,
+                               :key_type => "<shorttext>")
         end
       end
     end

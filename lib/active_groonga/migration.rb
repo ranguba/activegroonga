@@ -67,7 +67,7 @@ module ActiveGroonga
 
       def get_all_versions
         table = Base.context[groonga_schema_migrations_table_name]
-        table.records.collect {|record| record["version"].to_i}.sort
+        table.records.collect {|record| record.key.to_i}.sort
       end
 
       def current_version
@@ -139,12 +139,11 @@ module ActiveGroonga
       if down?
         @migrated_versions.delete(version.to_i)
         table.records.each do |record|
-          record.delete if record["version"] == version.to_s
+          record.delete if record.key == version.to_s
         end
       else
         @migrated_versions.push(version.to_i).sort!
-        record = table.add
-        record["version"] = version.to_s
+        table.add(version.to_s)
       end
     end
   end
