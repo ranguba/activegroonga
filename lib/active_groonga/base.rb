@@ -592,19 +592,34 @@ module ActiveGroonga
 
       def find_every(options)
         limit = options[:limit] ||= -1
-        conditions = options[:conditions] || {}
+        conditions = (options[:conditions] || {}).stringify_keys
         include_associations = merge_includes(scope(:find, :include), options[:include])
 
         if include_associations.any? && references_eager_loaded_tables?(options)
           records = find_with_associations(options)
         else
           records = []
-          table.open_cursor do |cursor|
-            cursor.each_with_index do |record, i|
-              break if limit >= 0 and records.size >= limit
-              next unless conditions.all? {|name, value| record[name] == value}
-              records << instantiate(record)
+          original_table = table
+          target_table = nil
+          Schema.indexes(table_name).each do |index|
+            if conditions.has_key?(index.columns)
+              index_column = context[index.name].column("inverted-index")
+              target_table =
+                index_column.search(conditions.delete(index.columns),
+                                    :result => target_table)
             end
+          end
+          if target_table
+            target_records = target_table.records.collect do |record|
+              Groonga::Record.new(original_table, record.key.unpack("i")[0])
+            end
+          else
+            target_records = original_table.records
+          end
+          target_records.each_with_index do |record, i|
+            break if limit >= 0 and records.size >= limit
+            next unless conditions.all? {|name, value| record[name] == value}
+            records << instantiate(record)
           end
           if include_associations.any?
             preload_associations(records, include_associations)
@@ -1281,10 +1296,22 @@ module ActiveGroonga
     def update(attribute_names=@attributes.keys)
       attribute_names = remove_readonly_attributes(attribute_names)
       table = self.class.table
+      indexes = Schema.indexes(table)
       attribute_names.each do |name|
         column = table.column(name)
         next if column.nil?
-        column[id] =  read_attribute(name)
+        value = read_attribute(name)
+        indexes.each do |index|
+          if index.column == name
+            index_table = self.class.context[index.name]
+            index_column = index_table.column("inverted-index")
+            index_column[id] = {
+              :old_value => column[id],
+              :value => value,
+            }
+          end
+        end
+        column[id] = value
       end
     end
 
@@ -1293,9 +1320,17 @@ module ActiveGroonga
     def create
       table = self.class.table
       record = table.add
+      indexes = Schema.indexes(table)
       record.table.columns.each do |column|
         column = Column.new(column)
         record[column.name] = @attributes[column.name]
+        indexes.each do |index|
+          if index.column == column.name
+            index_table = self.class.context[index.name]
+            index_column = index_table.column("inverted-index")
+            index_column[record.id] = record[column.name]
+          end
+        end
       end
       self.id = record.id
       @new_record = false

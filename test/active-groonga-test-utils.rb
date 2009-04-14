@@ -124,6 +124,7 @@ module ActiveGroongaTestUtils
     @bookmarks_content_index =
       Groonga::Hash.create(:name => "<index:bookmarks:content>",
                            :path => @bookmarks_content_index_path.to_s)
+    @bookmarks_content_index.default_tokenizer = "<token:mecab>"
 
     columns_dir = bookmarks_index_path + "content" + "columns"
     columns_dir.mkpath
@@ -137,6 +138,10 @@ module ActiveGroongaTestUtils
                                              :with_weight => true,
                                              :with_position => true,
                                              :path => path)
+
+    record = ActiveGroonga::Schema.index_management_table.add(@bookmarks.name)
+    record["column"] = "content"
+    record["index"] = @bookmarks_content_index.name
   end
 
   def setup_tasks_table

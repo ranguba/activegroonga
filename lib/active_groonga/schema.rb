@@ -120,12 +120,18 @@ module ActiveGroonga
         Base.context[groonga_index_management_table_name]
       end
 
-      def indexes(table_name)
-        table = Base.context[Base.groonga_table_name(table_name)]
+      def indexes(table_or_table_name)
+        if table_or_table_name.is_a?(String)
+          table_name = table_or_table_name
+          table = Base.context[Base.groonga_table_name(table_name)]
+        else
+          table = table_or_table_name
+          table_name = table.name.gsub(/(?:\A<table:|>\z)/, '')
+        end
         indexes = []
         index_management_table.records.each do |record|
-          next if record.table_id != table.id
-          indexes << IndexDefinition.new(table_name, nil,
+          next if record.key != table.name
+          indexes << IndexDefinition.new(table_name, record["index"],
                                          false, record["column"])
         end
         indexes
@@ -261,6 +267,8 @@ module ActiveGroonga
     end
 
     class IndexDefinition < ActiveRecord::ConnectionAdapters::IndexDefinition
+      alias_method :column, :columns
+      alias_method :column=, :columns=
     end
   end
 end

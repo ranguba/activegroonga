@@ -108,4 +108,26 @@ class BaseTest < Test::Unit::TestCase
                  "comment: \"fulltext search engine\">",
                  Bookmark.find_by_uri("http://groonga.org/").inspect)
   end
+
+  def test_index_update
+    google = Bookmark.new
+    google.attributes = {
+      "uri" => "http://google.com/",
+      "comment" => "a search engine",
+      "content" => "<html><body>...Google...</body></html>",
+    }
+    google.save!
+
+    bookmarks = Bookmark.find_all_by_content("Google")
+    assert_equal([google], bookmarks)
+
+    google.content = "<html><body>...Empty...</body></html>"
+    google.save!
+
+    bookmarks = Bookmark.find_all_by_content("Google")
+    assert_equal([], bookmarks)
+
+    bookmarks = Bookmark.find_all_by_content("Empty")
+    assert_equal([google], bookmarks)
+  end
 end
