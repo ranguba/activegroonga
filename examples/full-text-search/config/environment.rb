@@ -13,6 +13,8 @@ Rails::Initializer.run do |config|
 
   # Add additional load paths for your own custom dirs
   # config.load_paths += %W( #{RAILS_ROOT}/extras )
+  config.load_paths += %W(#{RAILS_ROOT}/../../lib)
+  config.plugin_paths += %W(#{RAILS_ROOT}/../..)
 
   # Specify gems that this application depends on and have them installed with rake gems:install
   # config.gem "bj"
@@ -27,6 +29,8 @@ Rails::Initializer.run do |config|
   # Skip frameworks you're not going to use. To use Rails without a database,
   # you must remove the Active Record framework.
   # config.frameworks -= [ :active_record, :active_resource, :action_mailer ]
+  config.frameworks -= [ :active_record ]
+  config.frameworks += [ :active_groonga ]
 
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector, :forum_observer
@@ -38,4 +42,17 @@ Rails::Initializer.run do |config|
   # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
   # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}')]
   # config.i18n.default_locale = :de
+
+  config.log_path = Logger::LogDevice.new(config.log_path)
+end
+
+if File.basename($0) == "generate"
+  require 'rails_generator'
+
+  path = "#{RAILS_ROOT}/../.."
+  full_path = Pathname.new(File.expand_path(path))
+  relative_path = full_path.relative_path_from(Pathname.new(::RAILS_ROOT))
+  source = Rails::Generator::PathSource.new("plugins (#{relative_path})",
+                                            "#{path}/**/{,rails_}generators")
+  Rails::Generator::Base.append_sources(source)
 end
