@@ -3,10 +3,11 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  test "page title" do
+  test "extract" do
     listener = Object.new
     mock(listener).title("アンパサンド")
     mock(listener).timestamp(Time.parse("2008-11-17T09:17:43Z"))
+    mock(listener).contributor({:id => 193720, :name => "鈴虫"})
     mock(listener).content("{{記号文字|&amp;}} ...")
     parse("ampersand-omitted.xml", listener)
   end

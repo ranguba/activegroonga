@@ -16,6 +16,7 @@ class WikipediaExtractor
       @listener = listener
       @name_stack = []
       @text_stack = []
+      @contributor_stack = []
     end
 
     ###
@@ -34,6 +35,10 @@ class WikipediaExtractor
     def start_element(name, attrs=[])
       @name_stack << name
       @text_stack << ""
+      case @name_stack.join(".")
+      when "mediawiki.page.revision.contributor"
+        @contributor_stack << {}
+      end
     end
 
     ###
@@ -45,6 +50,13 @@ class WikipediaExtractor
         @listener.title(@text_stack.last)
       when "mediawiki.page.revision.timestamp"
         @listener.timestamp(Time.parse(@text_stack.last))
+      when "mediawiki.page.revision.contributor"
+        @listener.contributor(@contributor_stack.last)
+        @contributor_stack.pop
+      when "mediawiki.page.revision.contributor.id"
+        @contributor_stack.last[:id] = Integer(@text_stack.last)
+      when "mediawiki.page.revision.contributor.username"
+        @contributor_stack.last[:name] = @text_stack.last
       when "mediawiki.page.revision.text"
         @listener.content(@text_stack.last)
       end
