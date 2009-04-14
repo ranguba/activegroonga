@@ -489,6 +489,10 @@ module ActiveGroonga
         "<table:#{name || table_name}>"
       end
 
+      def groonga_metadata_table_name(name)
+        "<metadata:#{name}>"
+      end
+
       # Defines an "attribute" method (like +inheritance_column+ or
       # +table_name+). A new (class) method will be created with the
       # given name. If a value is specified, the new method will
@@ -542,11 +546,11 @@ module ActiveGroonga
           unless File.exist?(database_directory)
             FileUtils.mkdir_p(database_directory)
           end
-          database_file = File.join(database_directory, "db")
+          database_file = File.join(database_directory, "database.groonga")
           if File.exist?(database_file)
-            @@database = Groonga::Database.new(database_file)
+            Groonga::Database.new(database_file)
           else
-            @@database = Groonga::Database.create(:path => database_file)
+            Groonga::Database.create(:path => database_file)
           end
           self.database_directory = database_directory
         end
@@ -559,7 +563,19 @@ module ActiveGroonga
       end
 
       def columns_directory(table_name)
-        directory = File.join(tables_directory, table_name, "columns")
+        directory = File.join(tables_directory, table_name.to_s, "columns")
+        FileUtils.mkdir_p(directory) unless File.exist?(directory)
+        directory
+      end
+
+      def indexes_directory
+        directory = File.join(database_directory, "indexes")
+        FileUtils.mkdir_p(directory) unless File.exist?(directory)
+        directory
+      end
+
+      def metadata_directory
+        directory = File.join(database_directory, "metadata")
         FileUtils.mkdir_p(directory) unless File.exist?(directory)
         directory
       end

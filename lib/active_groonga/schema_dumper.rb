@@ -71,11 +71,12 @@ module ActiveGroonga
       end
 
       def columns(table_name)
+        table_name = Base.groonga_table_name(table_name)
         Base.context[table_name].columns.collect {|column| Column.new(column)}
       end
 
       def indexes(table_name)
-        []
+        Schema.indexes(table_name)
       end
     end
 

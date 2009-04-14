@@ -30,7 +30,9 @@ module ActiveGroongaTestUtils
   def setup_sand_box
     Groonga::Context.default = nil
     @context = Groonga::Context.default
+
     setup_tmp_directory
+    setup_database_directory
     setup_tables_directory
     setup_indexes_directory
 
@@ -51,19 +53,27 @@ module ActiveGroongaTestUtils
     FileUtils.mkdir_p(@tmp_dir.to_s)
   end
 
+  def setup_database_directory
+    @database_dir = @tmp_dir + "database"
+    FileUtils.mkdir_p(@database_dir.to_s)
+    ActiveGroonga::Base.database_directory = @database_dir.to_s
+  end
+
   def setup_tables_directory
-    @tables_dir = @tmp_dir + "tables"
+    @tables_dir = @database_dir + "tables"
     FileUtils.mkdir_p(@tables_dir.to_s)
   end
 
   def setup_indexes_directory
-    @indexes_dir = @tmp_dir + "indexes"
+    @indexes_dir = @database_dir + "indexes"
     FileUtils.mkdir_p(@indexes_dir.to_s)
   end
 
   def setup_database
-    @db_path = @tmp_dir + "db"
-    @database = Groonga::Database.create(:path => @db_path.to_s)
+    @database_path = @database_dir + "database.groonga"
+    @database = Groonga::Database.create(:path => @database_path.to_s)
+
+    ActiveGroonga::Schema.initialize_schema_management_tables
   end
 
   def setup_users_table

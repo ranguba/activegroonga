@@ -62,7 +62,7 @@ module ActiveGroonga
       end
 
       def groonga_schema_migrations_table_name
-        Base.groonga_table_name(schema_migrations_table_name)
+        Base.groonga_metadata_table_name(schema_migrations_table_name)
       end
 
       def get_all_versions
@@ -89,7 +89,7 @@ module ActiveGroonga
     end
 
     def initialize(direction, migrations_path, target_version = nil)
-      Schema.initialize_schema_migrations_table
+      Schema.initialize_schema_management_tables
       @direction, @migrations_path, @target_version = direction, migrations_path, target_version
       FileUtils.mkdir_p(@migrations_path) unless File.exist?(@migrations_path)
     end
