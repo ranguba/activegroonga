@@ -27,7 +27,7 @@ module ActiveGroonga
 
       def assume_migrated_upto_version(version)
         version = version.to_i
-        table_name = Migrator.schema_migrations_table_name
+        table_name = Migrator.groonga_schema_migrations_table_name
 
         migrations_table = Base.context[table_name]
         migrated = migrations_table.records.collect do |record|
@@ -56,7 +56,8 @@ module ActiveGroonga
 
       def initialize_schema_migrations_table
         table_name = Migrator.schema_migrations_table_name
-        if Base.context[table_name].nil?
+        groonga_table_name = Migrator.groonga_schema_migrations_table_name
+        if Base.context[groonga_table_name].nil?
           create_table(table_name) do |table|
             table.string(:version)
           end
@@ -70,7 +71,7 @@ module ActiveGroonga
       end
 
       def drop_table(name, options={})
-        Base.context[name].remove
+        Base.context[Base.groonga_table_name(name)].remove
       end
 
       def add_column(table_name, column_name, type, options={})
@@ -96,7 +97,8 @@ module ActiveGroonga
 
       def create
         table_file = File.join(Base.tables_directory, "#{@name}.groonga")
-        Groonga::Array.create(:name => @name, :path => table_file)
+        Groonga::Array.create(:name => Base.groonga_table_name(@name),
+                              :path => table_file)
         @columns.each(&:create)
       end
 
@@ -130,9 +132,10 @@ module ActiveGroonga
         column_file = File.join(Base.columns_directory(@table_name),
                                 "#{@name}.groonga")
         options = options.merge(:path => column_file)
-        Base.context[@table_name].define_column(@name,
-                                                normalize_type(@type),
-                                                options)
+        table = Base.context[Base.groonga_table_name(@table_name)]
+        table.define_column(@name,
+                            normalize_type(@type),
+                            options)
       end
 
       def remove

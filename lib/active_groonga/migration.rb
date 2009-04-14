@@ -61,13 +61,17 @@ module ActiveGroonga
         Base.table_name_prefix + 'schema_migrations' + Base.table_name_suffix
       end
 
+      def groonga_schema_migrations_table_name
+        Base.groonga_table_name(schema_migrations_table_name)
+      end
+
       def get_all_versions
-        table = Base.context[schema_migrations_table_name]
+        table = Base.context[groonga_schema_migrations_table_name]
         table.records.collect {|record| record["version"].to_i}.sort
       end
 
       def current_version
-        table = Base.context[schema_migrations_table_name]
+        table = Base.context[groonga_schema_migrations_table_name]
         if table.nil?
           0
         else
@@ -76,7 +80,11 @@ module ActiveGroonga
       end
 
       def proper_table_name(name)
-        name.table_name rescue "#{Base.table_name_prefix}#{name}#{Base.table_name_suffix}"
+        begin
+          name.table_name
+        rescue
+          "#{Base.table_name_prefix}#{name}#{Base.table_name_suffix}"
+        end
       end
     end
 
@@ -124,7 +132,7 @@ module ActiveGroonga
 
     private
     def record_version_state_after_migrating(version)
-      table_name = self.class.schema_migrations_table_name
+      table_name = self.class.groonga_schema_migrations_table_name
       table = Base.context[table_name]
 
       @migrated_versions ||= []

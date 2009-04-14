@@ -32,6 +32,7 @@ module ActiveGroongaTestUtils
     @context = Groonga::Context.default
     setup_tmp_directory
     setup_tables_directory
+    setup_indexes_directory
 
     setup_database
     setup_users_table
@@ -55,6 +56,11 @@ module ActiveGroongaTestUtils
     FileUtils.mkdir_p(@tables_dir.to_s)
   end
 
+  def setup_indexes_directory
+    @indexes_dir = @tmp_dir + "indexes"
+    FileUtils.mkdir_p(@indexes_dir.to_s)
+  end
+
   def setup_database
     @db_path = @tmp_dir + "db"
     @database = Groonga::Database.create(:path => @db_path.to_s)
@@ -62,7 +68,7 @@ module ActiveGroongaTestUtils
 
   def setup_users_table
     @users_path = @tables_dir + "users.groonga"
-    @users = Groonga::Array.create(:name => "users",
+    @users = Groonga::Array.create(:name => "<table:users>",
                                    :path => @users_path.to_s)
 
     columns_dir = @tables_dir + "users" + "columns"
@@ -75,7 +81,7 @@ module ActiveGroongaTestUtils
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks.groonga"
-    @bookmarks = Groonga::Array.create(:name => "bookmarks",
+    @bookmarks = Groonga::Array.create(:name => "<table:bookmarks>",
                                        :path => @bookmarks_path.to_s)
 
     columns_dir = @tables_dir + "bookmarks" + "columns"
@@ -102,31 +108,30 @@ module ActiveGroongaTestUtils
   end
 
   def setup_bookmarks_index_table
-    @bookmarks_index_path = @tables_dir + "bookmarks-index.groonga"
-    @bookmarks_index = Groonga::Hash.create(:name => "bookmarks-index",
-                                            :path => @bookmarks_index_path.to_s)
+    bookmarks_index_path = @indexes_dir + "bookmarks"
+    bookmarks_index_path.mkpath
+    @bookmarks_content_index_path = bookmarks_index_path + "content.groonga"
+    @bookmarks_content_index =
+      Groonga::Hash.create(:name => "<index:bookmarks:content>",
+                           :path => @bookmarks_content_index_path.to_s)
 
-    columns_dir = @tables_dir + "bookmarks-index" + "columns"
+    columns_dir = bookmarks_index_path + "content" + "columns"
     columns_dir.mkpath
 
-    @bookmark_id_column_path = columns_dir + "bookmark_id.groonga"
-    @bookmark_id_column =
-      @bookmarks_index.define_column("bookmark_id", @bookmarks,
-                                     :path => @bookmark_id_column_path.to_s)
-
-    @content_index_column_path = columns_dir + "content_index.groonga"
-    @content_index_column =
-      @bookmarks_index.define_column("content", "<shorttext>",
-                                     :type => "index",
-                                     :with_section => true,
-                                     :with_weight => true,
-                                     :with_position => true,
-                                     :path => @content_index_column_path.to_s)
+    @bookmarks_content_index_column_path = columns_dir + "inverted-index.groonga"
+    path = @bookmarks_content_index_column_path.to_s
+    @bookmarks_content_index_column =
+      @bookmarks_content_index.define_column("inverted-index", "<shorttext>",
+                                             :type => "index",
+                                             :with_section => true,
+                                             :with_weight => true,
+                                             :with_position => true,
+                                             :path => path)
   end
 
   def setup_tasks_table
     @tasks_path = @tables_dir + "tasks.groonga"
-    @tasks = Groonga::Array.create(:name => "tasks",
+    @tasks = Groonga::Array.create(:name => "<table:tasks>",
                                    :path => @tasks_path.to_s)
 
     columns_dir = @tables_dir + "tasks" + "columns"
@@ -195,10 +200,7 @@ module ActiveGroongaTestUtils
     bookmark["user_id"] = user.id
     bookmark["comment"] = comment
     bookmark["content"] = content
-
-    bookmark_content_index = @bookmarks_index.add(name)
-    bookmark_content_index["bookmark_id"] = bookmark.id
-    bookmark_content_index["content"] = content
+    @bookmarks_content_index_column[bookmark.id] = content
 
     bookmark
   end

@@ -482,7 +482,11 @@ module ActiveGroonga
       end
 
       def table
-        context[table_name]
+        context[groonga_table_name]
+      end
+
+      def groonga_table_name(name=nil)
+        "<table:#{name || table_name}>"
       end
 
       # Defines an "attribute" method (like +inheritance_column+ or
