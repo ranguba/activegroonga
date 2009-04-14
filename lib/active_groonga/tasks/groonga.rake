@@ -133,7 +133,7 @@ namespace :groonga do
     desc "Recreate the test database from the current schema.rb"
     task :load => 'groonga:test:purge' do
       ActiveGroonga::Base.setup_database(:test)
-      ActiveGroonga::Schema.verbose = false
+      ActiveGroonga::Migration.verbose = false
       Rake::Task["groonga:schema:load"].invoke
     end
 
@@ -148,8 +148,8 @@ namespace :groonga do
 
     desc "Empty the test database"
     task :purge => :environment do
-      ActiveGroonga::Base.setup_connection(:test)
-      ActiveGroonga.database.remove
+      ActiveGroonga::Base.setup_database(:test)
+      ActiveGroonga::Base.database.remove
     end
 
     desc 'Check for pending migrations and load the test schema'

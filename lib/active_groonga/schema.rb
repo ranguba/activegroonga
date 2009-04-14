@@ -25,6 +25,35 @@ module ActiveGroonga
         end
       end
 
+      def assume_migrated_upto_version(version)
+        version = version.to_i
+        table_name = Migrator.schema_migrations_table_name
+
+        migrations_table = Base.context[table_name]
+        migrated = migrations_table.records.collect do |record|
+          record["version"].to_i
+        end
+        versions = Dir['db/migrate/[0-9]*_*.rb'].map do |filename|
+          filename.split('/').last.split('_').first.to_i
+        end
+
+        unless migrated.include?(version)
+          migration = migrations_table.add
+          migration["version"] = version.to_s
+        end
+
+        inserted = Set.new
+        (versions - migrated).each do |v|
+          if inserted.include?(v)
+            raise "Duplicate migration #{v}. Please renumber your migrations to resolve the conflict."
+          elsif v < version
+            migration = migrations_table.add
+            migration["version"] = v.to_s
+            inserted << v
+          end
+        end
+      end
+
       def initialize_schema_migrations_table
         table_name = Migrator.schema_migrations_table_name
         if Base.context[table_name].nil?

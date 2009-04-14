@@ -477,6 +477,10 @@ module ActiveGroonga
         Groonga::Context.default
       end
 
+      def database
+        context.database
+      end
+
       def table
         context[table_name]
       end

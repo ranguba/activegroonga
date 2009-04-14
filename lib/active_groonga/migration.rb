@@ -83,6 +83,7 @@ module ActiveGroonga
     def initialize(direction, migrations_path, target_version = nil)
       Schema.initialize_schema_migrations_table
       @direction, @migrations_path, @target_version = direction, migrations_path, target_version
+      FileUtils.mkdir_p(@migrations_path) unless File.exist?(@migrations_path)
     end
 
     def migrate
