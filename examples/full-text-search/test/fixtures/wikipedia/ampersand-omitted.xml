@@ -1,0 +1,45 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="ja">
+  <siteinfo>
+    <sitename>Wikipedia</sitename>
+    <base>http://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8</base>
+    <generator>MediaWiki 1.14alpha</generator>
+    <case>first-letter</case>
+      <namespaces>
+      <namespace key="-2">メディア</namespace>
+      <namespace key="-1">特別</namespace>
+      <namespace key="0" />
+      <namespace key="1">ノート</namespace>
+      <namespace key="2">利用者</namespace>
+      <namespace key="3">利用者‐会話</namespace>
+      <namespace key="4">Wikipedia</namespace>
+      <namespace key="5">Wikipedia‐ノート</namespace>
+      <namespace key="6">ファイル</namespace>
+      <namespace key="7">ファイル‐ノート</namespace>
+      <namespace key="8">MediaWiki</namespace>
+      <namespace key="9">MediaWiki‐ノート</namespace>
+      <namespace key="10">Template</namespace>
+      <namespace key="11">Template‐ノート</namespace>
+      <namespace key="12">Help</namespace>
+      <namespace key="13">Help‐ノート</namespace>
+      <namespace key="14">Category</namespace>
+      <namespace key="15">Category‐ノート</namespace>
+      <namespace key="100">Portal</namespace>
+      <namespace key="101">Portal‐ノート</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>アンパサンド</title>
+    <id>5</id>
+    <revision>
+      <id>22944114</id>
+      <timestamp>2008-11-17T09:17:43Z</timestamp>
+      <contributor>
+        <username>鈴虫</username>
+        <id>193720</id>
+      </contributor>
+      <minor />
+      <comment>Undo revision 22944102 by [[Special:Contributions/84.174.214.52|84.174.214.52]] ([[User talk:84.174.214.52|会話]])</comment>
+      <text xml:space="preserve">{{記号文字|&amp;amp;}} ...</text>
+    </revision>
+  </page>
+</mediawiki>

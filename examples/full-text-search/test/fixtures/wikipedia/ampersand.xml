@@ -1,0 +1,94 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.3/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.3/ http://www.mediawiki.org/xml/export-0.3.xsd" version="0.3" xml:lang="ja">
+  <siteinfo>
+    <sitename>Wikipedia</sitename>
+    <base>http://ja.wikipedia.org/wiki/%E3%83%A1%E3%82%A4%E3%83%B3%E3%83%9A%E3%83%BC%E3%82%B8</base>
+    <generator>MediaWiki 1.14alpha</generator>
+    <case>first-letter</case>
+      <namespaces>
+      <namespace key="-2">メディア</namespace>
+      <namespace key="-1">特別</namespace>
+      <namespace key="0" />
+      <namespace key="1">ノート</namespace>
+      <namespace key="2">利用者</namespace>
+      <namespace key="3">利用者‐会話</namespace>
+      <namespace key="4">Wikipedia</namespace>
+      <namespace key="5">Wikipedia‐ノート</namespace>
+      <namespace key="6">ファイル</namespace>
+      <namespace key="7">ファイル‐ノート</namespace>
+      <namespace key="8">MediaWiki</namespace>
+      <namespace key="9">MediaWiki‐ノート</namespace>
+      <namespace key="10">Template</namespace>
+      <namespace key="11">Template‐ノート</namespace>
+      <namespace key="12">Help</namespace>
+      <namespace key="13">Help‐ノート</namespace>
+      <namespace key="14">Category</namespace>
+      <namespace key="15">Category‐ノート</namespace>
+      <namespace key="100">Portal</namespace>
+      <namespace key="101">Portal‐ノート</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>アンパサンド</title>
+    <id>5</id>
+    <revision>
+      <id>22944114</id>
+      <timestamp>2008-11-17T09:17:43Z</timestamp>
+      <contributor>
+        <username>鈴虫</username>
+        <id>193720</id>
+      </contributor>
+      <minor />
+      <comment>Undo revision 22944102 by [[Special:Contributions/84.174.214.52|84.174.214.52]] ([[User talk:84.174.214.52|会話]])</comment>
+      <text xml:space="preserve">{{記号文字|&amp;amp;}}
+'''[[アンパサンド]]''' ({{lang|en|ampersand}}, '''&amp;amp;''') とは「～と…」を意味する[[記号]]である。正式な書き順は不明。[[英語]]の {{lang|en|&quot;and&quot;}} に相当する[[ラテン語]]の {{lang|la|&quot;et&quot;}} の[[合字]]で、{{lang|en|&quot;etc.&quot;}} を {{lang|en|&quot;&amp;amp;c.&quot;}} と記述することがあるのはそのため。[[Z]] に続く[[ラテン文字]][[アルファベット]]の27字目とされた時期もある。
+
+記号名の「アンパサンド」は、ラテン語の「&amp;amp; はそれ自身 &quot;and&quot; を表す」{{lang|la|(&amp;amp; per se and)}} からきている。
+
+== プログラミング言語 ==
+[[プログラミング言語]]では、[[C言語|C]] など多数の言語で AND [[演算子]]として用いられる。以下は C の例。
+* &lt;code&gt;X = A '''&amp;amp;&amp;amp;''' B&lt;/code&gt; のように2個重ねたものは[[論理積|論理 AND]] を表す。この場合 A, B がともに真ならば X も真、それ以外は偽である。
+* &lt;code&gt;0x12345678 '''&amp;amp;''' 0x0f0f0f0f&lt;/code&gt; のように1個であれば[[ビット演算#AND|ビット AND]] を表す。この場合の結果は &lt;code&gt;0x02040608&lt;/code&gt; である。
+
+[[BASIC]] 系列の言語では[[文字列]]の連結演算子として使用される。&lt;code&gt;&quot;foo&quot; '''&amp;amp;''' &quot;bar&quot;&lt;/code&gt; は &lt;code&gt;&quot;foobar&quot;&lt;/code&gt; を返す。また、主に[[マイクロソフト]]系では整数の[[十六進法|十六進表記]]に '''&lt;code&gt;&amp;h&lt;/code&gt;''' を用い、&lt;code&gt;&amp;h0F&lt;/code&gt; (十進で15）のように表現する。
+
+== その他 ==
+{{commons|Ampersand}}
+* 『'''&amp;amp;'''』（アンド）は、[[浜崎あゆみ]]が[[2003年]]に発売した4曲入りマキシ[[シングル]]。⇒[[&amp;amp; (シングル)]]
+* 『'''&amp;amp;'''』（アンド）は、[[一青窈]]が[[2005年]]に発売した[[アルバム]]、及び同アルバムに収録された楽曲。
+* '''アンパサンド'''は、[[日本]]の[[競走馬]]。⇒[[アンパサンド (競走馬)]]
+
+== 符号位置 ==
+{| class=&quot;wikitable&quot; style=&quot;text-align:center;&quot;
+!記号!![[Unicode]]!![[JIS X 0213]]!![[文字参照]]!!名称
+{{CharCode|38|0026|1-1-85|アンパサンド}}
+|}
+[[Category:記号|あんはさんと]]
+
+[[cs:Ampersand]]
+[[da:Og-tegn]]
+[[de:Et-Zeichen]]
+[[en:Ampersand]]
+[[eo:Kaj-signo]]
+[[es:&amp;]]
+[[eu:Ampersand]]
+[[fi:&amp;]]
+[[fr:Esperluette]]
+[[he:אמפרסנד]]
+[[hu:És jel]]
+[[id:Ampersand]]
+[[it:Ampersand]]
+[[la:&amp;]]
+[[nl:Ampersand]]
+[[no:&amp;]]
+[[pl:Et]]
+[[pt:&amp;]]
+[[ru:Амперсанд]]
+[[sk:Ampersand]]
+[[sv:Et-tecken]]
+[[th:แอมเพอร์แซนด์]]
+[[tr:Ve imi]]
+[[uk:Амперсанд]]
+[[zh:&amp;]]</text>
+    </revision>
+  </page>
+</mediawiki>

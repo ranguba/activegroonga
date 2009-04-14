@@ -1,0 +1,8 @@
+development:
+  database: db/development.groonga
+
+test:
+  database: db/test.groonga
+
+production:
+  database: db/production.groonga
