@@ -17,10 +17,10 @@ module ActiveGroonga
   module Schema
     class << self
       def define(info={}, &block)
+        initialize_schema_management_tables
         instance_eval(&block)
 
         unless info[:version].blank?
-          initialize_schema_management_tables
           assume_migrated_upto_version(info[:version])
         end
       end
@@ -38,8 +38,7 @@ module ActiveGroonga
         end
 
         unless migrated.include?(version)
-          migration = migrations_table.add
-          migration["version"] = version.to_s
+          migrations_table.add(version.to_s)
         end
 
         inserted = Set.new
