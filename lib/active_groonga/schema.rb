@@ -111,7 +111,8 @@ module ActiveGroonga
                                   :with_weight => true,
                                   :with_position => true)
 
-        record = index_management_table.add(groonga_table_name)
+        record = index_management_table.add
+        record["table"] = groonga_table_name
         record["column"] = column_name
         record["index"] = name
       end
@@ -130,7 +131,7 @@ module ActiveGroonga
         end
         indexes = []
         index_management_table.records.each do |record|
-          next if record.key != table.name
+          next if record["table"] != table.name
           indexes << IndexDefinition.new(table_name, record["index"],
                                          false, record["column"])
         end
@@ -152,12 +153,14 @@ module ActiveGroonga
         if Base.context[groonga_table_name].nil?
           table_file = File.join(Base.metadata_directory,
                                  "#{table_name}.groonga")
-          table = Groonga::Hash.create(:name => groonga_table_name,
-                                       :path => table_file,
-                                       :key_type => "<shorttext>")
+          table = Groonga::Array.create(:name => groonga_table_name,
+                                        :path => table_file)
 
           base_dir = File.join(Base.metadata_directory, table_name)
           FileUtils.mkdir_p(base_dir)
+
+          column_file = File.join(base_dir, "table.groonga")
+          table.define_column("table", "<shorttext>", :path => column_file)
 
           column_file = File.join(base_dir, "column.groonga")
           table.define_column("column", "<shorttext>", :path => column_file)

@@ -130,4 +130,12 @@ class BaseTest < Test::Unit::TestCase
     bookmarks = Bookmark.find_all_by_content("Empty")
     assert_equal([google], bookmarks)
   end
+
+  def test_create
+    google = Bookmark.create("uri" => "http://google.com/",
+                             "comment" => "a search engine",
+                             "content" => "<html><body>...Google...</body></html>")
+
+    assert_equal([google], Bookmark.find_all_by_content("Google"))
+  end
 end

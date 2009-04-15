@@ -140,6 +140,39 @@ module ActiveGroonga
     @@database_directory = nil
 
     class << self
+      # Creates an object (or multiple objects) and saves it to the database, if validations pass.
+      # The resulting object is returned whether the object was saved successfully to the database or not.
+      #
+      # The +attributes+ parameter can be either be a Hash or an Array of Hashes.  These Hashes describe the
+      # attributes on the objects that are to be created.
+      #
+      # ==== Examples
+      #   # Create a single new object
+      #   User.create(:first_name => 'Jamie')
+      #
+      #   # Create an Array of new objects
+      #   User.create([{ :first_name => 'Jamie' }, { :first_name => 'Jeremy' }])
+      #
+      #   # Create a single object and pass it into a block to set other attributes.
+      #   User.create(:first_name => 'Jamie') do |u|
+      #     u.is_admin = false
+      #   end
+      #
+      #   # Creating an Array of new objects using a block, where the block is executed for each object:
+      #   User.create([{ :first_name => 'Jamie' }, { :first_name => 'Jeremy' }]) do |u|
+      #     u.is_admin = false
+      #   end
+      def create(attributes = nil, &block)
+        if attributes.is_a?(Array)
+          attributes.collect { |attr| create(attr, &block) }
+        else
+          object = new(attributes)
+          yield(object) if block_given?
+          object.save
+          object
+        end
+      end
+
       # Attributes named in this macro are protected from mass-assignment,
       # such as <tt>new(attributes)</tt>,
       # <tt>update_attributes(attributes)</tt>, or
@@ -602,8 +635,9 @@ module ActiveGroonga
           original_table = table
           target_table = nil
           Schema.indexes(table_name).each do |index|
-            if conditions.has_key?(index.columns)
+            if conditions.has_key?(index.column)
               index_column = context[index.name].column("inverted-index")
+              next if index_column.nil?
               target_table =
                 index_column.search(conditions.delete(index.columns),
                                     :result => target_table)
@@ -1304,6 +1338,7 @@ module ActiveGroonga
         indexes.each do |index|
           if index.column == name
             index_table = self.class.context[index.name]
+            next if index_table.nil?
             index_column = index_table.column("inverted-index")
             index_column[id] = {
               :old_value => column[id],
@@ -1328,6 +1363,7 @@ module ActiveGroonga
           if index.column == column.name
             index_table = self.class.context[index.name]
             index_column = index_table.column("inverted-index")
+            next if index_column.nil?
             index_column[record.id] = record[column.name]
           end
         end
@@ -1344,6 +1380,18 @@ module ActiveGroonga
     def ensure_proper_type
       unless self.class.descends_from_active_groonga?
         write_attribute(self.class.inheritance_column, self.class.sti_name)
+      end
+    end
+
+    def convert_number_column_value(value)
+      if value == false
+        0
+      elsif value == true
+        1
+      elsif value.is_a?(String) && value.blank?
+        nil
+      else
+        value
       end
     end
 

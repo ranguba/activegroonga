@@ -139,7 +139,8 @@ module ActiveGroongaTestUtils
                                              :with_position => true,
                                              :path => path)
 
-    record = ActiveGroonga::Schema.index_management_table.add(@bookmarks.name)
+    record = ActiveGroonga::Schema.index_management_table.add
+    record["table"] = @bookmarks.name
     record["column"] = "content"
     record["index"] = @bookmarks_content_index.name
   end
