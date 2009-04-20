@@ -632,20 +632,22 @@ module ActiveGroonga
           records = find_with_associations(options)
         else
           records = []
+          target_records = []
           original_table = table
-          target_table = nil
-          Schema.indexes(table_name).each do |index|
-            if conditions.has_key?(index.column)
-              index_column = context[index.name].column("inverted-index")
-              next if index_column.nil?
-              target_table =
-                index_column.search(conditions.delete(index.columns),
-                                    :result => target_table)
+          index_records = nil
+          Schema.indexes(table_name).each do |index_definition|
+            if conditions.has_key?(index_definition.column)
+              index_column_name =
+                "#{index_definition.table}/#{index_definition.column}"
+              index = context[index_definition.name].column(index_column_name)
+              key = conditions.delete(index_definition.column)
+              index_records = index.search(key, :result => index_records)
             end
           end
-          if target_table
-            target_records = target_table.records.collect do |record|
-              Groonga::Record.new(original_table, record.key.unpack("i")[0])
+          if index_records
+            target_records = index_records.collect do |index_record|
+              id = index_record.key.unpack("i")[0]
+              Groonga::Record.new(original_table, id)
             end
           else
             target_records = original_table.records
@@ -1335,18 +1337,22 @@ module ActiveGroonga
         column = table.column(name)
         next if column.nil?
         value = read_attribute(name)
-        indexes.each do |index|
-          if index.column == name
-            index_table = self.class.context[index.name]
-            next if index_table.nil?
-            index_column = index_table.column("inverted-index")
-            index_column[id] = {
-              :old_value => column[id],
-              :value => value,
-            }
-          end
-        end
+        update_index(indexes, column, name, id, value)
         column[id] = value
+      end
+    end
+
+    def update_index(indexes, column, name, id, value)
+      return if value.nil?
+      indexes.each do |index|
+        next if index.column != name
+        index_table = self.class.context[index.name]
+        index_column_name = "#{self.class.table_name}/#{name}"
+        index_column = index_table.column(index_column_name)
+        index_column[id] = {
+          :old_value => column[id],
+          :value => value,
+        }
       end
     end
 
@@ -1358,19 +1364,25 @@ module ActiveGroonga
       indexes = Schema.indexes(table)
       record.table.columns.each do |column|
         column = Column.new(column)
-        record[column.name] = @attributes[column.name]
-        indexes.each do |index|
-          if index.column == column.name
-            index_table = self.class.context[index.name]
-            index_column = index_table.column("inverted-index")
-            next if index_column.nil?
-            index_column[record.id] = record[column.name]
-          end
-        end
+        column_name = column.name
+        value = @attributes[column_name]
+        record[column_name] = value
+        create_index(indexes, column, column_name, record.id, value)
       end
       self.id = record.id
       @new_record = false
       id
+    end
+
+    def create_index(indexes, column, name, id, value)
+      return if value.nil?
+      indexes.each do |index|
+        next if index.column != name
+        index_table = self.class.context[index.name]
+        index_column_name = "#{self.class.table_name}/#{name}"
+        index_column = index_table.column(index_column_name)
+        index_column[id] = value
+      end
     end
 
     # Sets the attribute used for single table inheritance to this class name if this is not the ActiveRecord::Base descendant.

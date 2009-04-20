@@ -109,7 +109,7 @@ class BaseTest < Test::Unit::TestCase
                  Bookmark.find_by_uri("http://groonga.org/").inspect)
   end
 
-  def test_index_update
+  def test_update_inverted_index
     google = Bookmark.new
     google.attributes = {
       "uri" => "http://google.com/",
@@ -128,6 +128,19 @@ class BaseTest < Test::Unit::TestCase
     assert_equal([], bookmarks)
 
     bookmarks = Bookmark.find_all_by_content("Empty")
+    assert_equal([google], bookmarks)
+  end
+
+  def test_update_index
+    user = @user_records[:daijiro]
+    google = Bookmark.new
+    google.attributes = {
+      "uri" => "http://google.com/",
+      "user_id" => user.id,
+    }
+    google.save!
+
+    bookmarks = Bookmark.find_all_by_user_id([user.id].pack("i"))
     assert_equal([google], bookmarks)
   end
 

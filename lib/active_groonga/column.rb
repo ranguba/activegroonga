@@ -35,26 +35,29 @@ module ActiveGroonga
     private
     def detect_type
       case @column.range
-      when Groonga::Type::INT
-        :integer
-      when Groonga::Type::UINT
-        :unsigned_integer
-      when Groonga::Type::INT64
-        :decimal
-      when Groonga::Type::FLOAT
-        :float
-      when Groonga::Type::TIME
-        :time
-      when Groonga::Type::SHORT_TEXT
-        :string
-      when Groonga::Type::TEXT, Groonga::Type::LONG_TEXT
-        :text
-      else
-        if Base.context[@column.range]
-          :references
+      when Groonga::Type
+        case @column.range.id
+        when Groonga::Type::INT
+          :integer
+        when Groonga::Type::UINT
+          :unsigned_integer
+        when Groonga::Type::INT64
+          :decimal
+        when Groonga::Type::FLOAT
+          :float
+        when Groonga::Type::TIME
+          :time
+        when Groonga::Type::SHORT_TEXT
+          :string
+        when Groonga::Type::TEXT, Groonga::Type::LONG_TEXT
+          :text
         else
           :string
         end
+      when Groonga::Table
+        :references
+      else
+        :string
       end
     end
   end
