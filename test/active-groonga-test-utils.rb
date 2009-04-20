@@ -34,7 +34,7 @@ module ActiveGroongaTestUtils
     setup_tmp_directory
     setup_database_directory
     setup_tables_directory
-    setup_indexes_directory
+    setup_metadata_directory
 
     setup_database
     setup_users_table
@@ -64,9 +64,9 @@ module ActiveGroongaTestUtils
     FileUtils.mkdir_p(@tables_dir.to_s)
   end
 
-  def setup_indexes_directory
-    @indexes_dir = @database_dir + "indexes"
-    FileUtils.mkdir_p(@indexes_dir.to_s)
+  def setup_metadata_directory
+    @metadata_dir = @database_dir + "metadata"
+    FileUtils.mkdir_p(@metadata_dir.to_s)
   end
 
   def setup_database
@@ -118,62 +118,50 @@ module ActiveGroongaTestUtils
   end
 
   def setup_bookmarks_index_tables
-    @index_terms_dir = @indexes_dir + "terms"
-    @index_terms_dir.mkpath
-
-    @index_ids_dir = @indexes_dir + "ids"
-    @index_ids_dir.mkpath
+    @index = @context["<metadata:index>"]
 
     setup_bookmarks_content_index_table
     setup_bookmarks_user_id_index_table
   end
 
   def setup_bookmarks_content_index_table
-    @index_terms_path = @indexes_dir + "terms.groonga"
-    @index_terms = Groonga::PatriciaTrie.create(:name => "<index:terms>",
-                                                :path => @index_terms_path.to_s)
-    @index_terms.default_tokenizer = "<token:mecab>"
-
-    bookmark_indexes_dir = @index_terms_dir + "bookmarks"
-    bookmark_indexes_dir.mkpath
+    bookmarks_index_dir = @metadata_dir + "index" + "bookmarks"
+    bookmarks_index_dir.mkpath
 
     @bookmarks_content_index_column_path =
-      bookmark_indexes_dir + "content.groonga"
+      bookmarks_index_dir + "content.groonga"
     path = @bookmarks_content_index_column_path.to_s
     @bookmarks_content_index_column =
-      @index_terms.define_column("bookmarks/content", @bookmarks,
-                                 :type => "index",
-                                 :with_section => true,
-                                 :with_weight => true,
-                                 :with_position => true,
-                                 :path => path)
+      @index.define_column("bookmarks/content", @bookmarks,
+                           :type => "index",
+                           :with_section => true,
+                           :with_weight => true,
+                           :with_position => true,
+                           :path => path)
+    @bookmarks_content_index_column.source = @content_column
 
     record = ActiveGroonga::Schema.index_management_table.add
     record["table"] = @bookmarks.name
     record["column"] = "content"
-    record["index"] = @index_terms.name
+    record["index"] = @index.name
   end
 
   def setup_bookmarks_user_id_index_table
-    @index_ids_path = @indexes_dir + "ids.groonga"
-    @index_ids = Groonga::Hash.create(:name => "<index:ids>",
-                                      :key_type => "<shorttext>",
-                                      :path => @index_ids_path.to_s)
-    @index_ids.default_tokenizer = "<token:delimit>"
+    bookmarks_index_dir = @metadata_dir + "index" + "bookmarks"
+    bookmarks_index_dir.mkpath
 
-    bookmark_indexes_dir = @index_ids_dir + "bookmarks"
-    bookmark_indexes_dir.mkpath
-
-    @bookmarks_user_id_index_column_path = bookmark_indexes_dir + "user_id.groonga"
+    @bookmarks_user_id_index_column_path =
+      bookmarks_index_dir + "user_id.groonga"
     @bookmarks_user_id_index_column =
-      @index_ids.define_column("bookmarks/user_id", @users,
-                               :type => "index",
-                               :path => @bookmarks_user_id_index_column_path.to_s)
+      @index.define_column("bookmarks/user_id", @users,
+                           :type => "index",
+                           :path => @bookmarks_user_id_index_column_path.to_s)
+    @bookmarks_user_id_index_column.source = @user_id_column
 
     record = ActiveGroonga::Schema.index_management_table.add
     record["table"] = @bookmarks.name
     record["column"] = "user_id"
-    record["index"] = @index_ids.name
+    record["index"] = @index.name
   end
 
   def setup_tasks_table
@@ -247,8 +235,6 @@ module ActiveGroongaTestUtils
     bookmark["user_id"] = user.id
     bookmark["comment"] = comment
     bookmark["content"] = content
-    @bookmarks_content_index_column[bookmark.id] = content
-    @bookmarks_user_id_index_column[bookmark.id] = user.id.to_s
 
     bookmark
   end

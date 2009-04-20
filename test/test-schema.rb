@@ -35,11 +35,9 @@ class SchemaTest < Test::Unit::TestCase
   end
 
   def test_add_index
-    base_dir = @indexes_dir + "posts"
+    base_dir = @metadata_dir + "index" + "posts"
     index_file = base_dir + "content.groonga"
-    inverted_index_file = base_dir + "content" + "inverted-index.groonga"
     assert_not_predicate(index_file, :exist?)
-    assert_not_predicate(inverted_index_file, :exist?)
 
     ActiveGroonga::Schema.create_table(:posts) do |table|
       table.string :content
@@ -47,6 +45,5 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     assert_predicate(index_file, :exist?)
-    assert_not_predicate(inverted_index_file, :exist?)
   end
 end

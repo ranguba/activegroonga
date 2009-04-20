@@ -132,22 +132,24 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_update_index
-    user = @user_records[:daijiro]
+    daijiro = @user_records[:daijiro]
     google = Bookmark.new
     google.attributes = {
       "uri" => "http://google.com/",
-      "user_id" => user.id,
+      "user_id" => daijiro.id,
     }
     google.save!
 
-    bookmarks = Bookmark.find_all_by_user_id([user.id].pack("i"))
-    assert_equal([google], bookmarks)
+    bookmarks = Bookmark.find_all_by_user_id(daijiro.id)
+    assert_equal([google, Bookmark.find(@bookmark_records[:groonga].id)],
+                 bookmarks)
   end
 
   def test_create
     google = Bookmark.create("uri" => "http://google.com/",
                              "comment" => "a search engine",
                              "content" => "<html><body>...Google...</body></html>")
+
 
     assert_equal([google], Bookmark.find_all_by_content("Google"))
   end

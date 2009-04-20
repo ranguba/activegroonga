@@ -601,12 +601,6 @@ module ActiveGroonga
         directory
       end
 
-      def indexes_directory
-        directory = File.join(database_directory, "indexes")
-        FileUtils.mkdir_p(directory) unless File.exist?(directory)
-        directory
-      end
-
       def metadata_directory
         directory = File.join(database_directory, "metadata")
         FileUtils.mkdir_p(directory) unless File.exist?(directory)
@@ -1337,22 +1331,7 @@ module ActiveGroonga
         column = table.column(name)
         next if column.nil?
         value = read_attribute(name)
-        update_index(indexes, column, name, id, value)
         column[id] = value
-      end
-    end
-
-    def update_index(indexes, column, name, id, value)
-      return if value.nil?
-      indexes.each do |index|
-        next if index.column != name
-        index_table = self.class.context[index.name]
-        index_column_name = "#{self.class.table_name}/#{name}"
-        index_column = index_table.column(index_column_name)
-        index_column[id] = {
-          :old_value => column[id],
-          :value => value,
-        }
       end
     end
 
@@ -1367,22 +1346,10 @@ module ActiveGroonga
         column_name = column.name
         value = @attributes[column_name]
         record[column_name] = value
-        create_index(indexes, column, column_name, record.id, value)
       end
       self.id = record.id
       @new_record = false
       id
-    end
-
-    def create_index(indexes, column, name, id, value)
-      return if value.nil?
-      indexes.each do |index|
-        next if index.column != name
-        index_table = self.class.context[index.name]
-        index_column_name = "#{self.class.table_name}/#{name}"
-        index_column = index_table.column(index_column_name)
-        index_column[id] = value
-      end
     end
 
     # Sets the attribute used for single table inheritance to this class name if this is not the ActiveRecord::Base descendant.

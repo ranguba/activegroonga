@@ -55,6 +55,7 @@ module ActiveGroonga
 
       def initialize_schema_management_tables
         initialize_index_management_table
+        initialize_index_table
         initialize_migrations_table
       end
 
@@ -88,23 +89,22 @@ module ActiveGroonga
       end
 
       def add_index(table_name, column_name, options={})
-        table_name = Base.table_name_prefix + table_name + Base.table_name_suffix
         groonga_table_name = Base.groonga_table_name(table_name)
         table = Base.context[groonga_table_name]
         column_name = column_name.to_s
         column = table.column(column_name)
 
-        name = "<index:#{table_name}:#{column_name}>"
-        base_dir = File.join(Base.indexes_directory, table_name)
+        index_table = Base.context[groonga_index_table_name]
+
+        base_dir = File.join(Base.metadata_directory,
+                             index_table_name,
+                             table_name)
         FileUtils.mkdir_p(base_dir)
+
+        name = "#{table_name}/#{column_name}"
         path = File.join(base_dir, "#{column_name}.groonga")
-        index_table = Groonga::Hash.create(:name => name,
-                                           :path => path,
-                                           :key_type => "<shorttext>",
-                                           :value_size => 4)
-        index_column_path = File.join(base_dir, column_name,
-                                      "inverted-index.groonga")
-        index_table.define_column("inverted-index", "<shorttext>",
+        index_table.define_column(name, column,
+                                  :path => path,
                                   :type => "index",
                                   :compress => "zlib",
                                   :with_section => true,
@@ -147,6 +147,14 @@ module ActiveGroonga
         Base.groonga_metadata_table_name(index_management_table_name)
       end
 
+      def index_table_name
+        Base.table_name_prefix + 'index' + Base.table_name_suffix
+      end
+
+      def groonga_index_table_name
+        Base.groonga_metadata_table_name(index_table_name)
+      end
+
       def initialize_index_management_table
         table_name = index_management_table_name
         groonga_table_name = groonga_index_management_table_name
@@ -167,6 +175,23 @@ module ActiveGroonga
 
           column_file = File.join(base_dir, "index.groonga")
           table.define_column("index", "<shorttext>", :path => column_file)
+        end
+      end
+
+      def initialize_index_table
+        table_name = index_table_name
+        groonga_table_name = groonga_index_table_name
+        if Base.context[groonga_table_name].nil?
+          table_file = File.join(Base.metadata_directory,
+                                 "#{table_name}.groonga")
+          table = Groonga::PatriciaTrie.create(:name => groonga_table_name,
+                                               :path => table_file,
+                                               :key_with_sis => true,
+                                               :key_normalize => true)
+          # table.default_tokenizer = "<token:mecab>"
+
+          base_dir = File.join(Base.metadata_directory, table_name)
+          FileUtils.mkdir_p(base_dir)
         end
       end
 
