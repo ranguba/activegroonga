@@ -37,7 +37,6 @@ module ActiveGroonga
           spec = {}
           spec[:type] = column.type.to_s
           name = column.name
-          name = name.sub(/_id$/, '') if spec[:type] == "references"
           spec[:name] = name.inspect
           spec
         end.compact

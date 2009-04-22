@@ -24,12 +24,43 @@ module ActiveGroonga
       @type = detect_type
     end
 
+    def type_cast(value)
+      return nil if value.nil?
+      case type
+      when :references
+        if value.is_a?(ActiveGroonga::Base)
+          value
+        else
+          table_name = @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
+          table_name.camelcase.singularize.constantize.find(value)
+        end
+      else
+        super
+      end
+    end
+
     def type_cast_code(var_name)
-      nil
+      case type
+      when :references
+        table_name = @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
+        table_name = table_name.camelcase.singularize
+        "#{var_name}.blank? ? nil : #{table_name}.find(#{var_name})"
+      else
+        super
+      end
     end
 
     def number?
       super or type == :unsigned_integer
+    end
+
+    def quote(value)
+      case value
+      when ActiveGroonga::Base
+        Groonga::Record.new(value.class.table, value.id)
+      else
+        value
+      end
     end
 
     private

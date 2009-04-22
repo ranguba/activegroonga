@@ -386,7 +386,9 @@ module ActiveGroonga
       # Returns an array of column objects where the primary id, all columns ending in "_id" or "_count",
       # and columns used for single table inheritance have been removed.
       def content_columns
-        @content_columns ||= columns.reject { |c| c.primary || c.name =~ /(_id|_count)$/ || c.name == inheritance_column }
+        @content_columns ||= columns.reject do |c|
+          c.primary || c.type == :references || c.name == inheritance_column
+        end
       end
 
       # Returns a hash of all the methods added to query each of the columns in the table with the name of the method as the key
@@ -1261,6 +1263,7 @@ module ActiveGroonga
 
     # Returns the column object for the named attribute.
     def column_for_attribute(name)
+      p [name, self.class.columns_hash[name.to_s]]
       self.class.columns_hash[name.to_s]
     end
 
@@ -1341,11 +1344,9 @@ module ActiveGroonga
       table = self.class.table
       record = table.add
       indexes = Schema.indexes(table)
-      record.table.columns.each do |column|
-        column = Column.new(column)
-        column_name = column.name
-        value = @attributes[column_name]
-        record[column_name] = value
+      quoted_attributes = attributes_with_quotes
+      quoted_attributes.each do |name, value|
+        record[name] = value
       end
       self.id = record.id
       @new_record = false
@@ -1484,6 +1485,33 @@ module ActiveGroonga
       end
 
       attributes.each { |name, values| attributes[name] = values.sort_by{ |v| v.first }.collect { |v| v.last } }
+    end
+
+    # Returns a copy of the attributes hash where all the values have been safely quoted for use in
+    # an SQL statement.
+    def attributes_with_quotes(include_readonly_attributes=true, attribute_names=@attributes.keys)
+      quoted = {}
+      attribute_names.each do |name|
+        column = column_for_attribute(name)
+        next if column.nil?
+
+        value = read_attribute(name)
+        # We need explicit to_yaml because quote() does not properly convert Time/Date fields to YAML.
+        if value && self.class.serialized_attributes.has_key?(name) && (value.acts_like?(:date) || value.acts_like?(:time))
+          value = value.to_yaml
+        end
+        quoted[name] = column.quote(value)
+      end
+      include_readonly_attributes ? quoted : remove_readonly_attributes(quoted)
+    end
+
+    # Quote strings appropriately for SQL statements.
+    def quote_value(value, column=nil)
+      if column
+        column.quote(value)
+      else
+        value
+      end
     end
 
 

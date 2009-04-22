@@ -70,7 +70,7 @@ class BaseTest < Test::Unit::TestCase
                    "uri" => "http://google.com/",
                    "comment" => "a search engine",
                    "content" => nil,
-                   "user_id" => 0,
+                   "user" => 0,
                  },
                  reloaded_google.attributes)
   end
@@ -82,12 +82,13 @@ class BaseTest < Test::Unit::TestCase
                                 "comment" => "a search engine",
                               })
 
+    p groonga.user
     google = Bookmark.find(groonga.id)
     assert_equal({
                    "uri" => "http://google.com/",
                    "comment" => "a search engine",
                    "content" => groonga.content,
-                   "user_id" => groonga.user_id,
+                   "user" => groonga.user,
                  },
                  google.attributes)
   end
@@ -99,11 +100,11 @@ class BaseTest < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal("Bookmark(user_id: references, uri: string, " +
+    assert_equal("Bookmark(user: references, uri: string, " +
                  "content: text, comment: text)",
                  Bookmark.inspect)
 
-    assert_equal("#<Bookmark user_id: 1, uri: \"http://groonga.org/\", " +
+    assert_equal("#<Bookmark user: 1, uri: \"http://groonga.org/\", " +
                  "content: \"<html><body>groonga</body></html>\", " +
                  "comment: \"fulltext search engine\">",
                  Bookmark.find_by_uri("http://groonga.org/").inspect)
@@ -136,11 +137,11 @@ class BaseTest < Test::Unit::TestCase
     google = Bookmark.new
     google.attributes = {
       "uri" => "http://google.com/",
-      "user_id" => daijiro.id,
+      "user" => User.find(daijiro.id),
     }
     google.save!
 
-    bookmarks = Bookmark.find_all_by_user_id(daijiro.id)
+    bookmarks = Bookmark.find_all_by_user(daijiro.id)
     assert_equal([google, Bookmark.find(@bookmark_records[:groonga].id)],
                  bookmarks)
   end

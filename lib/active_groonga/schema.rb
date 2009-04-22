@@ -241,7 +241,7 @@ module ActiveGroonga
       def references(*args)
         options = args.extract_options!
         args.each do |col|
-          column("#{col}_id", Base.context[col.to_s.pluralize], options)
+          column(col, Base.context[col.to_s.pluralize], options)
         end
       end
       alias :belongs_to :references
