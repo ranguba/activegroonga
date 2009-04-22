@@ -44,7 +44,7 @@ module ActiveGroonga
       when :references
         table_name = @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
         table_name = table_name.camelcase.singularize
-        "#{var_name}.blank? ? nil : #{table_name}.find(#{var_name})"
+        "#{table_name}.find(#{var_name})"
       else
         super
       end

@@ -650,7 +650,12 @@ module ActiveGroonga
           end
           target_records.each_with_index do |record, i|
             break if limit >= 0 and records.size >= limit
-            next unless conditions.all? {|name, value| record[name] == value}
+            unless conditions.all? do |name, value|
+                record[name] == value or
+                  (record.reference_column?(name) and record[name].id == value)
+              end
+              next
+            end
             records << instantiate(record)
           end
           if include_associations.any?
@@ -681,7 +686,12 @@ module ActiveGroonga
       end
 
       def find_one(id, options)
-        result = instantiate(Groonga::Record.new(table, Integer(id)))
+        if id.is_a?(Groonga::Record)
+          record = id
+        else
+          record = Groonga::Record.new(table, Integer(id))
+        end
+        result = instantiate(record)
         if result.nil?
           raise RecordNotFound, "Couldn't find #{name} with ID=#{id}"
         end
@@ -1263,7 +1273,6 @@ module ActiveGroonga
 
     # Returns the column object for the named attribute.
     def column_for_attribute(name)
-      p [name, self.class.columns_hash[name.to_s]]
       self.class.columns_hash[name.to_s]
     end
 
@@ -1330,10 +1339,10 @@ module ActiveGroonga
       attribute_names = remove_readonly_attributes(attribute_names)
       table = self.class.table
       indexes = Schema.indexes(table)
-      attribute_names.each do |name|
+      quoted_attributes = attributes_with_quotes(false, attribute_names)
+      quoted_attributes.each do |name, value|
         column = table.column(name)
         next if column.nil?
-        value = read_attribute(name)
         column[id] = value
       end
     end
