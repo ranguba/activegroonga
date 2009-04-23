@@ -1,0 +1,9 @@
+wikipedia_ja:
+  name: Wikipedia (ja)
+  description: Wikipedia in Japanese
+  url: http://ja.wikipedia.org/
+
+cutter:
+  name: Cutter
+  description: a unit testing framework for C
+  url: http://cutter.sourceforge.net/
