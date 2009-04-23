@@ -78,7 +78,12 @@ module ActiveGroonga
 
       def add_column(table_name, column_name, type, options={})
         column = ColumnDefinition.new(table_name, column_name)
-        column.type = type
+        if type.to_s == "references"
+          table = options.delete(:to) || column_name.pluralize
+          column.type = Base.groonga_table_name(table)
+        else
+          column.type = type
+        end
         column.create(options)
       end
 
@@ -244,7 +249,9 @@ module ActiveGroonga
       def references(*args)
         options = args.extract_options!
         args.each do |col|
-          column(col, Base.context[col.to_s.pluralize], options)
+          groonga_table_name = Base.groonga_table_name(col.to_s.pluralize)
+          table = Base.context[groonga_table_name]
+          column(col, table, options)
         end
       end
       alias :belongs_to :references

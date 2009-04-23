@@ -17,66 +17,112 @@ module ActiveGroonga
   class SchemaDumper < ActiveRecord::SchemaDumper
     class << self
       def dump(stream=STDOUT)
-        new(ConnectionMock.new).dump(StreamWrapper.new(stream))
+        new.dump(StreamWrapper.new(stream))
         stream
       end
     end
 
-    def initialize(connection)
-      @connection = connection
-      @types = ["int"]
+    def initialize
       @version = Migrator.current_version
     end
 
-    def table(table, stream)
-      columns = @connection.columns(table)
+    def dump(stream)
+      @references = []
+      header(stream)
+      dump_tables(stream)
+      dump_references(stream)
+      trailer(stream)
+      stream
+    end
+
+    private
+    def dump_tables(stream)
+      tables.sort.each do |name|
+        next if ignore_tables.any? {|ignored| ignored === name}
+        dump_table(name, stream)
+      end
+    end
+
+    def tables
+      Dir[File.join(Base.tables_directory, "*.groonga")].collect do |path|
+        File.basename(path, ".groonga")
+      end
+    end
+
+    def dump_table(name, stream)
       begin
-        tbl = StringIO.new
-        tbl.puts "  create_table #{table.inspect}, :force => true do |t|"
-        column_specs = columns.map do |column|
+        table_schema = StringIO.new
+        table_schema.puts "  create_table #{name.inspect}, :force => true do |t|"
+        column_specs = []
+        columns(name).each do |column|
+          if column.reference_type?
+            @references << [name, column]
+            next
+          end
+
           spec = {}
           spec[:type] = column.type.to_s
-          name = column.name
-          spec[:name] = name.inspect
-          spec
-        end.compact
-
-        column_specs.each do |spec|
-          tbl.print("    t.#{spec[:type]} #{spec[:name]}")
-          tbl.puts
+          spec[:name] = column.name.inspect
+          column_specs << spec
         end
 
-        tbl.puts "  end"
-        tbl.puts
+        column_specs.each do |spec|
+          table_schema.print("    t.#{spec[:type]} #{spec[:name]}")
+          table_schema.puts
+        end
 
-        indexes(table, tbl)
+        table_schema.puts "  end"
+        table_schema.puts
 
-        tbl.rewind
-        stream.print tbl.read
+        dump_indexes(name, table_schema)
+
+        stream.print table_schema.string
       rescue => e
-        stream.puts "# Could not dump table #{table.inspect} because of following #{e.class}"
+        stream.puts "# Could not dump table #{name.inspect} because of following #{e.class}"
         stream.puts "#   #{e.message}"
+        e.backtrace.each do |trace|
+          stream.puts "#   #{trace}"
+        end
         stream.puts
       end
 
       stream
     end
 
-    class ConnectionMock
-      def tables
-        Dir[File.join(Base.tables_directory, "*.groonga")].collect do |path|
-          File.basename(path, ".groonga")
-        end
+    def dump_indexes(table, stream)
+      _indexes = indexes(table)
+      return if _indexes.empty?
+
+      add_index_statements = _indexes.collect do |index|
+        statement_parts = []
+        statement_parts << "add_index #{index.table.inspect}"
+        statement_parts << index.columns.inspect
+        statement_parts << ":name => #{index.name.inspect}"
+        '  ' + statement_parts.join(', ')
       end
 
-      def columns(table_name)
-        table_name = Base.groonga_table_name(table_name)
-        Base.context[table_name].columns.collect {|column| Column.new(column)}
-      end
+      stream.puts add_index_statements.sort.join("\n")
+      stream.puts
+    end
 
-      def indexes(table_name)
-        Schema.indexes(table_name)
+    def dump_references(stream)
+      @references.sort_by do |name, column|
+        [name, column.name]
+      end.each do |name, column|
+        statement = "  add_column #{name.inspect}, "
+        statement << "#{column.name.inspect}, :references, "
+        statement << ":to => #{column.reference_object_name.inspect}"
+        stream.puts(statement)
       end
+    end
+
+    def columns(table_name)
+      table_name = Base.groonga_table_name(table_name)
+      Base.context[table_name].columns.collect {|column| Column.new(column)}
+    end
+
+    def indexes(table_name)
+      Schema.indexes(table_name)
     end
 
     class StreamWrapper

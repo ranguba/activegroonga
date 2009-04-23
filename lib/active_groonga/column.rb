@@ -31,8 +31,7 @@ module ActiveGroonga
         if value.is_a?(ActiveGroonga::Base)
           value
         else
-          table_name = @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
-          table_name.camelcase.singularize.constantize.find(value)
+          reference_object_class.find(value)
         end
       else
         super
@@ -42,9 +41,7 @@ module ActiveGroonga
     def type_cast_code(var_name)
       case type
       when :references
-        table_name = @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
-        table_name = table_name.camelcase.singularize
-        "#{table_name}.find(#{var_name})"
+        "#{reference_object_class.name}.find(#{var_name})"
       else
         super
       end
@@ -61,6 +58,21 @@ module ActiveGroonga
       else
         value
       end
+    end
+
+    def reference_type?
+      @type == :references
+    end
+
+    def reference_object_name
+      return nil unless reference_type?
+      @column.range.name.gsub(/(?:\A<table:|>\z)/, '')
+    end
+
+    def reference_object_class
+      table_name = reference_object_name
+      return nil if table_name.nil?
+      table_name.camelcase.singularize.constantize
     end
 
     private
