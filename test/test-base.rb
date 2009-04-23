@@ -71,6 +71,8 @@ class BaseTest < Test::Unit::TestCase
                    "comment" => "a search engine",
                    "content" => nil,
                    "user" => nil,
+                   "created_at" => google.created_at,
+                   "updated_at" => google.updated_at,
                  },
                  reloaded_google.attributes)
   end
@@ -88,6 +90,8 @@ class BaseTest < Test::Unit::TestCase
                    "comment" => "a search engine",
                    "content" => groonga.content,
                    "user" => groonga.user,
+                   "created_at" => groonga.created_at,
+                   "updated_at" => groonga.updated_at,
                  },
                  google.attributes)
   end
@@ -100,15 +104,19 @@ class BaseTest < Test::Unit::TestCase
 
   def test_inspect
     assert_equal("Bookmark(user: references, uri: string, " +
+                 "updated_at: time, created_at: time, " +
                  "content: text, comment: text)",
                  Bookmark.inspect)
 
     daijiro = User.find_by_name("daijiro")
+    groonga = Bookmark.find_by_uri("http://groonga.org/")
     assert_equal("#<Bookmark user: #{daijiro.inspect}, " +
                  "uri: \"http://groonga.org/\", " +
+                 "updated_at: \"2009-02-09 02:29:00\", " +
+                 "created_at: \"2009-02-09 02:09:29\", " +
                  "content: \"<html><body>groonga</body></html>\", " +
                  "comment: \"fulltext search engine\">",
-                 Bookmark.find_by_uri("http://groonga.org/").inspect)
+                 groonga.inspect)
   end
 
   def test_update_inverted_index
@@ -167,5 +175,12 @@ class BaseTest < Test::Unit::TestCase
     google = Bookmark.create("uri" => "http://google.com/",
                              "comment" => "a search engine")
     assert_equal(google, Bookmark.find(google))
+  end
+
+  def test_timestamp
+    google = Bookmark.create("uri" => "http://google.com/",
+                             "comment" => "a search engine")
+    assert_not_equal(Time.at(0), google.created_at)
+    assert_not_equal(Time.at(0), google.updated_at)
   end
 end

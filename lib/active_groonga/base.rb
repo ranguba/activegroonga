@@ -117,6 +117,13 @@ module ActiveGroonga
     cattr_accessor :colorize_logging, :instance_writer => false
     @@colorize_logging = true
 
+    ##
+    # :singleton-method:
+    # Determines whether to use Time.local (using :local) or Time.utc (using :utc) when pulling dates and times from the database.
+    # This is set to :local by default.
+    cattr_accessor :default_timezone, :instance_writer => false
+    @@default_timezone = :local
+
     # Determine whether to store the full constant name including namespace when using STI
     superclass_delegating_accessor :store_full_sti_class
     self.store_full_sti_class = false
@@ -1166,6 +1173,18 @@ module ActiveGroonga
       save!
     end
 
+    # Reloads the attributes of this object from the database.
+    # The optional options argument is passed to find when reloading so you
+    # may do e.g. record.reload(:lock => true) to reload the same record with
+    # an exclusive row lock.
+    def reload(options = nil)
+      clear_aggregation_cache
+      clear_association_cache
+      @attributes.update(self.class.find(self.id, options).instance_variable_get('@attributes'))
+      @attributes_cache = {}
+      self
+    end
+
     # Returns the value of the attribute identified by <tt>attr_name</tt> after it has been typecast (for example,
     # "2004-12-12" in a data column is cast to a date object, like Date.new(2004, 12, 12)).
     # (Alias for the protected read_attribute method).
@@ -1528,9 +1547,17 @@ module ActiveGroonga
       end
     end
 
+    def clone_attribute_value(reader_method, attribute_name)
+      value = send(reader_method, attribute_name)
+      value.duplicable? ? value.clone : value
+    rescue TypeError, NoMethodError
+      value
+    end
 
     include Validations
     include AttributeMethods
+    include Dirty
     include Reflection, Associations
+    include Timestamp
   end
 end

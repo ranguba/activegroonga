@@ -115,6 +115,18 @@ module ActiveGroongaTestUtils
     @user_column =
       @bookmarks.define_column("user", @users,
                                :path => @user_column_path.to_s)
+
+    define_timestamp(@bookmarks, columns_dir)
+  end
+
+  def define_timestamp(table, columns_dir)
+    created_at_column_path = columns_dir + "created_at.groonga"
+    table.define_column("created_at", "<time>",
+                        :path => created_at_column_path.to_s)
+
+    updated_at_column_path = columns_dir + "updated_at.groonga"
+    table.define_column("updated_at", "<time>",
+                        :path => updated_at_column_path.to_s)
   end
 
   def setup_bookmarks_index_tables
@@ -216,6 +228,8 @@ module ActiveGroongaTestUtils
     bookmark["user"] = user
     bookmark["comment"] = comment
     bookmark["content"] = content
+    bookmark["created_at"] = Time.parse("2009-02-09 02:09:29")
+    bookmark["updated_at"] = Time.parse("2009-02-09 02:29:00")
 
     bookmark
   end
