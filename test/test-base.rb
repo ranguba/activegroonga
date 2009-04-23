@@ -162,4 +162,10 @@ class BaseTest < Test::Unit::TestCase
 
     assert_equal([google], Bookmark.find_all_by_content("Google"))
   end
+
+  def test_find_by_model
+    google = Bookmark.create("uri" => "http://google.com/",
+                             "comment" => "a search engine")
+    assert_equal(google, Bookmark.find(google))
+  end
 end

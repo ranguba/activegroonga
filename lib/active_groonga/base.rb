@@ -689,7 +689,12 @@ module ActiveGroonga
         if id.is_a?(Groonga::Record)
           record = id
         else
-          record = Groonga::Record.new(table, Integer(id))
+          if id.is_a?(ActiveGroonga::Base)
+            id = id.id
+          else
+            id = Integer(id)
+          end
+          record = Groonga::Record.new(table, id)
         end
         result = instantiate(record)
         if result.nil?
