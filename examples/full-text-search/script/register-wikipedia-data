@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+require File.dirname(__FILE__) + '/../config/environment'
+
+class WikipediaRegister
+  def initialize
+  end
+
+  def title(title)
+  end
+
+  def timestamp(timestamp)
+  end
+
+  def contributor(info)
+    return if info[:id].blank?
+    wikipedia_id = "wikipedia:#{info[:id]}"
+    unless User.find_by_original_id(wikipedia_id)
+      User.create(:original_id => wikipedia_id, :name => info[:name])
+    end
+  end
+
+  def content(content)
+  end
+end
+
+extractor = WikipediaExtractor.new(WikipediaRegister.new)
+extractor.extract(ARGF)

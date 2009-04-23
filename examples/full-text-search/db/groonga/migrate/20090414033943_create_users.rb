@@ -1,14 +1,14 @@
 class CreateUsers < ActiveGroonga::Migration
   def self.up
     create_table :users do |t|
-      t.integer :original_id
+      t.string :original_id
       t.string :name
 
       t.timestamps
-    end
 
-    add_index(:users, :original_id)
-    add_index(:users, :name)
+      t.index :original_id
+      t.index :name
+    end
   end
 
   def self.down

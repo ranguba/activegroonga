@@ -94,8 +94,6 @@ module ActiveGroonga
         column_name = column_name.to_s
         column = table.column(column_name)
 
-        index_table = Base.context[groonga_index_table_name]
-
         base_dir = File.join(Base.metadata_directory,
                              index_table_name,
                              table_name)
@@ -103,13 +101,14 @@ module ActiveGroonga
 
         name = "#{table_name}/#{column_name}"
         path = File.join(base_dir, "#{column_name}.groonga")
-        index_table.define_column(name, column,
-                                  :path => path,
-                                  :type => "index",
-                                  :compress => "zlib",
-                                  :with_section => true,
-                                  :with_weight => true,
-                                  :with_position => true)
+        index_column = index_table.define_column(name, column,
+                                                 :path => path,
+                                                 :type => "index",
+                                                 :compress => "zlib",
+                                                 :with_section => true,
+                                                 :with_weight => true,
+                                                 :with_position => true)
+        index_column.source = column
 
         record = index_management_table.add
         record["table"] = groonga_table_name
@@ -119,6 +118,10 @@ module ActiveGroonga
 
       def index_management_table
         Base.context[groonga_index_management_table_name]
+      end
+
+      def index_table
+        Base.context[groonga_index_table_name]
       end
 
       def indexes(table_or_table_name)

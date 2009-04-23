@@ -635,7 +635,7 @@ module ActiveGroonga
             if conditions.has_key?(index_definition.column)
               index_column_name =
                 "#{index_definition.table}/#{index_definition.column}"
-              index = context[index_definition.name].column(index_column_name)
+              index = Schema.index_table.column(index_column_name)
               key = conditions.delete(index_definition.column)
               index_records = index.search(key, :result => index_records)
             end
