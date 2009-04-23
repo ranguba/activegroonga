@@ -1557,7 +1557,8 @@ module ActiveGroonga
     include Validations
     include AttributeMethods
     include Dirty
-    include Reflection, Associations
     include Timestamp
+    include Associations
+    include Aggregations, Reflection
   end
 end

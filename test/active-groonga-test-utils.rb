@@ -181,15 +181,13 @@ module ActiveGroongaTestUtils
     @bookmark_records = {}
 
     @bookmark_records[:groonga] =
-      create_bookmark("groonga",
-                      @user_records[:daijiro],
+      create_bookmark(@user_records[:daijiro],
                       "http://groonga.org/",
                       "fulltext search engine",
                       "<html><body>groonga</body></html>")
 
     @bookmark_records[:cutter] =
-      create_bookmark("cutter",
-                      @user_records[:gunyarakun],
+      create_bookmark(@user_records[:gunyarakun],
                       "http://cutter.sourceforge.net/",
                       "a unit testing framework for C",
                       "<html><body>Cutter</body></html>")
@@ -222,7 +220,7 @@ module ActiveGroongaTestUtils
     user
   end
 
-  def create_bookmark(name, user, uri, comment, content)
+  def create_bookmark(user, uri, comment, content)
     bookmark = @bookmarks.add
     bookmark["uri"] = uri
     bookmark["user"] = user

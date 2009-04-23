@@ -183,4 +183,12 @@ class BaseTest < Test::Unit::TestCase
     assert_not_equal(Time.at(0), google.created_at)
     assert_not_equal(Time.at(0), google.updated_at)
   end
+
+  def test_reload
+    groonga = Bookmark.find_by_uri("http://groonga.org/")
+    groonga.comment = "changed!"
+    assert_equal("changed!", groonga.comment)
+    groonga.reload
+    assert_equal("fulltext search engine", groonga.comment)
+  end
 end
