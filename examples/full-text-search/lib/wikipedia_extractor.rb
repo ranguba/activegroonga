@@ -17,6 +17,7 @@ class WikipediaExtractor
       @name_stack = []
       @text_stack = []
       @contributor_stack = []
+      @page = {}
     end
 
     ###
@@ -36,6 +37,8 @@ class WikipediaExtractor
       @name_stack << name
       @text_stack << ""
       case @name_stack.join(".")
+      when "mediawiki.page"
+        @page = {}
       when "mediawiki.page.revision.contributor"
         @contributor_stack << {}
       end
@@ -46,19 +49,24 @@ class WikipediaExtractor
     # +name+ is the tag name
     def end_element(name)
       case @name_stack.join(".")
+      when "mediawiki.page"
+        @listener.page(@page)
       when "mediawiki.page.title"
-        @listener.title(@text_stack.last)
+        title = @text_stack.last
+        @page[:title] = @listener.title(title) || title
       when "mediawiki.page.revision.timestamp"
-        @listener.timestamp(Time.parse(@text_stack.last))
+        timestamp = Time.parse(@text_stack.last)
+        @page[:timestamp] = @listener.timestamp(timestamp) || timestamp
       when "mediawiki.page.revision.contributor"
-        @listener.contributor(@contributor_stack.last)
-        @contributor_stack.pop
+        contributor = @contributor_stack.pop
+        @page[:contributor] = @listener.contributor(contributor) || contributor
       when "mediawiki.page.revision.contributor.id"
         @contributor_stack.last[:id] = Integer(@text_stack.last)
       when "mediawiki.page.revision.contributor.username"
         @contributor_stack.last[:name] = @text_stack.last
       when "mediawiki.page.revision.text"
-        @listener.content(@text_stack.last)
+        content = @text_stack.last
+        @page[:content] = @listener.content(content) || content
       end
       @name_stack.pop
       @text_stack.pop

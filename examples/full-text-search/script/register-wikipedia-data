@@ -4,6 +4,25 @@ require File.dirname(__FILE__) + '/../config/environment'
 
 class WikipediaRegister
   def initialize
+    @n = 0
+    @source = Source.find_by_name("Wikipedia (ja)")
+    if @source.nil?
+      @source = Source.create(:name => "Wikipedia (ja)",
+                              :description => "Wikipedia in Japanese",
+                              :url => "http://ja.wikipedia.org/")
+    end
+  end
+
+  def page(information)
+    @n += 1
+    user = information[:contributor]
+    user = nil unless user.is_a?(User)
+    Document.create(:title => information[:title],
+                    :content => information[:content],
+                    :updated_at => information[:timestamp],
+                    :user => user,
+                    :source => @source)
+    exit if @n == 300
   end
 
   def title(title)
@@ -13,11 +32,11 @@ class WikipediaRegister
   end
 
   def contributor(info)
-    return if info[:id].blank?
+    return nil if info[:id].blank?
     wikipedia_id = "wikipedia:#{info[:id]}"
-    unless User.find_by_original_id(wikipedia_id)
-      User.create(:original_id => wikipedia_id, :name => info[:name])
-    end
+    user = User.find_by_original_id(wikipedia_id)
+    user ||= User.create(:original_id => wikipedia_id, :name => info[:name])
+    user
   end
 
   def content(content)
