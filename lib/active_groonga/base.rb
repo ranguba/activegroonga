@@ -738,7 +738,7 @@ module ActiveGroonga
         end
       end
 
-      VALID_FIND_OPTIONS = [:conditions, :readonly]
+      VALID_FIND_OPTIONS = [:conditions, :readonly, :limit]
       def validate_find_options(options)
         options.assert_valid_keys(VALID_FIND_OPTIONS)
       end
