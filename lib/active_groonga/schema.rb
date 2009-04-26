@@ -106,12 +106,12 @@ module ActiveGroonga
 
         name = "#{table_name}/#{column_name}"
         path = File.join(base_dir, "#{column_name}.groonga")
-        index_column = index_table.define_column(name, column,
+        index_column = index_table.define_column(name, table,
                                                  :path => path,
                                                  :type => "index",
                                                  :compress => "zlib",
-                                                 :with_section => true,
-                                                 :with_weight => true,
+                                                 # :with_section => true,
+                                                 # :with_weight => true,
                                                  :with_position => true)
         index_column.source = column
 
@@ -193,10 +193,10 @@ module ActiveGroonga
           table_file = File.join(Base.metadata_directory,
                                  "#{table_name}.groonga")
           table = Groonga::PatriciaTrie.create(:name => groonga_table_name,
-                                               :path => table_file,
-                                               :key_with_sis => true,
-                                               :key_normalize => true)
-          # table.default_tokenizer = "<token:mecab>"
+                                               :key_type => "<shorttext>",
+                                               # :key_with_sis => true,
+                                               # :key_normalize => true,
+                                               :path => table_file)
 
           base_dir = File.join(Base.metadata_directory, table_name)
           FileUtils.mkdir_p(base_dir)
