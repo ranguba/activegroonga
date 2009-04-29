@@ -627,7 +627,7 @@ module ActiveGroonga
       end
 
       def find_every(options)
-        limit = options[:limit] ||= -1
+        limit = options[:limit] ||= 0
         conditions = (options[:conditions] || {}).stringify_keys
         include_associations = merge_includes(scope(:find, :include), options[:include])
 
@@ -649,6 +649,7 @@ module ActiveGroonga
           end
           if index_records
             sorted_records = index_records.sort([".:score"], :limit => limit)
+            limit = sorted_records.size
             target_records = sorted_records.records(:order => :ascending).collect do |record|
               index_record_id = record.value.unpack("i")[0]
               index_record = Groonga::Record.new(index_records, index_record_id)
@@ -661,9 +662,10 @@ module ActiveGroonga
             end
           else
             target_records = original_table.records
+            limit = target_records.size if limit.zero?
           end
           target_records.each_with_index do |record, i|
-            break if limit >= 0 and records.size >= limit
+            break if records.size >= limit
             unless conditions.all? do |name, value|
                 record[name] == value or
                   (record.reference_column?(name) and record[name].id == value)
