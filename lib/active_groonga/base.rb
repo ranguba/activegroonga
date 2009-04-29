@@ -648,9 +648,16 @@ module ActiveGroonga
             end
           end
           if index_records
-            target_records = index_records.collect do |index_record|
-              id = index_record.key.unpack("i")[0]
-              Groonga::Record.new(original_table, id)
+            sorted_records = index_records.sort([".:score"], :limit => limit)
+            target_records = sorted_records.records(:order => :ascending).collect do |record|
+              index_record_id = record.value.unpack("i")[0]
+              index_record = Groonga::Record.new(index_records, index_record_id)
+              target_record = index_record.key
+              target_record.instance_variable_set("@score", index_record.score)
+              def target_record.score
+                @score
+              end
+              target_record
             end
           else
             target_records = original_table.records
@@ -795,6 +802,7 @@ module ActiveGroonga
           end
 
         object.instance_variable_set("@id", record.id)
+        object.instance_variable_set("@score", record.score)
         attributes = {}
         record.table.columns.each do |column|
           _, column_name = column.name.split(/\A#{record.table.name}\./, 2)
@@ -1038,6 +1046,7 @@ module ActiveGroonga
 
     def initialize(attributes=nil)
       @id = nil
+      @score = nil
       @attributes = attributes_from_column_definition
       @attributes_cache = {}
       @new_record = true
@@ -1053,6 +1062,10 @@ module ActiveGroonga
     # whether you name it the default 'id' or set it to something else.
     def id
       @id
+    end
+
+    def score
+      @score
     end
 
     # Returns a String, which Action Pack uses for constructing an URL to this
