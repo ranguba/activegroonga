@@ -15,7 +15,7 @@ features. ActiveGroonga + groonga can be used as an
 alternative of ActiveRecord + RDB.
 
 ActiveGroonga is based on Ruby/groonga. See the following
-URLs for about Ruby/groonga and groonga.
+URLs about Ruby/groonga and groonga.
 
   * Ruby/groonga: http://groonga.rubyforge.org/
   * groonga: http://groonga.org/
