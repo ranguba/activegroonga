@@ -49,10 +49,11 @@ end
 manifest = File.join(base_dir, "Manifest.txt")
 manifest_contents = []
 base_dir_included_components = %w(AUTHORS
-                                  NEWS NEWS.ja README Rakefile
-                                  extconf.rb)
+                                  NEWS.rdoc NEWS.ja.rdoc
+                                  README.rdoc README.ja.rdoc
+                                  Rakefile extconf.rb)
 excluded_components = %w(.cvsignore .gdb_history CVS depend Makefile pkg
-                         .git .svn vendor .test-result)
+                         .git .svn doc vendor .test-result)
 excluded_suffixes = %w(.png .ps .pdf .o .so .a .txt .~)
 Find.find(base_dir) do |target|
   target = truncate_base_dir[target]
@@ -71,7 +72,7 @@ end
 
 # For Hoe's no user friendly default behavior. :<
 File.open("README.txt", "w") {|file| file << "= Dummy README\n== XXX\n"}
-FileUtils.cp("NEWS", "History.txt")
+FileUtils.cp("NEWS.rdoc", "History.txt")
 at_exit do
   FileUtils.rm_f("README.txt")
   FileUtils.rm_f("History.txt")
@@ -98,12 +99,16 @@ project = Hoe.new('activegroonga', version) do |project|
                    'groonga-dev@lists.sourceforge.jp']
   project.url = 'http://groonga.rubyforge.org/'
   project.testlib = :testunit2
-  project.test_globs = []
+  project.test_globs = ["test/run-test.rb"]
+  project.spec_extras = {
+    :extra_rdoc_files => Dir.glob("*.rdoc"),
+  }
+  project.readme_file = "README.ja.rdoc"
 
-  news_of_current_release = File.read("NEWS").split(/^==\s.*$/)[1]
+  news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
   project.changes = cleanup_white_space(news_of_current_release)
 
-  entries = File.read("README").split(/^==\s(.*)$/)
+  entries = File.read("README.rdoc").split(/^==\s(.*)$/)
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   project.summary, project.description, = description.split(/\n\n+/, 3)
 
@@ -118,6 +123,7 @@ ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
   rdoc_task.options[t_option_index, 2] = nil
   rdoc_task.title = "ActiveGroonga - #{version}"
   rdoc_task.rdoc_files = Dir.glob("lib/**/*.rb")
+  rdoc_task.rdoc_files += Dir.glob("*.rdoc")
 end
 
 task :publish_docs => [:prepare_docs_for_publishing]

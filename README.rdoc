@@ -17,8 +17,8 @@ alternative of ActiveRecord + RDB.
 ActiveGroonga is based on Ruby/groonga. See the following
 URLs about Ruby/groonga and groonga.
 
-  * Ruby/groonga: http://groonga.rubyforge.org/
-  * groonga: http://groonga.org/
+* Ruby/groonga: http://groonga.rubyforge.org/
+* groonga: http://groonga.org/
 
 == Author
 
@@ -30,7 +30,7 @@ LGPL 2.1. See license/LGPL for details.
 
 == Dependencies
 
-  * Ruby/groonga
+* Ruby/groonga
 
 == Install
 
@@ -48,4 +48,4 @@ http://rubyforge.org/mailman/listinfo/groonga-users-en
 
 == Thanks
 
-  * ...
+* ...

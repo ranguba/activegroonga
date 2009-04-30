@@ -1,5 +1,3 @@
-# -*- rd -*-
-
 = はじめに
 
 == 名前
@@ -17,8 +15,8 @@ groongaの組み合わせを使うことができます。
 Ruby/groongaをベースとしています。Ruby/groongaとgroongaに関
 する情報は以下を参照して下さい。
 
-  * Ruby/groonga: http://groonga.rubyforge.org/
-  * groonga: http://groonga.org/
+* Ruby/groonga: http://groonga.rubyforge.org/
+* groonga: http://groonga.org/
 
 == 作者
 
@@ -30,7 +28,7 @@ LGPL 2.1です。詳しくはlicense/LGPLを見てください。
 
 == 依存ソフトウェア
 
-  * Ruby/groonga
+* Ruby/groonga
 
 == インストール
 
@@ -48,4 +46,4 @@ http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
 
 == 感謝
 
-  * ...
+* ...
