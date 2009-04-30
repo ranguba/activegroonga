@@ -10,6 +10,13 @@ ActiveGroonga
 
 A library to use groonga with ActiveRecord like API.
 
+groonga provides both of full text search and column store
+features. ActiveGroonga + groonga can be used as an
+alternative of ActiveRecord + RDB.
+
+ActiveGroonga is based on Ruby/groonga. See the following
+URLs for about Ruby/groonga and groonga.
+
   * Ruby/groonga: http://groonga.rubyforge.org/
   * groonga: http://groonga.org/
 
@@ -31,11 +38,13 @@ LGPL 2.1. See license/LGPL for details.
 
 == Documents
 
-  * ...
+Japanese only. Sorry.
+
+http://groonga.rubyforge.org/active_groonga/
 
 == Mailing list
 
-Use groonga's ML.
+http://rubyforge.org/mailman/listinfo/groonga-users-en
 
 == Thanks
 
