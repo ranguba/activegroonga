@@ -8,7 +8,7 @@ ActiveGroonga
 
 == 説明
 
-ActivveRecord風のAPIを使ってgroongaを使うためのライブラリです。
+ActiveRecord風のAPIを使ってgroongaを使うためのライブラリです。
 
   * Ruby/groonga: http://groonga.rubyforge.org/
   * groonga: http://groonga.org/
