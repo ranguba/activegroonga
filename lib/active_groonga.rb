@@ -21,8 +21,8 @@ base_dir = File.dirname(__FILE__)
 ruby_groonga_dir = File.join(base_dir, "..", "..", "groonga")
 ruby_groonga_dir = File.expand_path(ruby_groonga_dir)
 if File.exist?(ruby_groonga_dir)
-  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "src"))
-  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "src", "lib"))
+  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "ext"))
+  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "lib"))
 end
 require 'groonga'
 
