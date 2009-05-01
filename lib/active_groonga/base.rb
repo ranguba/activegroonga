@@ -590,9 +590,9 @@ module ActiveGroonga
           end
           database_file = File.join(database_directory, "database.groonga")
           if File.exist?(database_file)
-            Groonga::Database.new(database_file)
+            @@database = Groonga::Database.new(database_file)
           else
-            Groonga::Database.create(:path => database_file)
+            @@database = Groonga::Database.create(:path => database_file)
           end
           self.database_directory = database_directory
         end
@@ -648,7 +648,11 @@ module ActiveGroonga
             end
           end
           if index_records
-            sorted_records = index_records.sort([".:score"], :limit => limit)
+            sorted_records = index_records.sort([
+                                                 :key => ".:score",
+                                                 :order => :descending,
+                                                ],
+                                                :limit => limit)
             limit = sorted_records.size
             target_records = sorted_records.records(:order => :ascending).collect do |record|
               index_record_id = record.value.unpack("i")[0]
