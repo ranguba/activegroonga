@@ -151,7 +151,7 @@ class BaseTest < Test::Unit::TestCase
     google.save!
 
     bookmarks = Bookmark.find_all_by_user(daijiro)
-    assert_equal([google, Bookmark.find(@bookmark_records[:groonga].id)],
+    assert_equal([Bookmark.find(@bookmark_records[:groonga].id), google],
                  bookmarks)
   end
 
