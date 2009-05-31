@@ -106,13 +106,12 @@ module ActiveGroonga
 
         name = "#{table_name}/#{column_name}"
         path = File.join(base_dir, "#{column_name}.groonga")
-        index_column = index_table.define_column(name, table,
-                                                 :path => path,
-                                                 :type => "index",
-                                                 :compress => "zlib",
-                                                 # :with_section => true,
-                                                 # :with_weight => true,
-                                                 :with_position => true)
+        index_column = index_table.define_index_column(name, table,
+                                                       :path => path,
+                                                       :compress => "zlib",
+                                                       # :with_section => true,
+                                                       # :with_weight => true,
+                                                       :with_position => true)
         index_column.source = column
 
         record = index_management_table.add

@@ -80,9 +80,9 @@ module ActiveGroonga
       case @column.range
       when Groonga::Type
         case @column.range.id
-        when Groonga::Type::INT
+        when Groonga::Type::INT32
           :integer
-        when Groonga::Type::UINT
+        when Groonga::Type::UINT32, Groonga::Type::UINT64
           :unsigned_integer
         when Groonga::Type::INT64
           :decimal
