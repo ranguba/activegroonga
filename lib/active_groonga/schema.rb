@@ -196,6 +196,7 @@ module ActiveGroonga
                                                # :key_with_sis => true,
                                                # :key_normalize => true,
                                                :path => table_file)
+          table.default_tokenizer = "<token:bigram>"
 
           base_dir = File.join(Base.metadata_directory, table_name)
           FileUtils.mkdir_p(base_dir)
