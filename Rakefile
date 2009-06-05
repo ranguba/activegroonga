@@ -27,7 +27,7 @@ require 'hoe'
 
 ENV["NODOT"] = "yes"
 
-Hoe::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
+Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
 
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
@@ -85,7 +85,10 @@ end
 
 ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
-project = Hoe.new('activegroonga', version) do |project|
+project = nil
+Hoe.spec('activegroonga') do |_project|
+  project = _project
+  project.version = version
   project.rubyforge_name = 'groonga'
   authors = File.join(base_dir, "AUTHORS")
   project.author = File.readlines(authors).collect do |line|
@@ -172,4 +175,10 @@ task :prepare_docs_for_publishing do
       apply_template(file, head, header, footer)
     end
   end
+end
+
+task :tag do
+  repository = "svn+ssh://rubyforge.org/var/svn/groonga/activegroonga"
+  sh("svn cp -m 'release #{version}!!!' " +
+     "#{repository}/trunk #{repository}/tags/#{version}")
 end
