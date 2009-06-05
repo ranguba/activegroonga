@@ -1,5 +1,9 @@
 = NEWS
 
+== 0.0.2: 2009-06-05
+
+* Support Ruby/groonga 0.0.2.
+
 == 0.0.1: 2009-04-30
 
 * Initial release!
