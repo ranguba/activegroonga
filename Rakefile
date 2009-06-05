@@ -104,6 +104,7 @@ project = Hoe.new('activegroonga', version) do |project|
     :extra_rdoc_files => Dir.glob("*.rdoc"),
   }
   project.readme_file = "README.ja.rdoc"
+  project.extra_deps = [["groonga", "=#{version}"], ["activerecord", "=2.3.2"]]
 
   news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]
   project.changes = cleanup_white_space(news_of_current_release)
