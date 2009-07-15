@@ -169,7 +169,8 @@ module ActiveGroonga
           table_file = File.join(Base.metadata_directory,
                                  "#{table_name}.groonga")
           table = Groonga::Array.create(:name => groonga_table_name,
-                                        :path => table_file)
+                                        :path => table_file,
+                                        :sub_records => true)
 
           base_dir = File.join(Base.metadata_directory, table_name)
           FileUtils.mkdir_p(base_dir)
@@ -228,7 +229,8 @@ module ActiveGroonga
       def create
         table_file = File.join(Base.tables_directory, "#{@name}.groonga")
         Groonga::Array.create(:name => Base.groonga_table_name(@name),
-                              :path => table_file)
+                              :path => table_file,
+                              :sub_records => true)
         @columns.each(&:create)
         @indexes.each do |column_name, options|
           Schema.add_index(@name.to_s, column_name, options)
