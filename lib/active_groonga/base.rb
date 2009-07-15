@@ -654,7 +654,7 @@ module ActiveGroonga
                                                 ],
                                                 :limit => limit)
             limit = sorted_records.size
-            target_records = sorted_records.records(:order => :ascending).collect do |record|
+            target_records = sorted_records.collect do |record|
               index_record_id = record.value.unpack("i")[0]
               index_record = Groonga::Record.new(index_records, index_record_id)
               target_record = index_record.key
