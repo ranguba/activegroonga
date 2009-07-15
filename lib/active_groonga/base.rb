@@ -779,33 +779,24 @@ module ActiveGroonga
       # single-table inheritance model that makes it possible to create
       # objects of different types from the same table.
       def instantiate(record)
-        object =
-          if subclass_name = record[inheritance_column]
-            # No type given.
-            if subclass_name.empty?
-              allocate
+        subclass_name = nil
+        if record.have_column?(inheritance_column)
+          subclass_name = record[inheritance_column]
+        end
 
-            else
-              # Ignore type if no column is present since it was probably
-              # pulled in from a sloppy join.
-              unless columns_hash.include?(inheritance_column)
-                allocate
-
-              else
-                begin
-                  compute_type(subclass_name).allocate
-                rescue NameError
-                  raise SubclassNotFound,
-                    "The single-table inheritance mechanism failed to locate the subclass: '#{record[inheritance_column]}'. " +
-                    "This error is raised because the column '#{inheritance_column}' is reserved for storing the class in case of inheritance. " +
-                    "Please rename this column if you didn't intend it to be used for storing the inheritance class " +
-                    "or overwrite #{self.to_s}.inheritance_column to use another column for that information."
-                end
-              end
-            end
-          else
-            allocate
+        if subclass_name.blank? or !columns_hash.include?(inheritance_column)
+          object = allocate
+        else
+          begin
+            object = compute_type(subclass_name).allocate
+          rescue NameError
+            raise SubclassNotFound,
+              "The single-table inheritance mechanism failed to locate the subclass: '#{record[inheritance_column]}'. " +
+              "This error is raised because the column '#{inheritance_column}' is reserved for storing the class in case of inheritance. " +
+              "Please rename this column if you didn't intend it to be used for storing the inheritance class " +
+              "or overwrite #{self.to_s}.inheritance_column to use another column for that information."
           end
+        end
 
         object.instance_variable_set("@id", record.id)
         object.instance_variable_set("@score", record.score)
