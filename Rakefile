@@ -27,8 +27,6 @@ require 'hoe'
 
 ENV["NODOT"] = "yes"
 
-Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
-
 base_dir = File.join(File.dirname(__FILE__))
 truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
@@ -87,6 +85,7 @@ ENV["VERSION"] ||= guess_version
 version = ENV["VERSION"]
 project = nil
 Hoe.spec('activegroonga') do |_project|
+  Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
   project = _project
   project.version = version
   project.rubyforge_name = 'groonga'
@@ -123,7 +122,8 @@ end
 project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}
 
 ObjectSpace.each_object(Rake::RDocTask) do |rdoc_task|
-  t_option_index = rdoc_task.options.index("-t")
+  options = rdoc_task.options
+  t_option_index = options.index("-t") || options.index("--title")
   rdoc_task.options[t_option_index, 2] = nil
   rdoc_task.title = "ActiveGroonga - #{version}"
   rdoc_task.rdoc_files = Dir.glob("lib/**/*.rb")
