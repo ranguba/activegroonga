@@ -528,11 +528,11 @@ module ActiveGroonga
       end
 
       def groonga_table_name(name=nil)
-        "<table:#{name || table_name}>"
+        (name || table_name).to_s
       end
 
       def groonga_metadata_table_name(name)
-        "<metadata:#{name}>"
+        "meta-#{name}"
       end
 
       # Defines an "attribute" method (like +inheritance_column+ or

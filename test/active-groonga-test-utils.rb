@@ -78,7 +78,7 @@ module ActiveGroongaTestUtils
 
   def setup_users_table
     @users_path = @tables_dir + "users.groonga"
-    @users = Groonga::Array.create(:name => "<table:users>",
+    @users = Groonga::Array.create(:name => "users",
                                    :path => @users_path.to_s,
                                    :sub_records => true)
 
@@ -86,13 +86,13 @@ module ActiveGroongaTestUtils
     columns_dir.mkpath
 
     @name_column_path = columns_dir + "name.groonga"
-    @name_column = @users.define_column("name", "<shorttext>",
+    @name_column = @users.define_column("name", "ShortText",
                                         :path => @name_column_path.to_s)
   end
 
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks.groonga"
-    @bookmarks = Groonga::Array.create(:name => "<table:bookmarks>",
+    @bookmarks = Groonga::Array.create(:name => "bookmarks",
                                        :path => @bookmarks_path.to_s,
                                        :sub_records => true)
 
@@ -100,17 +100,17 @@ module ActiveGroongaTestUtils
     columns_dir.mkpath
 
     @uri_column_path = columns_dir + "uri.groonga"
-    @uri_column = @bookmarks.define_column("uri", "<shorttext>",
+    @uri_column = @bookmarks.define_column("uri", "ShortText",
                                            :path => @uri_column_path.to_s)
 
     @comment_column_path = columns_dir + "comment.groonga"
     @comment_column =
-      @bookmarks.define_column("comment", "<text>",
+      @bookmarks.define_column("comment", "Text",
                                :path => @comment_column_path.to_s)
 
     @content_column_path = columns_dir + "content.groonga"
     @content_column =
-      @bookmarks.define_column("content", "<longtext>",
+      @bookmarks.define_column("content", "LongText",
                                :path => @content_column_path.to_s)
 
     @user_column_path = columns_dir + "user.groonga"
@@ -123,16 +123,16 @@ module ActiveGroongaTestUtils
 
   def define_timestamp(table, columns_dir)
     created_at_column_path = columns_dir + "created_at.groonga"
-    table.define_column("created_at", "<time>",
+    table.define_column("created_at", "Time",
                         :path => created_at_column_path.to_s)
 
     updated_at_column_path = columns_dir + "updated_at.groonga"
-    table.define_column("updated_at", "<time>",
+    table.define_column("updated_at", "Time",
                         :path => updated_at_column_path.to_s)
   end
 
   def setup_bookmarks_index_tables
-    @index = @context["<metadata:index>"]
+    @index = @context["meta-index"]
 
     setup_bookmarks_content_index_table
   end
@@ -160,7 +160,7 @@ module ActiveGroongaTestUtils
 
   def setup_tasks_table
     @tasks_path = @tables_dir + "tasks.groonga"
-    @tasks = Groonga::Array.create(:name => "<table:tasks>",
+    @tasks = Groonga::Array.create(:name => "tasks",
                                    :path => @tasks_path.to_s,
                                    :sub_records => true)
 
@@ -168,7 +168,7 @@ module ActiveGroongaTestUtils
     columns_dir.mkpath
 
     @name_column_path = columns_dir + "name.groonga"
-    @name_column = @tasks.define_column("name", "<shorttext>",
+    @name_column = @tasks.define_column("name", "ShortText",
                                         :path => @name_column_path.to_s)
   end
 

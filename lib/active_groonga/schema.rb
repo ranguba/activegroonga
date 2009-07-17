@@ -134,7 +134,7 @@ module ActiveGroonga
           table = Base.context[Base.groonga_table_name(table_name)]
         else
           table = table_or_table_name
-          table_name = table.name.gsub(/(?:\A<table:|>\z)/, '')
+          table_name = table.name
         end
         indexes = []
         index_management_table.records.each do |record|
@@ -176,13 +176,13 @@ module ActiveGroonga
           FileUtils.mkdir_p(base_dir)
 
           column_file = File.join(base_dir, "table.groonga")
-          table.define_column("table", "<shorttext>", :path => column_file)
+          table.define_column("table", "ShortText", :path => column_file)
 
           column_file = File.join(base_dir, "column.groonga")
-          table.define_column("column", "<shorttext>", :path => column_file)
+          table.define_column("column", "ShortText", :path => column_file)
 
           column_file = File.join(base_dir, "index.groonga")
-          table.define_column("index", "<shorttext>", :path => column_file)
+          table.define_column("index", "ShortText", :path => column_file)
         end
       end
 
@@ -193,11 +193,11 @@ module ActiveGroonga
           table_file = File.join(Base.metadata_directory,
                                  "#{table_name}.groonga")
           table = Groonga::PatriciaTrie.create(:name => groonga_table_name,
-                                               :key_type => "<shorttext>",
+                                               :key_type => "ShortText",
                                                # :key_with_sis => true,
                                                # :key_normalize => true,
                                                :path => table_file)
-          table.default_tokenizer = "<token:bigram>"
+          table.default_tokenizer = "TokenBigram"
 
           base_dir = File.join(Base.metadata_directory, table_name)
           FileUtils.mkdir_p(base_dir)
@@ -212,7 +212,7 @@ module ActiveGroonga
                                  "#{table_name}.groonga")
           Groonga::Hash.create(:name => groonga_table_name,
                                :path => table_file,
-                               :key_type => "<shorttext>")
+                               :key_type => "ShortText")
         end
       end
     end
@@ -287,21 +287,21 @@ module ActiveGroonga
         return type if type.is_a?(Groonga::Object)
         case type.to_s
         when "string"
-          "<shorttext>"
+          "ShortText"
         when "text"
-          "<text>"
+          "Text"
         when "integer"
-          "<int>"
+          "Int32"
         when "float"
-          "<float>"
+          "Float"
         when "decimal"
-          "<int64>"
+          "Int64"
         when "datetime", "timestamp", "time", "date"
-          "<time>"
+          "Time"
         when "binary"
-          "<longtext>"
+          "LongText"
         when "boolean"
-          "<int>"
+          "Bool"
         else
           type
         end
