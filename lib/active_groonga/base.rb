@@ -654,16 +654,7 @@ module ActiveGroonga
                                                 ],
                                                 :limit => limit)
             limit = sorted_records.size
-            target_records = sorted_records.collect do |record|
-              index_record_id = record.value.unpack("i")[0]
-              index_record = Groonga::Record.new(index_records, index_record_id)
-              target_record = index_record.key
-              target_record.instance_variable_set("@score", index_record.score)
-              def target_record.score
-                @score
-              end
-              target_record
-            end
+            target_records = sorted_records
           else
             target_records = original_table.records
             limit = target_records.size if limit.zero?
