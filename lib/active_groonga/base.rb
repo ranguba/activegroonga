@@ -634,40 +634,24 @@ module ActiveGroonga
         if include_associations.any? && references_eager_loaded_tables?(options)
           records = find_with_associations(options)
         else
-          records = []
-          target_records = []
-          original_table = table
-          index_records = nil
+          indexes = {}
           Schema.indexes(table_name).each do |index_definition|
-            if conditions.has_key?(index_definition.column)
-              index_column_name =
-                "#{index_definition.table}/#{index_definition.column}"
-              index = Schema.index_table.column(index_column_name)
-              key = conditions.delete(index_definition.column)
-              index_records = index.search(key, :result => index_records)
-            end
+            indexes[index_definition.column] = true
           end
-          if index_records
-            sorted_records = index_records.sort([
-                                                 :key => ".:score",
-                                                 :order => :descending,
-                                                ],
-                                                :limit => limit)
-            limit = sorted_records.size
-            target_records = sorted_records
-          else
-            target_records = original_table.records
-            limit = target_records.size if limit.zero?
-          end
-          target_records.each_with_index do |record, i|
-            break if records.size >= limit
-            unless conditions.all? do |name, value|
-                record[name] == value or
-                  (record.reference_column?(name) and record[name].id == value)
+
+          records = table.select do |record|
+            conditions.each do |key, value|
+              if indexes.has_key?(key)
+                record[key] =~ value
+              else
+                record[key] == value
               end
-              next
             end
-            records << instantiate(record)
+          end
+          records = records.sort([:key => ".:score", :order => :descending],
+                                 :limit => limit)
+          records = records.collect do |record|
+            instantiate(record, record.key.id, record.table.domain)
           end
           if include_associations.any?
             preload_associations(records, include_associations)
@@ -769,7 +753,10 @@ module ActiveGroonga
       # Finder methods must instantiate through this method to work with the
       # single-table inheritance model that makes it possible to create
       # objects of different types from the same table.
-      def instantiate(record)
+      def instantiate(record, id=nil, table=nil)
+        id ||= record.id
+        table ||= record.table
+
         subclass_name = nil
         if record.have_column?(inheritance_column)
           subclass_name = record[inheritance_column]
@@ -789,12 +776,12 @@ module ActiveGroonga
           end
         end
 
-        object.instance_variable_set("@id", record.id)
+        object.instance_variable_set("@id", id)
         object.instance_variable_set("@score", record.score)
         attributes = {}
-        record.table.columns.each do |column|
-          _, column_name = column.name.split(/\A#{record.table.name}\./, 2)
-          attributes[column_name] = column[record.id]
+        table.columns.each do |column|
+          column_name = column.local_name
+          attributes[column_name] = record[".#{column_name}"]
         end
         object.instance_variable_set("@attributes", attributes)
         object.instance_variable_set("@attributes_cache", Hash.new)
