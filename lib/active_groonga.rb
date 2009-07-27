@@ -46,6 +46,8 @@ module ActiveGroonga
   autoload :Callbacks, 'active_groonga/callbacks'
   autoload :Column, 'active_groonga/column'
   autoload :Dirty, 'active_groonga/dirty'
+  autoload :DynamicRecordExpressionBuilder,
+           'active_groonga/dynamic_record_expression_builder'
   autoload :Migration, 'active_groonga/migration'
   autoload :Migrator, 'active_groonga/migration'
   autoload :NamedScope, 'active_groonga/named_scope'

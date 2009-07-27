@@ -635,7 +635,13 @@ module ActiveGroonga
         if include_associations.any? && references_eager_loaded_tables?(options)
           records = find_with_associations(options)
         else
-          records = table.select(&expression)
+          if expression
+            records = table.select do |record|
+              expression.call(DynamicRecordExpressionBuilder.new(record))
+            end
+          else
+            records = table.select
+          end
           records = records.sort([:key => ".:score", :order => :descending],
                                  :limit => limit)
           records = records.collect do |record|

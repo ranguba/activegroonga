@@ -192,4 +192,14 @@ class BaseTest < Test::Unit::TestCase
     groonga.reload
     assert_equal("fulltext search engine", groonga.comment)
   end
+
+  def test_find_column_access_by_method
+    google = Bookmark.create("uri" => "http://google.com/",
+                             "comment" => "a search engine",
+                             "content" => "<html><body>Google</body></html>")
+
+
+    assert_equal([google],
+                 Bookmark.find(:all) {|record| record.content =~ "Google"})
+  end
 end
