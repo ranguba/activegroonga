@@ -480,8 +480,9 @@ module ActiveGroonga
         defined?(@abstract_class) && @abstract_class == true
       end
 
-      def find(*args)
+      def find(*args, &block)
         options = args.extract_options!
+        options = options.merge(:expression => block) if block
         validate_find_options(options)
         set_readonly_option!(options)
 
@@ -628,26 +629,13 @@ module ActiveGroonga
 
       def find_every(options)
         limit = options[:limit] ||= 0
-        conditions = (options[:conditions] || {}).stringify_keys
+        expression = options[:expression]
         include_associations = merge_includes(scope(:find, :include), options[:include])
 
         if include_associations.any? && references_eager_loaded_tables?(options)
           records = find_with_associations(options)
         else
-          indexes = {}
-          Schema.indexes(table_name).each do |index_definition|
-            indexes[index_definition.column] = true
-          end
-
-          records = table.select do |record|
-            conditions.each do |key, value|
-              if indexes.has_key?(key)
-                record[key] =~ value
-              else
-                record[key] == value
-              end
-            end
-          end
+          records = table.select(&expression)
           records = records.sort([:key => ".:score", :order => :descending],
                                  :limit => limit)
           records = records.collect do |record|
@@ -726,7 +714,7 @@ module ActiveGroonga
         end
       end
 
-      VALID_FIND_OPTIONS = [:conditions, :readonly, :limit]
+      VALID_FIND_OPTIONS = [:expression, :readonly, :limit]
       def validate_find_options(options)
         options.assert_valid_keys(VALID_FIND_OPTIONS)
       end
@@ -798,15 +786,18 @@ module ActiveGroonga
       end
 
       # Enables dynamic finders like <tt>find_by_user_name(user_name)</tt> and <tt>find_by_user_name_and_password(user_name, password)</tt>
-      # that are turned into <tt>find(:first, :conditions => ["user_name = ?", user_name])</tt> and
-      # <tt>find(:first, :conditions => ["user_name = ? AND password = ?", user_name, password])</tt> respectively. Also works for
-      # <tt>find(:all)</tt> by using <tt>find_all_by_amount(50)</tt> that is turned into <tt>find(:all, :conditions => ["amount = ?", 50])</tt>.
+      # that are turned into <tt>find(:first) {|record| record["user_name"] == user_name}</tt> and
+      # <tt>find(:first) {|record| (record["user_name"] ==
+      # user_name) & (record["password"] == password)}</tt> respectively. Also works for
+      # <tt>find(:all)</tt> by using
+      # <tt>find_all_by_amount(50)</tt> that is turned into
+      # <tt>find(:all) {|record| record["amount"] == 50}</tt>.
       #
       # It's even possible to use all the additional parameters to +find+. For example, the full interface for +find_all_by_amount+
       # is actually <tt>find_all_by_amount(amount, options)</tt>.
       #
       # Also enables dynamic scopes like scoped_by_user_name(user_name) and scoped_by_user_name_and_password(user_name, password) that
-      # are turned into scoped(:conditions => ["user_name = ?", user_name]) and scoped(:conditions => ["user_name = ? AND password = ?", user_name, password])
+      # are turned into scoped(:expression => Proc.new {|record| record["user_name"] == user_name}) and scoped(:expression => Proc.new {|record| (record["user_name"] == user_name) & (record["password"] == password)})
       # respectively.
       #
       # Each dynamic finder, scope or initializer/creator is also defined in the class after it is first invoked, so that future
@@ -820,15 +811,15 @@ module ActiveGroonga
             bang = match.bang?
             # def self.find_by_login_and_activated(*args)
             #   options = args.extract_options!
-            #   attributes = construct_attributes_from_arguments(
+            #   expression = construct_expression_from_arguments(
             #     [:login,:activated],
             #     args
             #   )
-            #   finder_options = { :conditions => attributes }
+            #   finder_options = { :expression => expression }
             #   validate_find_options(options)
             #   set_readonly_option!(options)
             #
-            #   if options[:conditions]
+            #   if options[:expression]
             #     with_scope(:find => finder_options) do
             #       find(:first, options)
             #     end
@@ -839,15 +830,15 @@ module ActiveGroonga
             self.class_eval <<-EOC, __FILE__, __LINE__
               def self.#{method_id}(*args)
                 options = args.extract_options!
-                attributes = construct_attributes_from_arguments(
+                expression = construct_expression_from_arguments(
                   [:#{attribute_names.join(',:')}],
                   args
                 )
-                finder_options = { :conditions => attributes }
+                finder_options = {:expression => expression}
                 validate_find_options(options)
                 set_readonly_option!(options)
 
-                #{'result = ' if bang}if options[:conditions]
+                #{'result = ' if bang}if options[:expression]
                   with_scope(:find => finder_options) do
                     find(:#{finder}, options)
                   end
@@ -866,12 +857,13 @@ module ActiveGroonga
             #   if args[0].is_a?(Hash)
             #     guard_protected_attributes = true
             #     attributes = args[0].with_indifferent_access
-            #     find_attributes = attributes.slice(*[:user_id])
+            #     find_expression = attributes.slice(*[:user_id])
             #   else
-            #     find_attributes = attributes = construct_attributes_from_arguments([:user_id], args)
+            #     attributes = construct_attributes_from_arguments([:user_id], args)
+            #     find_expression = construct_expression_from_arguments([:user_id], args)
             #   end
             #
-            #   options = { :conditions => find_attributes }
+            #   options = { :expression => find_expression }
             #   set_readonly_option!(options)
             #
             #   record = find(:first, options)
@@ -897,7 +889,8 @@ module ActiveGroonga
                   find_attributes = attributes = construct_attributes_from_arguments([:#{attribute_names.join(',:')}], args)
                 end
 
-                options = { :conditions => find_attributes }
+                find_expression = construct_expression_from_attributes(find_attributes)
+                options = { :expression => find_expression }
                 set_readonly_option!(options)
 
                 record = find(:first, options)
@@ -921,11 +914,11 @@ module ActiveGroonga
             self.class_eval <<-EOC, __FILE__, __LINE__
               def self.#{method_id}(*args)                        # def self.scoped_by_user_name_and_password(*args)
                 options = args.extract_options!                   #   options = args.extract_options!
-                attributes = construct_attributes_from_arguments( #   attributes = construct_attributes_from_arguments(
+                expression = construct_expression_from_arguments( #   expression = construct_expression_from_arguments(
                   [:#{attribute_names.join(',:')}], args          #     [:user_name, :password], args
                 )                                                 #   )
                                                                   # 
-                scoped(:conditions => attributes)                 #   scoped(:conditions => attributes)
+                scoped(:expression => expression)                 #   scoped(:expression => expression)
               end                                                 # end
             EOC
             send(method_id, *arguments)
@@ -937,11 +930,43 @@ module ActiveGroonga
 
       def construct_attributes_from_arguments(attribute_names, arguments)
         attributes = {}
-        attribute_names.each_with_index { |name, idx| attributes[name] = arguments[idx] }
+        attribute_names.each_with_index do |name, i|
+          attributes[name] = arguments[i]
+        end
         attributes
       end
 
-      # Similar in purpose to +expand_hash_conditions_for_aggregates+.
+      def construct_expression_from_attributes(attributes)
+        Proc.new do |record|
+          builder = nil
+          attributes.each do |name, value|
+            expression = (record[name] == value)
+            if builder
+              builder = builder & expression
+            else
+              builder = expression
+            end
+          end
+          builder
+        end
+      end
+
+      def construct_expression_from_arguments(attribute_names, arguments)
+        Proc.new do |record|
+          builder = nil
+          attribute_names.each_with_index do |name, i|
+            expression = (record[name] == arguments[i])
+            if builder
+              builder = builder & expression
+            else
+              builder = expression
+            end
+          end
+          builder
+        end
+      end
+
+      # Similar in purpose to +expand_hash_expression_for_aggregates+.
       def expand_attribute_names_for_aggregates(attribute_names)
         expanded_attribute_names = []
         attribute_names.each do |attribute_name|
@@ -1350,7 +1375,6 @@ module ActiveGroonga
     def update(attribute_names=@attributes.keys)
       attribute_names = remove_readonly_attributes(attribute_names)
       table = self.class.table
-      indexes = Schema.indexes(table)
       quoted_attributes = attributes_with_quotes(false, attribute_names)
       quoted_attributes.each do |name, value|
         column = table.column(name)
@@ -1364,7 +1388,6 @@ module ActiveGroonga
     def create
       table = self.class.table
       record = table.add
-      indexes = Schema.indexes(table)
       quoted_attributes = attributes_with_quotes
       quoted_attributes.each do |name, value|
         record[name] = value

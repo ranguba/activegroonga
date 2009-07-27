@@ -128,16 +128,16 @@ class BaseTest < Test::Unit::TestCase
     }
     google.save!
 
-    bookmarks = Bookmark.find_all_by_content("Google")
+    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Google"}
     assert_equal([google], bookmarks)
 
     google.content = "<html><body>...Empty...</body></html>"
     google.save!
 
-    bookmarks = Bookmark.find_all_by_content("Google")
+    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Google"}
     assert_equal([], bookmarks)
 
-    bookmarks = Bookmark.find_all_by_content("Empty")
+    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Empty"}
     assert_equal([google], bookmarks)
   end
 
@@ -168,7 +168,8 @@ class BaseTest < Test::Unit::TestCase
                              "content" => "<html><body>...Google...</body></html>")
 
 
-    assert_equal([google], Bookmark.find_all_by_content("Google"))
+    assert_equal([google],
+                 Bookmark.find(:all) {|record| record["content"] =~ "Google"})
   end
 
   def test_find_by_model
