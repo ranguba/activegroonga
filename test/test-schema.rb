@@ -44,7 +44,7 @@ class SchemaTest < Test::Unit::TestCase
     end
 
     ActiveGroonga::Schema.create_table(:terms) do |table|
-      table.index :posts_content, :posts, :content
+      table.index :posts, :content
     end
 
     assert_predicate(index_file, :exist?)

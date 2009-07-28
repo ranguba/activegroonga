@@ -86,9 +86,10 @@ module ActiveGroonga
         end
       end
 
-      def add_index_column(table_name, column_name,
-                           target_table_name, target_column_name,
+      def add_index_column(table_name, target_table_name, target_column_name,
                            options={})
+        column_name = options.delete(:name)
+        column_name ||= [target_table_name, target_column_name].join("_")
         column = IndexColumnDefinition.new(table_name, column_name,
                                            target_table_name, target_column_name)
         column.create(options)
@@ -134,7 +135,9 @@ module ActiveGroonga
         self
       end
 
-      def index(name, target_table_name, target_column_name, options={})
+      def index(target_table_name, target_column_name, options={})
+        name = options.delete(:name)
+        name ||= [target_table_name, target_column_name].join("_")
         column = self[name] || IndexColumnDefinition.new(@name, name,
                                                          target_table_name,
                                                          target_column_name)
