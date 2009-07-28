@@ -60,7 +60,7 @@ module ActiveGroonga
       def create_table(name, options={})
         table_definition = TableDefinition.new(name)
         yield(table_definition)
-        table_definition.create
+        table_definition.create(options)
       end
 
       def drop_table(name, options={})
@@ -117,13 +117,36 @@ module ActiveGroonga
         @name = name
       end
 
-      def create
+      def create(options={})
         table_file = File.join(Base.tables_directory, "#{@name}.groonga")
         table_name = Base.groonga_table_name(@name)
         unless Base.context[table_name]
-          Groonga::Array.create(:name => table_name,
-                                :path => table_file,
-                                :sub_records => true)
+          options = options.dup
+          type = options.delete(:type) || :array
+          case type.to_s
+          when "patricia_trie"
+            options = {
+              :sub_records => true,
+              :default_tokenizer => "TokenBigram",
+            }.merge(options)
+            Groonga::PatriciaTrie.create(options.merge(:name => table_name,
+                                                       :path => table_file))
+          when "hash"
+            options = {
+              :sub_records => true,
+              :default_tokenizer => "TokenBigram",
+            }.merge(options)
+            Groonga::Hash.create(options.merge(:name => table_name,
+                                               :path => table_file))
+          when "array"
+            options = {
+              :sub_records => true,
+            }.merge(options)
+            Groonga::Array.create(options.merge(:name => table_name,
+                                                :path => table_file))
+          else
+            raise ArgumentError, "unknown table type: #{type.inspect}"
+          end
         end
         @columns.each(&:create)
       end
@@ -226,7 +249,8 @@ module ActiveGroonga
         table = Base.context[Base.groonga_table_name(@table_name)]
         target_table = Base.context[Base.groonga_table_name(@target_table_name)]
         target_column = target_table.column(@target_column_name)
-        table.define_index_column(@name, target_column, options)
+        index = table.define_index_column(@name, target_column, options)
+        index.source = target_column
       end
 
       def remove
