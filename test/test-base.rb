@@ -167,7 +167,6 @@ class BaseTest < Test::Unit::TestCase
                              "comment" => "a search engine",
                              "content" => "<html><body>...Google...</body></html>")
 
-
     assert_equal([google],
                  Bookmark.find(:all) {|record| record["content"] =~ "Google"})
   end

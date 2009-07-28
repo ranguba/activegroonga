@@ -35,13 +35,16 @@ class SchemaTest < Test::Unit::TestCase
   end
 
   def test_add_index
-    base_dir = @metadata_dir + "index" + "posts"
-    index_file = base_dir + "content.groonga"
+    columns_dir = @tables_dir + "terms" + "columns" + "posts"
+    index_file = columns_dir + "posts_content.groonga"
     assert_not_predicate(index_file, :exist?)
 
     ActiveGroonga::Schema.create_table(:posts) do |table|
       table.string :content
-      table.index :content
+    end
+
+    ActiveGroonga::Schema.create_table(:terms) do |table|
+      table.index :posts_content, :posts, :content
     end
 
     assert_predicate(index_file, :exist?)

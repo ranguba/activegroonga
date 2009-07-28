@@ -611,6 +611,12 @@ module ActiveGroonga
         directory
       end
 
+      def index_columns_directory(table_name, target_table_name)
+        directory = File.join(columns_directory(table_name), target_table_name)
+        FileUtils.mkdir_p(directory) unless File.exist?(directory)
+        directory
+      end
+
       def metadata_directory
         directory = File.join(database_directory, "metadata")
         FileUtils.mkdir_p(directory) unless File.exist?(directory)

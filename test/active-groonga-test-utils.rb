@@ -132,30 +132,26 @@ module ActiveGroongaTestUtils
   end
 
   def setup_bookmarks_index_tables
-    @index = @context["meta-index"]
+    @terms_path = @tables_dir + "terms.groonga"
+    @terms = Groonga::PatriciaTrie.create(:name => "terms",
+                                          :key_type => "ShortText",
+                                          :path => @terms_path.to_s,
+                                          :default_tokenizer => "TokenBigram")
 
-    setup_bookmarks_content_index_table
-  end
-
-  def setup_bookmarks_content_index_table
-    bookmarks_index_dir = @metadata_dir + "index" + "bookmarks"
+    columns_dir = @tables_dir + "terms" + "columns"
+    bookmarks_index_dir = columns_dir + "bookmarks"
     bookmarks_index_dir.mkpath
 
     @bookmarks_content_index_column_path =
       bookmarks_index_dir + "content.groonga"
     path = @bookmarks_content_index_column_path.to_s
     @bookmarks_content_index_column =
-      @index.define_index_column("bookmarks/content", @bookmarks,
+      @terms.define_index_column("bookmarks/content", @bookmarks,
                                  :with_section => true,
                                  :with_weight => true,
                                  :with_position => true,
                                  :path => path)
     @bookmarks_content_index_column.source = @content_column
-
-    record = ActiveGroonga::Schema.index_management_table.add
-    record["table"] = @bookmarks.name
-    record["column"] = "content"
-    record["index"] = @index.name
   end
 
   def setup_tasks_table

@@ -54,8 +54,6 @@ module ActiveGroonga
       end
 
       def initialize_schema_management_tables
-        initialize_index_management_table
-        initialize_index_table
         initialize_migrations_table
       end
 
@@ -67,18 +65,13 @@ module ActiveGroonga
 
       def drop_table(name, options={})
         table = Base.context[Base.groonga_table_name(name)]
-        table_id = table.id
         table.remove
-        index_management_table.open_cursor do |cursor|
-          while cursor.next
-            cursor.delete if cursor.table_id == table_id
-          end
-        end
       end
 
       def add_column(table_name, column_name, type, options={})
         column = ColumnDefinition.new(table_name, column_name)
-        if type.to_s == "references"
+        case type.to_s
+        when "references"
           table = options.delete(:to) || column_name.pluralize
           column.type = Base.groonga_table_name(table)
         else
@@ -93,116 +86,15 @@ module ActiveGroonga
         end
       end
 
-      def add_index(table_name, column_name, options={})
-        groonga_table_name = Base.groonga_table_name(table_name)
-        table = Base.context[groonga_table_name]
-        column_name = column_name.to_s
-        column = table.column(column_name)
-
-        base_dir = File.join(Base.metadata_directory,
-                             index_table_name,
-                             table_name)
-        FileUtils.mkdir_p(base_dir)
-
-        name = "#{table_name}/#{column_name}"
-        path = File.join(base_dir, "#{column_name}.groonga")
-        index_column = index_table.define_index_column(name, table,
-                                                       :path => path,
-                                                       # :with_section => true,
-                                                       # :with_weight => true,
-                                                       :with_position => true)
-        index_column.source = column
-
-        record = index_management_table.add
-        record["table"] = groonga_table_name
-        record["column"] = column_name
-        record["index"] = name
-      end
-
-      def index_management_table
-        Base.context[groonga_index_management_table_name]
-      end
-
-      def index_table
-        Base.context[groonga_index_table_name]
-      end
-
-      def indexes(table_or_table_name)
-        if table_or_table_name.is_a?(String)
-          table_name = table_or_table_name
-          table = Base.context[Base.groonga_table_name(table_name)]
-        else
-          table = table_or_table_name
-          table_name = table.name
-        end
-        indexes = []
-        index_management_table.records.each do |record|
-          next if record["table"] != table.name
-          indexes << IndexDefinition.new(table_name, record["index"],
-                                         false, record["column"])
-        end
-        indexes
+      def add_index_column(table_name, column_name,
+                           target_table_name, target_column_name,
+                           options={})
+        column = IndexColumnDefinition.new(table_name, column_name,
+                                           target_table_name, target_column_name)
+        column.create(options)
       end
 
       private
-      def index_management_table_name
-        Base.table_name_prefix + 'indexes' + Base.table_name_suffix
-      end
-
-      def groonga_index_management_table_name
-        Base.groonga_metadata_table_name(index_management_table_name)
-      end
-
-      def index_table_name
-        Base.table_name_prefix + 'index' + Base.table_name_suffix
-      end
-
-      def groonga_index_table_name
-        Base.groonga_metadata_table_name(index_table_name)
-      end
-
-      def initialize_index_management_table
-        table_name = index_management_table_name
-        groonga_table_name = groonga_index_management_table_name
-        if Base.context[groonga_table_name].nil?
-          table_file = File.join(Base.metadata_directory,
-                                 "#{table_name}.groonga")
-          table = Groonga::Array.create(:name => groonga_table_name,
-                                        :path => table_file,
-                                        :sub_records => true)
-
-          base_dir = File.join(Base.metadata_directory, table_name)
-          FileUtils.mkdir_p(base_dir)
-
-          column_file = File.join(base_dir, "table.groonga")
-          table.define_column("table", "ShortText", :path => column_file)
-
-          column_file = File.join(base_dir, "column.groonga")
-          table.define_column("column", "ShortText", :path => column_file)
-
-          column_file = File.join(base_dir, "index.groonga")
-          table.define_column("index", "ShortText", :path => column_file)
-        end
-      end
-
-      def initialize_index_table
-        table_name = index_table_name
-        groonga_table_name = groonga_index_table_name
-        if Base.context[groonga_table_name].nil?
-          table_file = File.join(Base.metadata_directory,
-                                 "#{table_name}.groonga")
-          table = Groonga::PatriciaTrie.create(:name => groonga_table_name,
-                                               :key_type => "ShortText",
-                                               # :key_with_sis => true,
-                                               # :key_normalize => true,
-                                               :path => table_file)
-          table.default_tokenizer = "TokenBigram"
-
-          base_dir = File.join(Base.metadata_directory, table_name)
-          FileUtils.mkdir_p(base_dir)
-        end
-      end
-
       def initialize_migrations_table
         table_name = Migrator.schema_migrations_table_name
         groonga_table_name = Migrator.groonga_schema_migrations_table_name
@@ -222,18 +114,17 @@ module ActiveGroonga
       def initialize(name)
         super(nil)
         @name = name
-        @indexes = []
       end
 
       def create
         table_file = File.join(Base.tables_directory, "#{@name}.groonga")
-        Groonga::Array.create(:name => Base.groonga_table_name(@name),
-                              :path => table_file,
-                              :sub_records => true)
-        @columns.each(&:create)
-        @indexes.each do |column_name, options|
-          Schema.add_index(@name.to_s, column_name, options)
+        table_name = Base.groonga_table_name(@name)
+        unless Base.context[table_name]
+          Groonga::Array.create(:name => table_name,
+                                :path => table_file,
+                                :sub_records => true)
         end
+        @columns.each(&:create)
       end
 
       def column(name, type, options={})
@@ -243,8 +134,12 @@ module ActiveGroonga
         self
       end
 
-      def index(column_name, options={})
-        @indexes << [column_name.to_s, options]
+      def index(name, target_table_name, target_column_name, options={})
+        column = self[name] || IndexColumnDefinition.new(@name, name,
+                                                         target_table_name,
+                                                         target_column_name)
+        @columns << column unless @columns.include?(column)
+        self
       end
 
       def references(*args)
@@ -307,9 +202,33 @@ module ActiveGroonga
       end
     end
 
-    class IndexDefinition < ActiveRecord::ConnectionAdapters::IndexDefinition
-      alias_method :column, :columns
-      alias_method :column=, :columns=
+    class IndexColumnDefinition
+      def initialize(table_name, name, target_table_name, target_column_name)
+        @table_name = table_name
+        @name = name
+        @name = @name.to_s if @name.is_a?(Symbol)
+        @target_table_name = target_table_name
+        @target_column_name = target_column_name
+        if @target_column_name.is_a?(Symbol)
+          @target_column_name = @target_column_name.to_s
+        end
+      end
+
+      def create(options={})
+        column_dir = Base.index_columns_directory(@table_name,
+                                                  @target_table_name.to_s)
+        column_file = File.join(column_dir, "#{@name}.groonga")
+        options = {:with_position => true}.merge(options)
+        options = options.merge(:path => column_file)
+        table = Base.context[Base.groonga_table_name(@table_name)]
+        target_table = Base.context[Base.groonga_table_name(@target_table_name)]
+        target_column = target_table.column(@target_column_name)
+        table.define_index_column(@name, target_column, options)
+      end
+
+      def remove
+        Base.context[@name].remove
+      end
     end
   end
 end
