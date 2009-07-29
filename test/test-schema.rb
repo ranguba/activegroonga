@@ -34,6 +34,19 @@ class SchemaTest < Test::Unit::TestCase
     assert_predicate(column_file, :exist?)
   end
 
+  def test_reference_column
+    ActiveGroonga::Schema.create_table(:categories) do |table|
+      table.string :name
+    end
+
+    column_file = @tables_dir + "posts" + "columns" + "category.groonga"
+    assert_not_predicate(column_file, :exist?)
+    ActiveGroonga::Schema.create_table(:posts) do |table|
+      table.reference :category
+    end
+    assert_predicate(column_file, :exist?)
+  end
+
   def test_add_index
     columns_dir = @tables_dir + "words" + "columns" + "posts"
     index_file = columns_dir + "posts_content.groonga"

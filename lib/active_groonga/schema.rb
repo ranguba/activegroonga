@@ -183,7 +183,8 @@ module ActiveGroonga
         columns("Bool", *args)
       end
 
-      def reference(name, table, options={})
+      def reference(name, table=nil, options={})
+        table = Base.groonga_table_name(table || name.to_s.pluralize)
         column(name, table, options)
       end
       alias_method :references, :reference
