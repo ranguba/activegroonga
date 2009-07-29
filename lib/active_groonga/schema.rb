@@ -57,42 +57,47 @@ module ActiveGroonga
         initialize_migrations_table
       end
 
-      def create_table(name, options={})
-        table_definition = TableDefinition.new(name)
-        yield(table_definition)
-        table_definition.create(options)
+      def create_table(name, options={}, &block)
+        table_file = File.join(Base.tables_directory, "#{name}.groonga")
+        table_name = Base.groonga_table_name(name)
+        options = {:path => table_file}.merge(options)
+        options = options.merge(:context => Base.context)
+        Groonga::Schema.create_table(table_name, options) do |table|
+          block.call(TableDefinitionWrapper.new(table))
+        end
       end
 
-      def drop_table(name, options={})
-        table = Base.context[Base.groonga_table_name(name)]
-        table.remove
+      def remove_table(name, options={})
+        options = options.merge(:context => Base.context)
+        Groonga::Schema.remove_table(name, options)
       end
+      alias_method :drop_table, :remove_table
 
       def add_column(table_name, column_name, type, options={})
-        column = ColumnDefinition.new(table_name, column_name)
-        case type.to_s
-        when "references"
-          table = options.delete(:to) || column_name.pluralize
-          column.type = Base.groonga_table_name(table)
-        else
-          column.type = type
+        options_with_context = options.merge(:context => Base.context)
+        Groonga::Schema.change_table(table_name, options_with_context) do |table|
+          table = TableDefinitionWrapper.new(table)
+          table.column(column_name, type, options)
         end
-        column.create(options)
       end
 
       def remove_column(table_name, *column_names)
-        column_names.each do |column_name|
-          ColumnDefinition.new(table_name, column_name).remove
+        options_with_context = options.merge(:context => Base.context)
+        Groonga::Schema.change_table(table_name, options_with_context) do |table|
+          column_names.each do |column_name|
+            table.remove_column(column_name)
+          end
         end
       end
 
       def add_index_column(table_name, target_table_name, target_column_name,
                            options={})
-        column_name = options.delete(:name)
-        column_name ||= [target_table_name, target_column_name].join("_")
-        column = IndexColumnDefinition.new(table_name, column_name,
-                                           target_table_name, target_column_name)
-        column.create(options)
+        options_for_table = options.reject {|key, value| key == :name}
+        options_for_table = options_for_table.merge(:context => Base.context)
+        Groonga::Schema.change_table(table_name, options_for_table) do |table|
+          table = TableDefinitionWrapper.new(table)
+          table.index(target_table_name, target_column_name, options)
+        end
       end
 
       private
@@ -109,152 +114,88 @@ module ActiveGroonga
       end
     end
 
-    class TableDefinition < ActiveRecord::ConnectionAdapters::TableDefinition
-      undef_method :primary_key, :to_sql, :native
-
-      def initialize(name)
-        super(nil)
-        @name = name
-      end
-
-      def create(options={})
-        table_file = File.join(Base.tables_directory, "#{@name}.groonga")
-        table_name = Base.groonga_table_name(@name)
-        unless Base.context[table_name]
-          options = options.dup
-          type = options.delete(:type) || :array
-          case type.to_s
-          when "patricia_trie"
-            options = {
-              :sub_records => true,
-              :default_tokenizer => "TokenBigram",
-            }.merge(options)
-            Groonga::PatriciaTrie.create(options.merge(:name => table_name,
-                                                       :path => table_file))
-          when "hash"
-            options = {
-              :sub_records => true,
-              :default_tokenizer => "TokenBigram",
-            }.merge(options)
-            Groonga::Hash.create(options.merge(:name => table_name,
-                                               :path => table_file))
-          when "array"
-            options = {
-              :sub_records => true,
-            }.merge(options)
-            Groonga::Array.create(options.merge(:name => table_name,
-                                                :path => table_file))
-          else
-            raise ArgumentError, "unknown table type: #{type.inspect}"
-          end
-        end
-        @columns.each(&:create)
+    class TableDefinitionWrapper
+      def initialize(definition)
+        @definition = definition
       end
 
       def column(name, type, options={})
-        column = self[name] || ColumnDefinition.new(@name, name)
-        column.type = type
-        @columns << column unless @columns.include?(column)
-        self
+        column_file = File.join(Base.columns_directory(@definition.name),
+                                "#{name}.groonga")
+        options = {:path => column_file}.merge(options)
+        @definition.column(name, type, options)
       end
+
+      def remove_column(name, options={})
+        @definition.remove_column(name, options)
+      end
+      alias_method :remove_index, :remove_column
 
       def index(target_table_name, target_column_name, options={})
-        name = options.delete(:name)
-        name ||= [target_table_name, target_column_name].join("_")
-        column = self[name] || IndexColumnDefinition.new(@name, name,
-                                                         target_table_name,
-                                                         target_column_name)
-        @columns << column unless @columns.include?(column)
-        self
+        column_name = options.delete(:name)
+        column_name ||= [target_table_name, target_column_name].join("_")
+        column_dir = Base.index_columns_directory(@definition.name,
+                                                  target_table_name.to_s)
+        column_file = File.join(column_dir, "#{column_name}.groonga")
+        options = {:with_position => true, :path => column_file}.merge(options)
+        target_table = @definition.context[target_table_name]
+        target_column = target_table.column(target_column_name)
+        @definition.index(column_name, target_column, options)
       end
 
-      def references(*args)
+      def timestamps(*args)
         options = args.extract_options!
-        args.each do |col|
-          groonga_table_name = Base.groonga_table_name(col.to_s.pluralize)
-          table = Base.context[groonga_table_name]
-          column(col, table, options)
+        column(:created_at, :datetime, options)
+        column(:updated_at, :datetime, options)
+      end
+
+      def string(*args)
+        columns("ShortText", *args)
+      end
+
+      def text(*args)
+        columns("Text", *args)
+      end
+
+      def integer(*args)
+        columns("Integer32", *args)
+      end
+
+      def float(*args)
+        columns("Float", *args)
+      end
+
+      def decimal(*args)
+        columns("Integer64", *args)
+      end
+
+      def time(*args)
+        columns("Time", *args)
+      end
+      alias_method :datetime, :time
+      alias_method :timestamp, :time
+
+      def binary(*args)
+        columns("LongText", *args)
+      end
+
+      def boolean(*args)
+        columns("Bool", *args)
+      end
+
+      def reference(name, table, options={})
+        column(name, table, options)
+      end
+      alias_method :references, :reference
+      alias_method :belongs_to, :references
+
+      private
+      def columns(type, *args)
+        options = args.extract_options!
+        column_names = args
+        column_names.each do |name|
+          column(name, type, options)
         end
-      end
-      alias :belongs_to :references
-    end
-
-    class ColumnDefinition
-      attr_accessor :name, :type
-
-      def initialize(table_name, name)
-        @table_name = table_name
-        @name = name
-        @name = @name.to_s if @name.is_a?(Symbol)
-        @type = nil
-      end
-
-      def create(options={})
-        column_file = File.join(Base.columns_directory(@table_name),
-                                "#{@name}.groonga")
-        options = options.merge(:path => column_file)
-        table = Base.context[Base.groonga_table_name(@table_name)]
-        table.define_column(@name,
-                            normalize_type(@type),
-                            options)
-      end
-
-      def remove
-        Base.context[@name].remove
-      end
-
-      def normalize_type(type)
-        return type if type.is_a?(Groonga::Object)
-        case type.to_s
-        when "string"
-          "ShortText"
-        when "text"
-          "Text"
-        when "integer"
-          "Int32"
-        when "float"
-          "Float"
-        when "decimal"
-          "Int64"
-        when "datetime", "timestamp", "time", "date"
-          "Time"
-        when "binary"
-          "LongText"
-        when "boolean"
-          "Bool"
-        else
-          type
-        end
-      end
-    end
-
-    class IndexColumnDefinition
-      def initialize(table_name, name, target_table_name, target_column_name)
-        @table_name = table_name
-        @name = name
-        @name = @name.to_s if @name.is_a?(Symbol)
-        @target_table_name = target_table_name
-        @target_column_name = target_column_name
-        if @target_column_name.is_a?(Symbol)
-          @target_column_name = @target_column_name.to_s
-        end
-      end
-
-      def create(options={})
-        column_dir = Base.index_columns_directory(@table_name,
-                                                  @target_table_name.to_s)
-        column_file = File.join(column_dir, "#{@name}.groonga")
-        options = {:with_position => true}.merge(options)
-        options = options.merge(:path => column_file)
-        table = Base.context[Base.groonga_table_name(@table_name)]
-        target_table = Base.context[Base.groonga_table_name(@target_table_name)]
-        target_column = target_table.column(@target_column_name)
-        index = table.define_index_column(@name, target_column, options)
-        index.source = target_column
-      end
-
-      def remove
-        Base.context[@name].remove
       end
     end
   end
