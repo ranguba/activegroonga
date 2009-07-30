@@ -147,10 +147,14 @@ module ActiveGroonga
         column_dir = Base.index_columns_directory(@definition.name,
                                                   target_table_name.to_s)
         column_file = File.join(column_dir, "#{column_name}.groonga")
-        options = {:with_position => true, :path => column_file}.merge(options)
+        options = {
+          :with_position => true,
+          :path => column_file,
+          :name => column_name,
+        }.merge(options)
         target_table = @definition.context[target_table_name]
         target_column = target_table.column(target_column_name)
-        @definition.index(column_name, target_column, options)
+        @definition.index(target_column, options)
       end
 
       def timestamps(*args)
