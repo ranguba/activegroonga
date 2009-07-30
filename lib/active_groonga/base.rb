@@ -589,6 +589,7 @@ module ActiveGroonga
           unless File.exist?(database_directory)
             FileUtils.mkdir_p(database_directory)
           end
+          database_directory = File.expand_path(database_directory)
           database_file = File.join(database_directory, "database.groonga")
           if File.exist?(database_file)
             Groonga::Database.new(database_file)
