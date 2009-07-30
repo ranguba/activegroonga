@@ -115,7 +115,6 @@ Hoe.spec('activegroonga') do |_project|
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   project.summary, project.description, = description.split(/\n\n+/, 3)
 
-  project.need_tar = false
   project.remote_rdoc_dir = "active_groonga"
 end
 
