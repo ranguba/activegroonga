@@ -61,6 +61,7 @@ module ActiveGroonga
         table_file = File.join(Base.tables_directory, "#{name}.groonga")
         table_name = Base.groonga_table_name(name)
         options = {:path => table_file}.merge(options)
+        options = default_table_options(options).merge(options)
         options = options.merge(:context => Base.context)
         Groonga::Schema.create_table(table_name, options) do |table|
           block.call(TableDefinitionWrapper.new(table))
@@ -111,6 +112,15 @@ module ActiveGroonga
                                :path => table_file,
                                :key_type => "ShortText")
         end
+      end
+
+      def default_table_options(options)
+        default_options = {:sub_records => true}
+        case options[:type]
+        when :hash, :patricia_trie
+          default_options[:default_tokenizer] = "TokenBigram"
+        end
+        default_options
       end
     end
 
