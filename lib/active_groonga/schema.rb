@@ -172,7 +172,7 @@ module ActiveGroonga
       end
 
       def integer(*args)
-        columns("Integer32", *args)
+        columns("Int32", *args)
       end
 
       def float(*args)
@@ -180,7 +180,7 @@ module ActiveGroonga
       end
 
       def decimal(*args)
-        columns("Integer64", *args)
+        columns("Int64", *args)
       end
 
       def time(*args)
