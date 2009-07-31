@@ -20,7 +20,7 @@ URLs about Ruby/groonga and groonga.
 
 == Author
 
-Kouhei Sutou <kou@clear-code.com>
+Kouhei Sutou <tt><kou@clear-code.com></tt>
 
 == License
 

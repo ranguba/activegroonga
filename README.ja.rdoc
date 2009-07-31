@@ -20,7 +20,7 @@ Ruby/groongaをベースとしています。Ruby/groongaとgroongaに関
 
 == 作者
 
-Kouhei Sutou <kou@clear-code.com>
+Kouhei Sutou <tt><kou@clear-code.com></tt>
 
 == ライセンス
 
