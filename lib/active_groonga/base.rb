@@ -635,7 +635,6 @@ module ActiveGroonga
       end
 
       def find_every(options)
-        limit = options[:limit] ||= 0
         expression = options[:expression]
         include_associations = merge_includes(scope(:find, :include), options[:include])
 
@@ -649,8 +648,24 @@ module ActiveGroonga
           else
             records = table.select
           end
+          sort_options = {}
+          limit = options[:limit]
+          offset = options[:offset]
+          offset = Integer(offset) unless offset.nil?
+          if limit and offset.nil?
+            sort_options[:limit] = limit
+          end
           records = records.sort([:key => ".:score", :order => :descending],
-                                 :limit => limit)
+                                 sort_options)
+          if offset
+            in_target = false
+            _records, records = records, []
+            _records.each_with_index do |record, i|
+              break if limit and limit <= records.size
+              in_target = i >= offset unless in_target
+              records << record if in_target
+            end
+          end
           records = records.collect do |record|
             instantiate(record, record.key.id, record.table.domain)
           end
@@ -727,7 +742,7 @@ module ActiveGroonga
         end
       end
 
-      VALID_FIND_OPTIONS = [:expression, :readonly, :limit]
+      VALID_FIND_OPTIONS = [:expression, :readonly, :limit, :offset]
       def validate_find_options(options)
         options.assert_valid_keys(VALID_FIND_OPTIONS)
       end
