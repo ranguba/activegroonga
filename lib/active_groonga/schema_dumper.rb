@@ -54,7 +54,24 @@ module ActiveGroonga
     def dump_table(name, stream)
       begin
         table_schema = StringIO.new
-        table_schema.puts "  create_table #{name.inspect}, :force => true do |t|"
+
+        table_name = Base.groonga_table_name(name)
+        table = Base.context[table_name]
+        options = [":force => true"]
+        case table
+        when Groonga::Hash
+          options << ":type => :hash"
+        when Groonga::PatriciaTrie
+          options << ":type => :patricia_trie"
+        end
+        if table.domain
+          options << ":key_type => #{table.domain.name.inspect}"
+        end
+        if table.respond_to?(:default_tokenizer) and table.default_tokenizer
+          options << ":default_tokenizer => #{table.default_tokenizer.name.inspect}"
+        end
+
+        table_schema.puts "  create_table #{name.inspect}, #{options.join(', ')} do |t|"
         column_specs = []
         columns(name).each do |column|
           if column.reference_type?
@@ -121,10 +138,6 @@ module ActiveGroonga
     def columns(table_name)
       table_name = Base.groonga_table_name(table_name)
       Base.context[table_name].columns.collect {|column| Column.new(column)}
-    end
-
-    def indexes(table_name)
-      Schema.indexes(table_name)
     end
 
     class StreamWrapper

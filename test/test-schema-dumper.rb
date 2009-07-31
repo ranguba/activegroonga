@@ -35,7 +35,7 @@ ActiveGroonga::Schema.define(:version => 0) do
   create_table "tasks", :force => true do |t|
     t.string "name"
   end
-  create_table "terms", :force => true do |t|
+  create_table "terms", :force => true, :type => :patricia_trie, :key_type => "ShortText", :default_tokenizer => "TokenBigram" do |t|
   end
   create_table "users", :force => true do |t|
     t.string "name"
