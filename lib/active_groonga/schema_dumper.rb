@@ -28,9 +28,11 @@ module ActiveGroonga
 
     def dump(stream)
       @references = []
+      @indexes = []
       header(stream)
       dump_tables(stream)
       dump_references(stream)
+      dump_indexes(stream)
       trailer(stream)
       stream
     end
@@ -59,6 +61,10 @@ module ActiveGroonga
             @references << [name, column]
             next
           end
+          if column.index?
+            @indexes << [name, column]
+            next
+          end
 
           spec = {}
           spec[:type] = column.type.to_s
@@ -74,8 +80,6 @@ module ActiveGroonga
         table_schema.puts "  end"
         table_schema.puts
 
-        dump_indexes(name, table_schema)
-
         stream.print table_schema.string
       rescue => e
         stream.puts "# Could not dump table #{name.inspect} because of following #{e.class}"
@@ -89,30 +93,28 @@ module ActiveGroonga
       stream
     end
 
-    def dump_indexes(table, stream)
-      _indexes = indexes(table)
-      return if _indexes.empty?
-
-      add_index_statements = _indexes.collect do |index|
-        statement_parts = []
-        statement_parts << "add_index #{index.table.inspect}"
-        statement_parts << index.columns.inspect
-        statement_parts << ":name => #{index.name.inspect}"
-        '  ' + statement_parts.join(', ')
-      end
-
-      stream.puts add_index_statements.sort.join("\n")
-      stream.puts
-    end
-
     def dump_references(stream)
       @references.sort_by do |name, column|
         [name, column.name]
       end.each do |name, column|
         statement = "  add_column #{name.inspect}, "
-        statement << "#{column.name.inspect}, :references, "
-        statement << ":to => #{column.reference_object_name.inspect}"
+        statement << "#{column.name.inspect}, "
+        statement << "#{column.reference_object_name.inspect}"
         stream.puts(statement)
+      end
+    end
+
+    def dump_indexes(stream)
+      @indexes.sort_by do |name, column|
+        [name, column.name]
+      end.each do |name, column|
+        column.index_sources.each do |source|
+          statement = "  add_index_column #{name.inspect}, "
+          statement << "#{source.table.name.inspect}, "
+          statement << "#{source.local_name.inspect}, "
+          statement << ":name => #{column.name.inspect}"
+          stream.puts(statement)
+        end
       end
     end
 

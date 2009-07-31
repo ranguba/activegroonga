@@ -60,6 +60,14 @@ module ActiveGroonga
       end
     end
 
+    def index?
+      @type == :index
+    end
+
+    def index_sources
+      @column.sources
+    end
+
     def reference_type?
       @type == :references
     end
@@ -77,6 +85,7 @@ module ActiveGroonga
 
     private
     def detect_type
+      return :index if @column.is_a?(Groonga::IndexColumn)
       case @column.range
       when Groonga::Type
         case @column.range.id
