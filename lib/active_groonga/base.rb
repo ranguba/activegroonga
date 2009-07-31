@@ -624,8 +624,14 @@ module ActiveGroonga
         directory
       end
 
-      def count
-        table.size
+      def count(expression=nil)
+        if expression
+          table.select do |record|
+            expression.call(DynamicRecordExpressionBuilder.new(record))
+          end.size
+        else
+          table.size
+        end
       end
 
       private
