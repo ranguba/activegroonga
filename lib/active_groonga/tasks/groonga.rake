@@ -150,6 +150,8 @@ namespace :groonga do
     task :purge => :environment do
       ActiveGroonga::Base.setup_database(:test)
       ActiveGroonga::Base.database.remove
+      rm_rf(ActiveGroonga::Base.database_directory)
+      # FIXME: groonga isn't fully implemented remove for database.
     end
 
     desc 'Check for pending migrations and load the test schema'
