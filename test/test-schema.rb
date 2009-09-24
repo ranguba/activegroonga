@@ -62,4 +62,16 @@ class TestSchema < Test::Unit::TestCase
 
     assert_predicate(index_file, :exist?)
   end
+
+  def test_remove_column
+    column_file = @tables_dir + "posts" + "columns" + "title.groonga"
+    assert_not_predicate(column_file, :exist?)
+    ActiveGroonga::Schema.create_table(:posts) do |table|
+      table.string :title
+    end
+    assert_predicate(column_file, :exist?)
+
+    ActiveGroonga::Schema.remove_column(:posts, :title)
+    assert_not_predicate(column_file, :exist?)
+  end
 end

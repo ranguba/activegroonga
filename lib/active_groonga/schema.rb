@@ -83,6 +83,11 @@ module ActiveGroonga
       end
 
       def remove_column(table_name, *column_names)
+        if column_names.last.is_a?(Hash)
+          options = columns.pop
+        else
+          options = {}
+        end
         options_with_context = options.merge(:context => Base.context)
         Groonga::Schema.change_table(table_name, options_with_context) do |table|
           column_names.each do |column_name|
