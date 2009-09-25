@@ -46,8 +46,7 @@ module ActiveGroonga
           if inserted.include?(v)
             raise "Duplicate migration #{v}. Please renumber your migrations to resolve the conflict."
           elsif v < version
-            migration = migrations_table.add
-            migration["version"] = v.to_s
+            migration = migrations_table.add(v.to_s)
             inserted << v
           end
         end
