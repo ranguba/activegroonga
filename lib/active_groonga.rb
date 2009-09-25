@@ -28,7 +28,7 @@ require 'groonga'
 
 module ActiveGroonga
   def self.load_all!
-    [Base]
+    [Base, Column]
   end
 
   autoload :VERSION, 'active_groonga/version'
@@ -45,6 +45,7 @@ module ActiveGroonga
   autoload :Calculations, 'active_groonga/calculations'
   autoload :Callbacks, 'active_groonga/callbacks'
   autoload :Column, 'active_groonga/column'
+  autoload :IdColumn, 'active_groonga/column'
   autoload :Dirty, 'active_groonga/dirty'
   autoload :DynamicRecordExpressionBuilder,
            'active_groonga/dynamic_record_expression_builder'

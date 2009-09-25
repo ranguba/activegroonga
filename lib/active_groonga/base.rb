@@ -375,7 +375,7 @@ module ActiveGroonga
 
       # Returns an array of column objects for the table associated with this class.
       def columns
-        @columns ||= table.columns.collect do |column|
+        @columns ||= [IdColumn.new(table)] + table.columns.collect do |column|
           Column.new(column)
         end
       end
@@ -428,7 +428,13 @@ module ActiveGroonga
         elsif abstract_class?
           "#{super}(abstract)"
         elsif table_exists?
-          attr_list = columns.map { |c| "#{c.name}: #{c.type}" } * ', '
+          attr_list = columns.collect do |column|
+            if column.id?
+              nil
+            else
+              "#{column.name}: #{column.type}"
+            end
+          end.compact.join(', ')
           "#{super}(#{attr_list})"
         else
           "#{super}(Table doesn't exist)"
@@ -1571,7 +1577,7 @@ module ActiveGroonga
       quoted = {}
       attribute_names.each do |name|
         column = column_for_attribute(name)
-        next if column.nil?
+        next if column.nil? or column.id?
 
         value = read_attribute(name)
         # We need explicit to_yaml because quote() does not properly convert Time/Date fields to YAML.

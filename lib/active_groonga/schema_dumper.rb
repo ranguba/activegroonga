@@ -74,6 +74,7 @@ module ActiveGroonga
         table_schema.puts "  create_table #{name.inspect}, #{options.join(', ')} do |t|"
         column_specs = []
         columns(name).each do |column|
+          next if column.id?
           if column.reference_type?
             @references << [name, column]
             next

@@ -24,6 +24,10 @@ module ActiveGroonga
       @type = detect_type
     end
 
+    def id?
+      false
+    end
+
     def type_cast(value)
       return nil if value.nil?
       case type
@@ -65,7 +69,11 @@ module ActiveGroonga
     end
 
     def index_sources
-      @column.sources
+      if @column
+        @column.sources
+      else
+        []
+      end
     end
 
     def reference_type?
@@ -111,6 +119,19 @@ module ActiveGroonga
       else
         :string
       end
+    end
+  end
+
+  class IdColumn < Column
+    def initialize(table)
+      @column = nil
+      @table = table
+      @name = "id"
+      @type = :unsigned_integer
+    end
+
+    def id?
+      true
     end
   end
 end
