@@ -1600,10 +1600,9 @@ module ActiveGroonga
     end
 
     include Validations
-    include Callbacks
     include AttributeMethods
     include Dirty
-    include Timestamp
+    include Callbacks, Observing, Timestamp
     include Associations
     include Aggregations, Reflection
   end
