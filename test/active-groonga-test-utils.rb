@@ -2,8 +2,7 @@
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
-# License as published by the Free Software Foundation; either
-# version 2.1 of the License.
+# License version 2.1 as published by the Free Software Foundation.
 #
 # This library is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -72,8 +71,6 @@ module ActiveGroongaTestUtils
   def setup_database
     @database_path = @database_dir + "database.groonga"
     @database = Groonga::Database.create(:path => @database_path.to_s)
-
-    ActiveGroonga::Schema.initialize_schema_management_tables
   end
 
   def setup_users_table
@@ -146,7 +143,7 @@ module ActiveGroongaTestUtils
       bookmarks_index_dir + "content.groonga"
     path = @bookmarks_content_index_column_path.to_s
     @bookmarks_content_index_column =
-      @terms.define_index_column("bookmarks/content", @bookmarks,
+      @terms.define_index_column("bookmarks_content", @bookmarks,
                                  :with_section => true,
                                  :with_weight => true,
                                  :with_position => true,

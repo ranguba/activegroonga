@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -13,65 +13,35 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'rubygems'
-require 'active_support'
-require 'active_record'
+require 'pathname'
 
-base_dir = File.dirname(__FILE__)
-ruby_groonga_dir = File.join(base_dir, "..", "..", "groonga")
-ruby_groonga_dir = File.expand_path(ruby_groonga_dir)
-if File.exist?(ruby_groonga_dir)
-  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "ext"))
-  $LOAD_PATH.unshift(File.join(ruby_groonga_dir, "lib"))
+require 'active_model'
+
+base_dir = Pathname(__FILE__).dirname
+rroonga_dir = (base_dir + "../../groonga").expand_path
+if rroonga_dir.exist?
+  $LOAD_PATH.unshift(rroonga_dir + "ext" + "groonga")
+  $LOAD_PATH.unshift(rroonga_dir + "lib")
 end
+
 require 'groonga'
 
 module ActiveGroonga
-  def self.load_all!
-    [Base, Column]
-  end
+  extend ActiveSupport::Autoload
 
-  autoload :VERSION, 'active_groonga/version'
+  eager_autoload do
+    autoload :VERSION
 
-  autoload :ActiveGroongaError, 'active_groonga/base'
+    autoload :Error
 
-  autoload :Aggregations, 'active_groonga/aggregations'
-  autoload :AssociationPreload, 'active_groonga/association_preload'
-  autoload :Associations, 'active_groonga/associations'
-  autoload :AttributeMethods, 'active_groonga/attribute_methods'
-  autoload :AutosaveAssociation, 'active_groonga/autosave_association'
-  autoload :Base, 'active_groonga/base'
-  autoload :Batches, 'active_groonga/batches'
-  autoload :Calculations, 'active_groonga/calculations'
-  autoload :Callbacks, 'active_groonga/callbacks'
-  autoload :Column, 'active_groonga/column'
-  autoload :IdColumn, 'active_groonga/column'
-  autoload :Dirty, 'active_groonga/dirty'
-  autoload :DynamicRecordExpressionBuilder,
-           'active_groonga/dynamic_record_expression_builder'
-  autoload :Migration, 'active_groonga/migration'
-  autoload :Migrator, 'active_groonga/migration'
-  autoload :NamedScope, 'active_groonga/named_scope'
-  autoload :NestedAttributes, 'active_groonga/nested_attributes'
-  autoload :Observing, 'active_groonga/observer'
-  autoload :QueryCache, 'active_groonga/query_cache'
-  autoload :Reflection, 'active_groonga/reflection'
-  autoload :Schema, 'active_groonga/schema'
-  autoload :SchemaDumper, 'active_groonga/schema_dumper'
-  autoload :Serialization, 'active_groonga/serialization'
-  autoload :SessionStore, 'active_groonga/session_store'
-  autoload :TestCase, 'active_groonga/test_case'
-  autoload :Timestamp, 'active_groonga/timestamp'
-  autoload :Transactions, 'active_groonga/transactions'
-  autoload :Validations, 'active_groonga/validations'
+    autoload :Base
+    autoload :Schema
 
-  module Locking
-    autoload :Optimistic, 'active_groonga/locking/optimistic'
-    autoload :Pessimistic, 'active_groonga/locking/pessimistic'
+    autoload :AttributeMethods
   end
 end
 
-# I18n.load_path << File.dirname(__FILE__) + '/active_groonga/locale/en.yml'
+I18n.load_path << (base_dir + '/active_groonga/locale/en.yml').to_s
 
 if defined?(Rails::Configuration)
   require 'active_groonga/rails_support'

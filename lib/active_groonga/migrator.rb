@@ -14,11 +14,23 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module ActiveGroonga
-  module VERSION
-    MAJOR = 1
-    MINOR = 0
-    TINY  = 0
+  class Migrator
+    MANAGEMENT_TABLE_NAME = "schema_migrations"
 
-    STRING = [MAJOR, MINOR, TINY].join(".")
+    def initialize
+      ensure_table
+    end
+
+    private
+    def ensure_table
+      groonga_table_name = Base.groonga_metadata_table_name(MANAGEMENT_TABLE_NAME)
+      if Base.context[groonga_table_name].nil?
+          table_file = File.join(Base.database_directory,
+                                 "#{groonga_table_name}.groonga")
+          Groonga::Hash.create(:name => groonga_table_name,
+                               :path => table_file,
+                               :key_type => "ShortText")
+      end
+    end
   end
 end

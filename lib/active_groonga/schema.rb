@@ -13,47 +13,13 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'active_groonga/migrator'
+
 module ActiveGroonga
   module Schema
     class << self
       def define(info={}, &block)
-        initialize_schema_management_tables
         instance_eval(&block)
-
-        unless info[:version].blank?
-          assume_migrated_upto_version(info[:version])
-        end
-      end
-
-      def assume_migrated_upto_version(version)
-        version = version.to_i
-        table_name = Migrator.groonga_schema_migrations_table_name
-
-        migrations_table = Base.context[table_name]
-        migrated = migrations_table.records.collect do |record|
-          record["version"].to_i
-        end
-        versions = Dir['db/migrate/[0-9]*_*.rb'].map do |filename|
-          filename.split('/').last.split('_').first.to_i
-        end
-
-        unless migrated.include?(version)
-          migrations_table.add(version.to_s)
-        end
-
-        inserted = Set.new
-        (versions - migrated).each do |v|
-          if inserted.include?(v)
-            raise "Duplicate migration #{v}. Please renumber your migrations to resolve the conflict."
-          elsif v < version
-            migration = migrations_table.add(v.to_s)
-            inserted << v
-          end
-        end
-      end
-
-      def initialize_schema_management_tables
-        initialize_migrations_table
       end
 
       def create_table(name, options={}, &block)
@@ -106,18 +72,6 @@ module ActiveGroonga
       end
 
       private
-      def initialize_migrations_table
-        table_name = Migrator.schema_migrations_table_name
-        groonga_table_name = Migrator.groonga_schema_migrations_table_name
-        if Base.context[groonga_table_name].nil?
-          table_file = File.join(Base.metadata_directory,
-                                 "#{table_name}.groonga")
-          Groonga::Hash.create(:name => groonga_table_name,
-                               :path => table_file,
-                               :key_type => "ShortText")
-        end
-      end
-
       def default_table_options(options)
         default_options = {:sub_records => true}
         case options[:type]

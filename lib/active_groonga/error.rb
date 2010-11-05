@@ -14,11 +14,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module ActiveGroonga
-  module VERSION
-    MAJOR = 1
-    MINOR = 0
-    TINY  = 0
+  # Generic ActiveGroonga exception class.
+  class Error < StandardError
+  end
 
-    STRING = [MAJOR, MINOR, TINY].join(".")
+  class RecordNotSaved < Error
   end
 end

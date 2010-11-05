@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -29,7 +29,7 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_find_by_attribute
-    daijiro = User.find_by_name("daijiro")
+    daijiro = User.first {|record| record.name == "daijiro"}
     assert_equal("daijiro", daijiro.name)
   end
 
@@ -78,11 +78,14 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_mass_updates
-    groonga = Bookmark.find_by_uri("http://groonga.org/")
+    groonga = Bookmark.find(:first) do |record|
+      record.uri == "http://groonga.org/"
+    end
     groonga.update_attributes({
                                 "uri" => "http://google.com/",
                                 "comment" => "a search engine",
                               })
+    groonga.reload
 
     google = Bookmark.find(groonga.id)
     assert_equal({
@@ -98,22 +101,24 @@ class TestBase < Test::Unit::TestCase
 
   def test_destroy
     before_count = Bookmark.count
-    Bookmark.find_by_uri("http://groonga.org/").destroy
+    Bookmark.first {|record| record.uri == "http://groonga.org/"}.destroy
     assert_equal(before_count - 1, Bookmark.count)
   end
 
   def test_inspect
-    assert_equal("Bookmark(user: references, uri: string, " +
-                 "updated_at: time, created_at: time, " +
-                 "content: text, comment: text)",
+    assert_equal("Bookmark(user: users, uri: ShortText, " +
+                 "updated_at: Time, created_at: Time, " +
+                 "content: LongText, comment: Text)",
                  Bookmark.inspect)
 
-    daijiro = User.find_by_name("daijiro")
-    groonga = Bookmark.find_by_uri("http://groonga.org/")
-    assert_equal("#<Bookmark user: #{daijiro.inspect}, " +
+    daijiro = User.first {|record| record.name == "daijiro"}
+    groonga = Bookmark.first {|record| record.uri == "http://groonga.org/"}
+    assert_equal("#<Bookmark " +
+                 "id: #{groonga.id}, " +
+                 "user: #{daijiro.inspect}, " +
                  "uri: \"http://groonga.org/\", " +
-                 "updated_at: \"2009-02-09 02:29:00\", " +
-                 "created_at: \"2009-02-09 02:09:29\", " +
+                 "updated_at: 2009-02-09 02:29:00 +0900, " +
+                 "created_at: 2009-02-09 02:09:29 +0900, " +
                  "content: \"<html><body>groonga</body></html>\", " +
                  "comment: \"fulltext search engine\">",
                  groonga.inspect)
@@ -150,25 +155,27 @@ class TestBase < Test::Unit::TestCase
     }
     google.save!
 
-    bookmarks = Bookmark.find_all_by_user(daijiro)
+    bookmarks = Bookmark.all do |record|
+      record.user == daijiro
+    end
     assert_equal([Bookmark.find(@bookmark_records[:groonga].id), google],
                  bookmarks)
   end
 
   def test_find_reference_by_id
     daijiro = @user_records[:daijiro]
-    bookmarks = Bookmark.find_all_by_user(daijiro.id)
+    bookmarks = Bookmark.all {|record| record.user == daijiro}
     assert_equal([Bookmark.find(@bookmark_records[:groonga])],
                  bookmarks)
   end
 
-  def test_create
+  def test_find_all_with_block
     google = Bookmark.create("uri" => "http://google.com/",
                              "comment" => "a search engine",
                              "content" => "<html><body>...Google...</body></html>")
 
     assert_equal([google],
-                 Bookmark.find(:all) {|record| record["content"] =~ "Google"})
+                 Bookmark.all {|record| record["content"] =~ "Google"})
   end
 
   def test_find_by_model
@@ -181,11 +188,11 @@ class TestBase < Test::Unit::TestCase
     google = Bookmark.create("uri" => "http://google.com/",
                              "comment" => "a search engine")
     assert_not_equal(Time.at(0), google.created_at)
-    assert_not_equal(Time.at(0), google.updated_at)
+    assert_equal(Time.at(0), google.updated_at)
   end
 
   def test_reload
-    groonga = Bookmark.find_by_uri("http://groonga.org/")
+    groonga = Bookmark.first {|record| record.uri == "http://groonga.org/"}
     groonga.comment = "changed!"
     assert_equal("changed!", groonga.comment)
     groonga.reload
