@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 #
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,13 +17,20 @@
 
 # $VERBOSE = true
 
-base_dir = File.expand_path(File.join(File.dirname(__FILE__), ".."))
-test_unit_dir = File.join(base_dir, "test-unit", "lib")
-ruby_groonga_dir = File.expand_path(File.join(base_dir, "..", "groonga"))
-lib_dir = File.join(base_dir, "lib")
-test_dir = File.join(base_dir, "test")
+require 'pathname'
+require 'shellwords'
 
-if File.exist?(ruby_groonga_dir)
+base_dir = Pathname(__FILE__).dirname.parent.expand_path
+test_unit_dir = base_dir + "test-unit"
+unless test_unit_dir.exist?
+  system("svn", "co", "http://test-unit.rubyforge.org/svn/trunk", "test-unit")
+end
+
+rroonga_dir = base_dir.parent + "rroonga"
+lib_dir = base_dir + "lib"
+test_dir = base_dir + "test"
+
+if rroonga_dir.exist?
   make = nil
   if system("which gmake > /dev/null")
     make = "gmake"
@@ -31,11 +38,14 @@ if File.exist?(ruby_groonga_dir)
     make = "make"
   end
   if make
-    system("cd #{ruby_groonga_dir.dump} && #{make} > /dev/null") or exit(1)
+    escaped_rroonga_dir = Shellwords.escape(rroonga_dir.to_s)
+    system("cd #{escaped_rroonga_dir} && #{make} > /dev/null") or exit(false)
   end
+  $LOAD_PATH.unshift(rroonga_dir + "ext" + "groonga")
+  $LOAD_PATH.unshift(rroonga_dir + "lib")
 end
 
-$LOAD_PATH.unshift(test_unit_dir)
+$LOAD_PATH.unshift(test_unit_dir + "lib")
 
 require 'test/unit'
 
