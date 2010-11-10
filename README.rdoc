@@ -26,9 +26,12 @@ Kouhei Sutou <tt><kou@clear-code.com></tt>
 
 LGPL 2.1. See license/LGPL for details.
 
+(Kouhei Sutou has a right to change rroonga's license
+inclidng contributed patches.)
+
 == Dependencies
 
-* Ruby/groonga
+* rroonga
 
 == Install
 
