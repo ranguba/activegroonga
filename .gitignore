@@ -1,4 +1,6 @@
 /doc
 /email.txt
 /pkg
-/test-unit
+/test-unit/
+/test-unit-notify/
+/test/.test-result/
