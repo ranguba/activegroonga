@@ -22,8 +22,18 @@ require 'shellwords'
 
 base_dir = Pathname(__FILE__).dirname.parent.expand_path
 test_unit_dir = base_dir + "test-unit"
+test_unit_notify_dir = base_dir + "test-unit-notify"
+test_unit_repository_base = "http://test-unit.rubyforge.org/svn"
 unless test_unit_dir.exist?
-  system("svn", "co", "http://test-unit.rubyforge.org/svn/trunk", "test-unit")
+  system("svn", "co", "#{test_unit_repository_base}/trunk",
+         test_unit_dir.to_s)
+end
+unless test_unit_notify_dir.exist?
+  test_unit_notify_repository = "#{test_unit_repository_base}/extensions/test-unit-notify/trunk/"
+  system("svn", "co",
+         test_unit_notify_repository.to_s,
+         test_unit_notify_dir.to_s) or exit(false)
+  system("svn", "up", test_unit_dir.to_s) or exit(false)
 end
 
 rroonga_dir = base_dir.parent + "rroonga"
@@ -45,9 +55,14 @@ if rroonga_dir.exist?
   $LOAD_PATH.unshift(rroonga_dir + "lib")
 end
 
+$LOAD_PATH.unshift(test_unit_notify_dir + "lib")
 $LOAD_PATH.unshift(test_unit_dir + "lib")
 
 require 'test/unit'
+require 'test/unit/notify'
+
+ARGV.unshift("--priority-mode")
+ARGV.unshift("--notify")
 
 $LOAD_PATH.unshift(lib_dir)
 
