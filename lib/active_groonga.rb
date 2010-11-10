@@ -42,7 +42,3 @@ module ActiveGroonga
 end
 
 I18n.load_path << (base_dir + '/active_groonga/locale/en.yml').to_s
-
-if defined?(Rails::Configuration)
-  require 'active_groonga/rails_support'
-end
