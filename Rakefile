@@ -82,7 +82,7 @@ def cleanup_white_space(entry)
 end
 
 ENV["VERSION"] ||= guess_version
-version = ENV["VERSION"]
+version = ENV["VERSION"].dup
 project = nil
 Hoe.spec('activegroonga') do |_project|
   Hoe::Test::SUPPORTED_TEST_FRAMEWORKS[:testunit2] = "test/run-test.rb"
@@ -181,4 +181,13 @@ task :tag do
   repository = "svn+ssh://rubyforge.org/var/svn/groonga/activegroonga"
   sh("svn cp -m 'release #{version}!!!' " +
      "#{repository}/trunk #{repository}/tags/#{version}")
+end
+
+desc "generate activegroonga.gemspec"
+task :generate_gemspec do
+  spec = project.spec
+  spec_name = File.join(base_dir, project.spec.spec_name)
+  File.open(spec_name, "w") do |spec_file|
+    spec_file.puts(spec.to_ruby)
+  end
 end
