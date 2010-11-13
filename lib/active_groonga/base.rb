@@ -28,6 +28,26 @@ module ActiveGroonga
     cattr_accessor :configurations
 
     class << self
+      def configure(configuration)
+        case configuration
+        when String, Symbol
+          configure(configurations[configuration.to_s])
+        when Hash
+          self.database_path = configuration["database_path"]
+        end
+      end
+
+      def database
+        path = database_path
+        return nil if path.nil?
+        if path.exist?
+          @@database ||= Groonga::Database.open(:path => path.to_s,
+                                                :context => context)
+        else
+          @@databae ||= Groonga::Database.create(path.to_s, :context => context)
+        end
+      end
+
       def create(attributes=nil, &block)
         if attributes.is_a?(Array)
           attributes.collect do |nested_attributes|
@@ -136,6 +156,7 @@ module ActiveGroonga
       def database_path=(path)
         path = Pathname(path) if path.is_a?(String)
         @@database_path = path
+        @@database = nil
       end
 
       protected
