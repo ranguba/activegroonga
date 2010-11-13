@@ -39,8 +39,6 @@ module ActiveGroonga
 
     autoload :Persistence
     autoload :Callbacks
-
-    autoload :AttributeMethods
   end
 end
 
