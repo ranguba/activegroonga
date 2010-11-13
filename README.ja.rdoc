@@ -26,8 +26,8 @@ Kouhei Sutou <tt><kou@clear-code.com></tt>
 
 LGPL 2.1です。詳しくはlicense/LGPLを見てください。
 
-（コントリビュートされたパッチなども含み、Kouhei Sutouが
-rroongaのライセンスを変更する権利を持ちます。）
+（コントリビュートされたパッチなども含み、Kouhei Sutouがライ
+センスを変更する権利を持ちます。）
 
 == 依存ソフトウェア
 
