@@ -23,7 +23,14 @@ module ActiveGroonga
       end
 
       def dump(options={})
-        new(options).dump
+        options ||= {}
+        if options.is_a?(Hash)
+          options = options.dup
+          output = options.delete(:output)
+        else
+          output, options = options, {}
+        end
+        new(options).dump(output)
       end
     end
 
@@ -40,6 +47,9 @@ module ActiveGroonga
     end
 
     def dump(output=nil)
+      dumped_schema = @schema.dump
+      return nil if dumped_schema.nil?
+
       return_string = false
       if output.nil?
         output = StringIO.new
@@ -47,7 +57,7 @@ module ActiveGroonga
       end
       output << "ActiveGroonga::Schema.define(:version => 0) do |schema|\n"
       output << "  schema.instance_eval do\n"
-      @schema.dump.each_line do |line|
+      dumped_schema.each_line do |line|
         if /^\s*$/ =~ line
           output << line
         else

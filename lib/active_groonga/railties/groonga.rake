@@ -37,6 +37,7 @@ namespace :groonga do
   desc "Migrate the database (options: VERSION=x, VERBOSE=false)."
   task :migrate => :load_config do
     # TODO
+    Rake::Task["groonga:schema:dump"].invoke
   end
 
   namespace :schema do
@@ -57,9 +58,14 @@ namespace :groonga do
     desc "Dump the schema."
     task :dump => "groonga:load_config" do
       schema = schema_name.call
-      mkdir_p(schema.directory.to_s) unless schema.directory.exist?
-      schema.open("w") do |schema_file|
-        ActiveGroonga::Schema.dump(schema_file)
+      mkdir_p(schema.dirname.to_s) unless schema.dirname.exist?
+      begin
+        schema.open("w") do |schema_file|
+          ActiveGroonga::Schema.dump(schema_file)
+        end
+      rescue Exception
+        rm_f(schema.to_s)
+        raise
       end
     end
   end
