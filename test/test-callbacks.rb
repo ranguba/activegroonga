@@ -18,10 +18,20 @@ class TestCallbacks < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
   def test_before_save
-    bookmark = Bookmark.new
-    def bookmark.before_save
-      @called = true
+    callbacked_bookmark_class = Class.new(Bookmark) do
+      class << self
+        def model_name
+          Bookmark.model_name
+        end
+      end
+
+      set_callback :save, :before, :before_save
+
+      def before_save
+        @called = true
+      end
     end
+    bookmark = callbacked_bookmark_class.new
     bookmark.instance_variable_set("@called", false)
     assert_equal(false, bookmark.instance_variable_get("@called"))
     bookmark.save

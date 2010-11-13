@@ -37,6 +37,9 @@ module ActiveGroonga
     autoload :Base
     autoload :Schema
 
+    autoload :Persistence
+    autoload :Callbacks
+
     autoload :AttributeMethods
   end
 end

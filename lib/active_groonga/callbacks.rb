@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -15,12 +15,31 @@
 
 module ActiveGroonga
   module Callbacks
-    class << self
-      def included(base)
-        base.class_eval do
-          include ActiveRecord::Callbacks
-        end
-      end
+    extend ActiveSupport::Concern
+
+    included do
+      extend ActiveModel::Callbacks
+      include ActiveModel::Validations::Callbacks
+
+      define_model_callbacks :initialize, :find, :only => :after
+      define_model_callbacks :save, :create, :update, :destory
+    end
+
+    def destroy #:nodoc:
+      run_callbacks(:destory) {super}
+    end
+
+    private
+    def create_or_update #:nodoc:
+      run_callbacks(:save) {super}
+    end
+
+    def create #:nodoc:
+      run_callbacks(:create) {super}
+    end
+
+    def update #:nodoc:
+      run_callbacks(:update) {super}
     end
   end
 end

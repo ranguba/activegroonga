@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -145,7 +145,9 @@ module ActiveGroonga
     def initialize(record_or_attributes=nil)
       self.class.define_column_accessors
       @new_record = true
+      @destroyed = false
       @attributes = initial_attributes
+      @attributes_cache = {}
       if record_or_attributes.is_a?(Groonga::Record)
         reload_attributes(record_or_attributes)
       else
@@ -184,16 +186,6 @@ module ActiveGroonga
       end
     end
 
-    def update_attributes(attributes)
-      self.attributes = attributes
-      save
-    end
-
-    def update_attributes!(attributes)
-      self.attributes = attributes
-      save!
-    end
-
     def ==(other)
       other.is_a?(self.class) and other.id == id
     end
@@ -202,37 +194,12 @@ module ActiveGroonga
       id.hash
     end
 
-    def new_record?
-      @new_record
-    end
-
-    def save
-      create_or_update
-    end
-
-    def save!
-      create_or_update or raise(RecordNotSaved)
-    end
-
-    def destroy
-      self.class.table.delete(record_id)
-    end
-
     def read_attribute(name)
       @attributes[name]
     end
 
     def write_attribute(name, value)
       @attributes[name] = value
-    end
-
-    def reload
-      if new_record?
-        record = nil
-      else
-        record = table[record_id]
-      end
-      reload_attributes(record)
     end
 
     def inspect
@@ -253,34 +220,6 @@ module ActiveGroonga
       @table ||= self.class.table
     end
 
-    def initial_attributes
-      attributes = {}
-      self.class.table.columns.each do |column|
-        next if column.index_column?
-        attributes[column.local_name] = nil
-      end
-      attributes
-    end
-
-    def extract_attributes(record)
-      attributes = {}
-      if record.support_key?
-        attributes["key"] = record.key
-      else
-        attributes["id"] = record.id
-      end
-      record.columns.each do |column|
-        next if column.is_a?(Groonga::IndexColumn)
-        value = record[column.local_name]
-        if value and column.reference_column?
-          value_class = column.range.name.camelize.singularize.constantize
-          value = value_class.instantiate(value)
-        end
-        attributes[column.local_name] = value
-      end
-      attributes
-    end
-
     def attribute(name)
       read_attribute(name)
     end
@@ -289,48 +228,7 @@ module ActiveGroonga
       write_attribute(name, value)
     end
 
-    def reload_attributes(record=nil)
-      if record.nil?
-        @attributes = initial_attributes
-      else
-        @attributes = extract_attributes(record)
-      end
-      @id = @attributes.delete("id")
-      @key = @attributes.delete("key")
-    end
-
-    def create_or_update
-      new_record? ? create : update
-    end
-
-    def create
-      attributes = {}
-      @attributes.each do |key, value|
-        if value.is_a?(Base)
-          value.save if value.new_record?
-          value = value.id
-        end
-        attributes[key] = value
-      end
-      record = self.class.table.add(attributes)
-      record["created_at"] = Time.now if record.have_column?("created_at")
-      reload_attributes(record)
-      @new_record = false
-      true
-    end
-
-    def update
-      record = self.class.table[@id]
-      @attributes.each do |key, value|
-        if value.respond_to?(:record_id)
-          value = value.record_id
-        elsif value.is_a?(Hash) and value["id"]
-          value = value["id"]
-        end
-        record[key] = value
-      end
-      record["updated_at"] = Time.now if record.have_column?("updated_at")
-      true
-    end
+    include Persistence
+    include Callbacks
   end
 end
