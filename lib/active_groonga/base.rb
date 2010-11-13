@@ -22,7 +22,10 @@ module ActiveGroonga
     attribute_method_suffix ""
     attribute_method_suffix "="
 
-    cattr_reader :database_directory
+    cattr_reader :database_path
+
+    @@configurations = {}
+    cattr_accessor :configurations
 
     class << self
       def create(attributes=nil, &block)
@@ -130,9 +133,9 @@ module ActiveGroonga
         end
       end
 
-      def database_directory=(directory)
-        directory = Pathname(directory) if directory.is_a?(String)
-        @@database_directory = directory
+      def database_path=(path)
+        path = Pathname(path) if path.is_a?(String)
+        @@database_path = path
       end
 
       protected

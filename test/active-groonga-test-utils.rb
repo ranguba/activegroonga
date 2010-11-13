@@ -55,12 +55,12 @@ module ActiveGroongaTestUtils
   def setup_database_directory
     @database_dir = @tmp_dir + "groonga"
     FileUtils.mkdir_p(@database_dir.to_s)
-    ActiveGroonga::Base.database_directory = @database_dir.to_s
   end
 
   def setup_database
     @database_path = @database_dir + "database"
     @database = Groonga::Database.create(:path => @database_path.to_s)
+    ActiveGroonga::Base.database_path = @database_path.to_s
   end
 
   def setup_tables_directory
