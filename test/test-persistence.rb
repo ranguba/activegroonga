@@ -29,4 +29,17 @@ class TestPersistence < Test::Unit::TestCase
     assert_equal([key, title],
                  [found_site.key, found_site.title])
   end
+
+  def test_update
+    groonga = Site.new
+    groonga.key = "http://groonga.org/"
+    assert_true(groonga.save)
+
+    groonga.title = "groonga"
+    assert_true(groonga.save)
+
+    reloaded_groonga = Site.find("http://groonga.org/")
+    assert_equal(["http://groonga.org/", "groonga"],
+                 [reloaded_groonga.key, reloaded_groonga.title])
+  end
 end

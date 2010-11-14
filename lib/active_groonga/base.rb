@@ -153,6 +153,10 @@ module ActiveGroonga
 
       def instantiate(record)
         object = new(record)
+        object.instance_variable_set("@id", record.id)
+        if record.support_key?
+          object.instance_variable_set("@key", record.key)
+        end
         object.instance_variable_set("@new_record", false)
         object
       end
@@ -187,6 +191,8 @@ module ActiveGroonga
 
     def initialize(record_or_attributes=nil)
       self.class.define_column_accessors
+      @id = nil
+      @key = nil
       @new_record = true
       @destroyed = false
       @attributes = initial_attributes

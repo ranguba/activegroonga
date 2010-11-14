@@ -106,12 +106,14 @@ module ActiveGroonga
       end
       record["created_at"] = Time.now if record.have_column?("created_at")
       reload_attributes(record)
+      @id = record.id
+      @key = record.key if record.support_key?
       @new_record = false
       true
     end
 
     def update
-      record = self.class.table[@id]
+      record = self.class.table[record_id]
       @attributes.each do |key, value|
         if value.respond_to?(:record_id)
           value = value.record_id
