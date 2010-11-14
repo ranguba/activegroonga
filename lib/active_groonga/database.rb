@@ -40,5 +40,16 @@ module ActiveGroonga
       @database.remove
       @database = nil
     end
+
+    def close
+      return if @database.nil?
+      @database.close
+      @database = nil
+    end
+
+    def reopen
+      close
+      ensure_available
+    end
   end
 end

@@ -26,10 +26,13 @@ module ActiveGroonga
 
     cattr_accessor :logger, :instance_writer => false
 
-    cattr_reader :database_path
+    cattr_reader :database_path, :instance_reader => false
 
     @@configurations = {}
     cattr_accessor :configurations
+
+    @@context = nil
+    @@encoding = "utf8"
 
     class << self
       def configure(configuration)
@@ -38,6 +41,7 @@ module ActiveGroonga
           configure(configurations[configuration.to_s])
         when Hash
           self.database_path = configuration["database"]
+          self.encoding = configuration["encoding"]
         end
       end
 
@@ -107,7 +111,19 @@ module ActiveGroonga
       end
 
       def context
-        Groonga::Context.default
+        @@context ||= Groonga::Context.new(:encoding => encoding)
+      end
+
+      def encoding
+        @@encoding
+      end
+
+      def encoding=(new_encoding)
+        return if @@encoding == new_encoding
+        @@encoding = new_encoding
+        database_opened = @@context and !@@context.database.nil?
+        @@context = nil
+        database.reopen if database_opened
       end
 
       def table
