@@ -14,23 +14,97 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 module ActiveGroonga
+  class DuplicateMigrationVersionError < Error #:nodoc:
+    attr_reader :version, :path
+    def initialize(version, path)
+      @version = version
+      @path = path
+      super("duplicated migration version exists: #{version}: <#{@path}>")
+    end
+  end
+
   class Migrator
     MANAGEMENT_TABLE_NAME = "schema_migrations"
 
-    def initialize
+    def initialize(direction, migrations_path, target_version=nil)
+      @direction = direction
+      @migrations_path = migrations_path
+      unless @migrations_path.is_a?(Pathname)
+        @migrations_path = Pathanme(@migrations_path)
+      end
+      @target_version = target_version
       ensure_table
+    end
+
+    def migrate
+      migrations.each do |migration|
+        next if migration.version <= current_version
+        Base.logger.info("Migrating to #{migration.name} (#{migration.version})")
+        migration.migrate(@direction)
+        break if migration.version == @target_version
+      end
+    end
+
+    def up?
+      @direction == :up
+    end
+
+    def down?
+      @direction == :down
+    end
+
+    def current_version
+      @current_version ||= migrated_versions.max
+    end
+
+    def migrated_versions
+      @migratee_versions ||= management_table.collect do |record|
+        [record.key, record.migrated_at]
+      end
+    end
+
+    def management_table
+      @management_table ||= Base.context[MANAGEMENT_TABLE_NAME]
     end
 
     private
     def ensure_table
-      groonga_table_name = Base.groonga_metadata_table_name(MANAGEMENT_TABLE_NAME)
-      if Base.context[groonga_table_name].nil?
-          table_file = File.join(Base.database_directory,
-                                 "#{groonga_table_name}.groonga")
-          Groonga::Hash.create(:name => groonga_table_name,
-                               :path => table_file,
-                               :key_type => "ShortText")
+      Schema.define do |schema|
+        schema.create_table(MANAGEMENT_TABLE_NAME,
+                            :type => :hash,
+                            :key_type => :uint32) do |table|
+          table.time("migrated_at")
+        end
       end
+    end
+
+    def migrations
+      @migrations ||= collect_migrations
+    end
+
+    def collect_migrations
+      migrations = []
+      @migrations_path.glob("[0-9]*_[a-z]*.rb").each do |path|
+        if /\A([0-9]+)_([_a-z0-9]+)\.rb\z/ =~ path.basename.to_s
+          version = $1.to_i
+        else
+          next
+        end
+
+        if migrations.find {|migration| migration.version == version}
+          raise DuplicateMigrationVersionError.new(version, path)
+        end
+
+        migrations_before = Migration.migrations.dup
+        load(path, true)
+        defined_migrations = Migration.migrations - migrations_before
+        defined_migrations.each do |migration|
+          migrations << migration.new(version, path)
+        end
+      end
+
+      migrations = migrations.sort_by(&:version)
+      down? ? migrations.reverse : migrations
     end
   end
 end

@@ -15,9 +15,26 @@
 
 module ActiveGroonga
   class Migration
-    def initialize(version, name)
+    @@migrations = []
+    class << self
+      def inherited(sub_class)
+        super
+        @@migrations << sub_class
+      end
+
+      def migrations
+        @@migrations
+      end
+    end
+
+    attr_reader :version, :path
+    def initialize(version, path)
       @version = version
-      @name = name
+      @path = path
+    end
+
+    def name
+      self.class.name
     end
 
     def migrate(direction)

@@ -36,7 +36,9 @@ namespace :groonga do
 
   desc "Migrate the database (options: VERSION=x, VERBOSE=false)."
   task :migrate => :load_config do
-    # TODO
+    migrations_path = Rails.root + "db" + "groonga" + "migrations"
+    migrator = ActiveGroonga::Migrator.new(:up, migrations_path)
+    migrator.migrate
     Rake::Task["groonga:schema:dump"].invoke
   end
 
