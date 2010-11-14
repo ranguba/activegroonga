@@ -70,11 +70,6 @@ namespace :groonga do
     end
   end
 
-  desc "Create the database and load the schema."
-  task :setup => [:create, "groonga:schema:load"]
-
-  task :reset => [:drop, :setup]
-
   desc('Load the seed data from db/groonga/seeds/#{RAILS_ENV}.grn, ' +
        'db/groonga/seeds/#{RAILS_ENV}.rb, db/groonga/seeds.grn or ' +
        'db/groonga/seeds.rb')
@@ -103,4 +98,9 @@ namespace :groonga do
       raise "unsupported seed file type: <#{seed_file_path}>"
     end
   end
+
+  desc "Create the database and load the schema."
+  task :setup => [:create, "groonga:schema:load", :seed]
+
+  task :reset => [:drop, :setup]
 end
