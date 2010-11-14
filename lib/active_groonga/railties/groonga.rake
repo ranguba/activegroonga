@@ -27,6 +27,9 @@ namespace :groonga do
   task :drop => :load_config do
     database = ActiveGroonga::Base.database
     database.remove if database
+    database_path = ActiveGroonga::Base.database_path
+    tables_path = "#{database_path}.talbes"
+    rm_rf(tables_path) if tables_path.exist?
   end
 
   desc "Create the database."
