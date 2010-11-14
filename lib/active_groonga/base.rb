@@ -206,7 +206,7 @@ module ActiveGroonga
     end
 
     def have_column?(name)
-      self.class.table.have_column?(name)
+      table.have_column?(name)
     end
 
     def id
