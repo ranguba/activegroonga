@@ -35,6 +35,7 @@ module ActiveGroonga
     end
 
     def remove
+      ensure_available if @path.exist?
       return if @database.nil?
       @database.remove
       @database = nil
