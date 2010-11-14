@@ -124,8 +124,12 @@ module ActiveGroonga
         database.reopen if database_opened
       end
 
-      def table_name
-        @table_name ||= model_name.plural
+      def table_name(name=nil)
+        if name.nil?
+          @table_name ||= model_name.plural
+        else
+          self.table_name = name
+        end
       end
 
       def table_name=(name)
@@ -181,6 +185,18 @@ module ActiveGroonga
         path = Pathname(path) if path.is_a?(String)
         @@database_path = path
         @@database = nil
+      end
+
+      def reference_class(column_name, klas)
+        @reference_mapping ||= {}
+        column_name = column_name.to_s
+        @reference_mapping[column_name] = klass
+      end
+
+      def custom_reference_class(column_name)
+        @reference_mapping ||= {}
+        column_name = column_name.to_s
+        @reference_mapping[column_name]
       end
 
       protected

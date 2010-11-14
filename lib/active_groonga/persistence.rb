@@ -146,7 +146,8 @@ module ActiveGroonga
         next if column.is_a?(Groonga::IndexColumn)
         value = record[column.local_name]
         if value and column.reference_column?
-          value_class = column.range.name.camelize.singularize.constantize
+          value_class = self.class.custom_reference_class(column.local_name)
+          value_class ||= column.range.name.camelize.singularize.constantize
           value = value_class.instantiate(value)
         end
         attributes[column.local_name] = value
