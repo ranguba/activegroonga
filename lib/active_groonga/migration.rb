@@ -25,16 +25,21 @@ module ActiveGroonga
       def migrations
         @@migrations
       end
+
+      def migration_name
+        name.split(/::/).last
+      end
     end
 
     attr_reader :version, :path
-    def initialize(version, path)
+    def initialize(version, path, schema)
       @version = version
       @path = path
+      @schema = schema
     end
 
     def name
-      self.class.name
+      self.class.migration_name
     end
 
     def migrate(direction)
@@ -59,9 +64,18 @@ module ActiveGroonga
 
     private
     def report(message)
-      text = "#{@version} #{@name}: #{message}"
+      relative_path = @path.relative_path_from(Rails.root)
+      text = "#{@version} #{name} (#{relative_path}): #{message}"
       rest_length = [0, 75 - text.length].max
       puts("== #{text} #{'=' * rest_length}")
+    end
+
+    def method_missing(name, *args, &block)
+      if @schema.respond_to?(name)
+        @schema.send(name, *args, &block)
+      else
+        super
+      end
     end
   end
 end

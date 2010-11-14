@@ -23,6 +23,24 @@ module ActiveGroonga
     end
   end
 
+  class MigrationEntry
+    attr_reader :version, :path
+    def initialize(migration, version, path)
+      @migration = migration
+      @version = version
+      @path = path
+    end
+
+    def name
+      @migration.migration_name
+    end
+
+    def migrate(direction, schema)
+      migration = @migration.new(@version, @path, schema)
+      migration.migrate(direction)
+    end
+  end
+
   class Migrator
     MANAGEMENT_TABLE_NAME = "schema_migrations"
 
@@ -37,11 +55,14 @@ module ActiveGroonga
     end
 
     def migrate
-      migrations.each do |migration|
-        next if migration.version <= current_version
-        Base.logger.info("Migrating to #{migration.name} (#{migration.version})")
-        migration.migrate(@direction)
-        break if migration.version == @target_version
+      active_groonga_schema = Schema.new(:context => @context)
+      migration_entries.each do |entry|
+        next if entry.version <= current_version
+        Base.logger.info("Migrating to #{entry.name} (#{entry.version})")
+        active_groonga_schema.define do |schema|
+          entry.migrate(@direction, schema)
+        end
+        break if entry.version == @target_version
       end
     end
 
@@ -54,11 +75,11 @@ module ActiveGroonga
     end
 
     def current_version
-      @current_version ||= migrated_versions.max
+      @current_version ||= migrated_versions.max || 0
     end
 
     def migrated_versions
-      @migratee_versions ||= management_table.collect do |record|
+      @migrated_versions ||= management_table.collect do |record|
         [record.key, record.migrated_at]
       end
     end
@@ -72,26 +93,26 @@ module ActiveGroonga
       Schema.define do |schema|
         schema.create_table(MANAGEMENT_TABLE_NAME,
                             :type => :hash,
-                            :key_type => :uint32) do |table|
+                            :key_type => "UInt32") do |table|
           table.time("migrated_at")
         end
       end
     end
 
-    def migrations
-      @migrations ||= collect_migrations
+    def migration_entries
+      @migration_entries ||= collect_migration_entries
     end
 
-    def collect_migrations
-      migrations = []
-      @migrations_path.glob("[0-9]*_[a-z]*.rb").each do |path|
+    def collect_migration_entries
+      migration_entries = []
+      Pathname.glob(@migrations_path + "[0-9]*_[a-z]*.rb").each do |path|
         if /\A([0-9]+)_([_a-z0-9]+)\.rb\z/ =~ path.basename.to_s
           version = $1.to_i
         else
           next
         end
 
-        if migrations.find {|migration| migration.version == version}
+        if migration_entries.find {|entry| entry.version == version}
           raise DuplicateMigrationVersionError.new(version, path)
         end
 
@@ -99,12 +120,12 @@ module ActiveGroonga
         load(path, true)
         defined_migrations = Migration.migrations - migrations_before
         defined_migrations.each do |migration|
-          migrations << migration.new(version, path)
+          migration_entries << MigrationEntry.new(migration, version, path)
         end
       end
 
-      migrations = migrations.sort_by(&:version)
-      down? ? migrations.reverse : migrations
+      migration_entries = migration_entries.sort_by(&:version)
+      down? ? migration_entries.reverse : migration_entries
     end
   end
 end
