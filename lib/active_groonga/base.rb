@@ -173,8 +173,7 @@ module ActiveGroonga
 
       protected
       def instance_method_already_implemented?(method_name)
-        super(method_name) and
-          !parent.instance_method_already_implemented?(method_name)
+        super(method_name)
       end
     end
 
