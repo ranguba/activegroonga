@@ -59,6 +59,7 @@ module ActiveGroonga
       ActiveSupport.on_load(:active_groonga) do
         self.configurations = app.config.groonga_configurations
         configure(Rails.env)
+        database.ensure_available
       end
     end
   end
