@@ -74,4 +74,33 @@ namespace :groonga do
   task :setup => [:create, "groonga:schema:load"]
 
   task :reset => [:drop, :setup]
+
+  desc('Load the seed data from db/groonga/seeds/#{RAILS_ENV}.grn, ' +
+       'db/groonga/seeds/#{RAILS_ENV}.rb, db/groonga/seeds.grn or ' +
+       'db/groonga/seeds.rb')
+  task :seed => :load_config do
+    base_dir = Rails.root + "db" + "groonga"
+    candidates = [base_dir + "seeds" + "#{Rails.env}.grn",
+                  base_dir + "seeds" + "#{Rails.env}.rb",
+                  base_dir + "seeds.grn",
+                  base_dir + "seeds.rb"]
+    seed_file_path = candidates.find(&:exist?)
+    break unless seed_file_path
+    case seed_file_path.extname
+    when /\A\.grn\z/i
+      context = ActiveGroonga::Base.database.context
+      seed_file_path.open do |seed_file|
+        seed_file.each_line do |line|
+          puts("> #{line}")
+          context.send(line)
+          id, result = context.receive
+          puts(result) unless result.empty?
+        end
+      end
+    when /\A\.rb\z/i
+      load(seed_file_path)
+    else
+      raise "unsupported seed file type: <#{seed_file_path}>"
+    end
+  end
 end
