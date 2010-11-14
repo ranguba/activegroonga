@@ -40,16 +40,7 @@ module ActiveGroonga
       end
 
       def database
-        path = database_path
-        return nil if path.nil?
-        if path.exist?
-          @@database ||= Groonga::Database.open(path.to_s,
-                                                :context => context)
-        else
-          FileUtils.mkdir_p(path.dirname) unless path.dirname.exist?
-          @@databae ||= Groonga::Database.create(:path => path.to_s,
-                                                 :context => context)
-        end
+        @@database ||= Database.new(database_path)
       end
 
       def create(attributes=nil, &block)

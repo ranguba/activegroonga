@@ -31,7 +31,7 @@ namespace :groonga do
 
   desc "Create the database."
   task :create => :load_config do
-    ActiveGroonga::Base.database
+    ActiveGroonga::Base.database.ensure_available
   end
 
   desc "Migrate the database (options: VERSION=x, VERBOSE=false)."
@@ -85,7 +85,8 @@ namespace :groonga do
     break unless seed_file_path
     case seed_file_path.extname
     when /\A\.grn\z/i
-      context = ActiveGroonga::Base.database.context
+      ActiveGroonga::Base.database.ensure_available
+      context = ActiveGroonga::Base.context
       seed_file_path.open do |seed_file|
         seed_file.each_line do |line|
           puts("> #{line}")
