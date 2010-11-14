@@ -28,6 +28,7 @@ module ActiveGroonga
         @database = Groonga::Database.open(@path.to_s,
                                            :context => Base.context)
       else
+        FileUtils.mkdir_p(@path.dirname) unless @path.dirname.exist?
         @database = Groonga::Database.create(:path => @path.to_s,
                                              :context => Base.context)
       end
