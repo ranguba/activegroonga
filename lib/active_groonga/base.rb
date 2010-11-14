@@ -211,6 +211,12 @@ module ActiveGroonga
       @key
     end
 
+    def key=(key)
+      raise NoKeyTableError.new(table) unless table.support_key?
+      raise KeyOverrideError.new(table, key) unless new_record?
+      @key = key
+    end
+
     def record_id
       if table.support_key?
         key

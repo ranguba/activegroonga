@@ -40,6 +40,7 @@ module ActiveGroongaTestUtils
     setup_bookmarks_table
     setup_bookmarks_index_tables
     setup_tasks_table
+    setup_sites_table
 
     setup_user_records
     setup_bookmark_records
@@ -162,6 +163,20 @@ module ActiveGroongaTestUtils
                                         :path => @name_column_path.to_s)
   end
 
+  def setup_sites_table
+    @sites_path = @tables_dir + "sites"
+    @sites = Groonga::Hash.create(:name => "sites",
+                                  :key_type => "ShortText",
+                                  :path => @sites_path.to_s)
+
+    columns_dir = @tables_dir + "sites.columns"
+    columns_dir.mkpath
+
+    @title_column_path = columns_dir + "title"
+    @title_column = @sites.define_column("title", "ShortText",
+                                         :path => @title_column_path.to_s)
+  end
+
   def setup_user_records
     @user_records = {}
 
@@ -191,10 +206,12 @@ module ActiveGroongaTestUtils
       remove_const(:User) if const_defined?(:User)
       remove_const(:Bookmark) if const_defined?(:Bookmark)
       remove_const(:Task) if const_defined?(:Task)
+      remove_const(:Site) if const_defined?(:Site)
     end
     load((base_dir + 'user.rb').to_s)
     load((base_dir + 'bookmark.rb').to_s)
     load((base_dir + 'task.rb').to_s)
+    load((base_dir + 'site.rb').to_s)
   end
 
   def teardown_sand_box

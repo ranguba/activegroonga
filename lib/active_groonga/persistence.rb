@@ -98,7 +98,11 @@ module ActiveGroonga
         end
         attributes[key] = value
       end
-      record = self.class.table.add(attributes)
+      if table.support_key?
+        record = table.add(key, attributes)
+      else
+        record = table.add(attributes)
+      end
       record["created_at"] = Time.now if record.have_column?("created_at")
       reload_attributes(record)
       @new_record = false

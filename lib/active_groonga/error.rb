@@ -20,4 +20,21 @@ module ActiveGroonga
 
   class RecordNotSaved < Error
   end
+
+  class NoKeyTableError < Error
+    attr_reader :table
+    def initialize(table)
+      @table = table
+      super("table doesn't have key: #{@table}")
+    end
+  end
+
+  class KeyOverrideError < Error
+    attr_reader :table, :key
+    def initialize(table, key)
+      @table = table
+      @key = key
+      super("can't override existing record key: #{@table}: <#{@key}>")
+    end
+  end
 end
