@@ -187,7 +187,7 @@ module ActiveGroonga
         @@database = nil
       end
 
-      def reference_class(column_name, klas)
+      def reference_class(column_name, klass)
         @reference_mapping ||= {}
         column_name = column_name.to_s
         @reference_mapping[column_name] = klass
