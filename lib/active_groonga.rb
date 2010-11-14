@@ -37,10 +37,12 @@ module ActiveGroonga
     autoload :Base
     autoload :Database
     autoload :Schema
-
     autoload :Persistence
     autoload :Callbacks
+
+    autoload :Migrator
+    autoload :Migration
   end
 end
 
-I18n.load_path << (base_dir + '/active_groonga/locale/en.yml').to_s
+I18n.load_path << (base_dir + 'active_groonga/locale/en.yml').to_s
