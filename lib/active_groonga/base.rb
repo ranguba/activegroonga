@@ -97,9 +97,7 @@ module ActiveGroonga
           records = table.select do |record|
             yield(record)
           end
-          records.collect do |record|
-            instantiate(record.key)
-          end
+          ResultSet.new(records, self)
         else
           table.collect do |record|
             instantiate(record)
