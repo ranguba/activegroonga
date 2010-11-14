@@ -33,6 +33,7 @@ module ActiveGroonga
 
     @@context = nil
     @@encoding = "utf8"
+    cattr_reader :encoding, :instance_reader => false
 
     class << self
       def configure(configuration)
@@ -111,18 +112,15 @@ module ActiveGroonga
       end
 
       def context
-        @@context ||= Groonga::Context.new(:encoding => encoding)
-      end
-
-      def encoding
-        @@encoding
+        Groonga::Context.default
       end
 
       def encoding=(new_encoding)
         return if @@encoding == new_encoding
         @@encoding = new_encoding
-        database_opened = @@context and !@@context.database.nil?
-        @@context = nil
+        database_opened = !context.database.nil?
+        Groonga::Context.default = nil
+        Groonga::Context.default_options = {:encoding => @@encoding}
         database.reopen if database_opened
       end
 
