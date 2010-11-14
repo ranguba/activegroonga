@@ -56,7 +56,7 @@ module ActiveGroonga
 
     initializer("active_groonga.initialize_database") do |app|
       ActiveSupport.on_load(:active_groonga) do
-        self.configurations = app.config.groonga_configuration
+        self.configurations = app.config.groonga_configurations
         configure(Rails.env)
       end
     end
