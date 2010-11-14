@@ -13,6 +13,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'fileutils'
+
 require 'active_support/all'
 
 module ActiveGroonga
@@ -33,7 +35,7 @@ module ActiveGroonga
         when String, Symbol
           configure(configurations[configuration.to_s])
         when Hash
-          self.database_path = configuration["database_path"]
+          self.database_path = configuration["database"]
         end
       end
 
@@ -41,10 +43,12 @@ module ActiveGroonga
         path = database_path
         return nil if path.nil?
         if path.exist?
-          @@database ||= Groonga::Database.open(:path => path.to_s,
+          @@database ||= Groonga::Database.open(path.to_s,
                                                 :context => context)
         else
-          @@databae ||= Groonga::Database.create(path.to_s, :context => context)
+          FileUtils.mkdir_p(path.dirname) unless path.dirname.exist?
+          @@databae ||= Groonga::Database.create(:path => path.to_s,
+                                                 :context => context)
         end
       end
 
