@@ -24,6 +24,8 @@ module ActiveGroonga
     attribute_method_suffix ""
     attribute_method_suffix "="
 
+    cattr_accessor :logger, :instance_writer => false
+
     cattr_reader :database_path
 
     @@configurations = {}
@@ -120,6 +122,7 @@ module ActiveGroonga
       end
 
       def inspect
+        return super if table.nil?
         columns_info = table.columns.collect do |column|
           "#{column.local_name}: #{column.range.name}"
         end
@@ -251,3 +254,5 @@ module ActiveGroonga
     include Callbacks
   end
 end
+
+ActiveSupport.run_load_hooks(:active_groonga, ActiveGroonga::Base)
