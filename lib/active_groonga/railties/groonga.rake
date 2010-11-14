@@ -28,7 +28,7 @@ namespace :groonga do
     database = ActiveGroonga::Base.database
     database.remove if database
     database_path = ActiveGroonga::Base.database_path
-    tables_path = "#{database_path}.talbes"
+    tables_path = Pathname("#{database_path}.talbes")
     rm_rf(tables_path) if tables_path.exist?
   end
 
