@@ -124,8 +124,16 @@ module ActiveGroonga
         database.reopen if database_opened
       end
 
+      def table_name
+        @table_name ||= model_name.plural
+      end
+
+      def table_name=(name)
+        @table_name = name
+      end
+
       def table
-        @table ||= context[model_name.plural]
+        @table ||= context[table_name]
       end
 
       def define_column_accessors
