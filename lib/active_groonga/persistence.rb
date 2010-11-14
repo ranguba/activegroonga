@@ -92,6 +92,7 @@ module ActiveGroonga
     def create
       attributes = {}
       @attributes.each do |key, value|
+        next if value.nil?
         if value.is_a?(Base)
           value.save if value.new_record?
           value = value.id

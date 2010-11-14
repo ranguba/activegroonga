@@ -175,6 +175,9 @@ module ActiveGroongaTestUtils
     @title_column_path = columns_dir + "title"
     @title_column = @sites.define_column("title", "ShortText",
                                          :path => @title_column_path.to_s)
+    @score_column_path = columns_dir + "score"
+    @score_column = @sites.define_column("score", "UInt32",
+                                         :path => @score_column_path.to_s)
   end
 
   def setup_user_records
