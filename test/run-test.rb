@@ -58,6 +58,8 @@ end
 $LOAD_PATH.unshift(test_unit_notify_dir + "lib")
 $LOAD_PATH.unshift(test_unit_dir + "lib")
 
+ENV["TEST_UNIT_MAX_DIFF_TARGET_STRING_SIZE"] = "10000"
+
 require 'test/unit'
 require 'test/unit/notify'
 

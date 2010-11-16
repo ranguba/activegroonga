@@ -63,21 +63,14 @@ module ActiveGroonga
         end
       end
 
-      def find(*args, &block)
-        options = args.extract_options!
-        case args.first
-        when :first, :last, :all
-          send(args.first, &block)
-        else
-          id = args.first
-          id = id.record_id if id.respond_to?(:record_id)
-          record = table[id]
-          record = instantiate(record) if record
-          record
-        end
+      def find(record_id, options={})
+        record_id = record_id.record_id if record_id.respond_to?(:record_id)
+        record = table[record_id]
+        record = instantiate(record) if record
+        record
       end
 
-      def first
+      def first(options={})
         return nil if table.empty?
         if block_given?
           records = table.select do |record|
@@ -92,7 +85,7 @@ module ActiveGroonga
         end
       end
 
-      def all
+      def all(options={})
         if block_given?
           records = table.select do |record|
             yield(record)

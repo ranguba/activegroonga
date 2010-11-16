@@ -102,6 +102,13 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
       table.short_text("uri")
     end
 
+    create_table("sites",
+                 :type => :patricia_trie,
+                 :key_type => "ShortText",
+                 :force => true) do |table|
+      table.short_text("title"))
+    end
+
     create_table("tasks",
                  :force => true) do |table|
       table.short_text("name")

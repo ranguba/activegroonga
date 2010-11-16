@@ -18,7 +18,7 @@ class TestBase < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
   def test_find
-    bookmarks = Bookmark.find(:all)
+    bookmarks = Bookmark.all
     assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
                  bookmarks.collect(&:uri).sort)
   end
@@ -78,7 +78,7 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_mass_updates
-    groonga = Bookmark.find(:first) do |record|
+    groonga = Bookmark.first do |record|
       record.uri == "http://groonga.org/"
     end
     groonga.update_attributes({
@@ -133,17 +133,17 @@ class TestBase < Test::Unit::TestCase
     }
     google.save!
 
-    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Google"}
-    assert_equal([google], bookmarks)
+    bookmarks = Bookmark.all {|record| record["content"] =~ "Google"}
+    assert_equal([google], bookmarks.to_a)
 
     google.content = "<html><body>...Empty...</body></html>"
     google.save!
 
-    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Google"}
-    assert_equal([], bookmarks)
+    bookmarks = Bookmark.all {|record| record["content"] =~ "Google"}
+    assert_equal([], bookmarks.to_a)
 
-    bookmarks = Bookmark.find(:all) {|record| record["content"] =~ "Empty"}
-    assert_equal([google], bookmarks)
+    bookmarks = Bookmark.all {|record| record["content"] =~ "Empty"}
+    assert_equal([google], bookmarks.to_a)
   end
 
   def test_update_index
@@ -159,14 +159,14 @@ class TestBase < Test::Unit::TestCase
       record.user == daijiro
     end
     assert_equal([Bookmark.find(@bookmark_records[:groonga].id), google],
-                 bookmarks)
+                 bookmarks.to_a)
   end
 
   def test_find_reference_by_id
     daijiro = @user_records[:daijiro]
     bookmarks = Bookmark.all {|record| record.user == daijiro}
     assert_equal([Bookmark.find(@bookmark_records[:groonga])],
-                 bookmarks)
+                 bookmarks.to_a)
   end
 
   def test_find_all_with_block
@@ -175,7 +175,7 @@ class TestBase < Test::Unit::TestCase
                              "content" => "<html><body>...Google...</body></html>")
 
     assert_equal([google],
-                 Bookmark.all {|record| record["content"] =~ "Google"})
+                 Bookmark.all {|record| record["content"] =~ "Google"}.to_a)
   end
 
   def test_find_by_model
@@ -206,6 +206,6 @@ class TestBase < Test::Unit::TestCase
 
 
     assert_equal([google],
-                 Bookmark.find(:all) {|record| record.content =~ "Google"})
+                 Bookmark.all {|record| record.content =~ "Google"}.to_a)
   end
 end
