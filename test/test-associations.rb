@@ -18,10 +18,10 @@ class TestAssociations < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
   def test_belongs_to
-    groonga = Bookmark.first do |record|
+    groonga = Bookmark.select do |record|
       record.uri == "http://groonga.org/"
-    end
-    assert_equal(User.first {|record| record.name == "daijiro"},
+    end.first
+    assert_equal(User.select {|record| record.name == "daijiro"}.first,
                  groonga.user)
   end
 end

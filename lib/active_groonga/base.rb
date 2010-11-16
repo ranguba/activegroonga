@@ -70,31 +70,14 @@ module ActiveGroonga
         record
       end
 
-      def first(options={})
-        return nil if table.empty?
+      def select(options={})
         if block_given?
           records = table.select do |record|
             yield(record)
           end
-          return nil if records.empty?
-          record = records.find {|record| true}
-          instantiate(record.key)
+          ResultSet.new(records, self, :expression => records.expression)
         else
-          record = table.find {|record| true}
-          instantiate(record)
-        end
-      end
-
-      def all(options={})
-        if block_given?
-          records = table.select do |record|
-            yield(record)
-          end
-          ResultSet.new(records, self)
-        else
-          table.collect do |record|
-            instantiate(record)
-          end
+          ResultSet.new(table, self)
         end
       end
 

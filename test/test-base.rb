@@ -17,19 +17,19 @@
 class TestBase < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
-  def test_find
-    bookmarks = Bookmark.all
+  def test_select
+    bookmarks = Bookmark.select
     assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
                  bookmarks.collect(&:uri).sort)
   end
 
-  def test_find_by_id
+  def test_find
     groonga = Bookmark.find(@bookmark_records[:groonga].id)
     assert_equal("http://groonga.org/", groonga.uri)
   end
 
-  def test_find_by_attribute
-    daijiro = User.first {|record| record.name == "daijiro"}
+  def test_select_by_attribute
+    daijiro = User.select {|record| record.name == "daijiro"}.first
     assert_equal("daijiro", daijiro.name)
   end
 
@@ -78,9 +78,9 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_mass_updates
-    groonga = Bookmark.first do |record|
+    groonga = Bookmark.select do |record|
       record.uri == "http://groonga.org/"
-    end
+    end.first
     groonga.update_attributes({
                                 "uri" => "http://google.com/",
                                 "comment" => "a search engine",
@@ -101,7 +101,7 @@ class TestBase < Test::Unit::TestCase
 
   def test_destroy
     before_count = Bookmark.count
-    Bookmark.first {|record| record.uri == "http://groonga.org/"}.destroy
+    Bookmark.select {|record| record.uri == "http://groonga.org/"}.first.destroy
     assert_equal(before_count - 1, Bookmark.count)
   end
 
@@ -111,8 +111,8 @@ class TestBase < Test::Unit::TestCase
                  "content: LongText, comment: Text)",
                  Bookmark.inspect)
 
-    daijiro = User.first {|record| record.name == "daijiro"}
-    groonga = Bookmark.first {|record| record.uri == "http://groonga.org/"}
+    daijiro = User.select {|record| record.name == "daijiro"}.first
+    groonga = Bookmark.select {|record| record.uri == "http://groonga.org/"}.first
     assert_equal("#<Bookmark " +
                  "id: #{groonga.id}, " +
                  "user: #{daijiro.inspect}, " +
@@ -133,16 +133,16 @@ class TestBase < Test::Unit::TestCase
     }
     google.save!
 
-    bookmarks = Bookmark.all {|record| record["content"] =~ "Google"}
+    bookmarks = Bookmark.select {|record| record["content"] =~ "Google"}
     assert_equal([google], bookmarks.to_a)
 
     google.content = "<html><body>...Empty...</body></html>"
     google.save!
 
-    bookmarks = Bookmark.all {|record| record["content"] =~ "Google"}
+    bookmarks = Bookmark.select {|record| record["content"] =~ "Google"}
     assert_equal([], bookmarks.to_a)
 
-    bookmarks = Bookmark.all {|record| record["content"] =~ "Empty"}
+    bookmarks = Bookmark.select {|record| record["content"] =~ "Empty"}
     assert_equal([google], bookmarks.to_a)
   end
 
@@ -155,7 +155,7 @@ class TestBase < Test::Unit::TestCase
     }
     google.save!
 
-    bookmarks = Bookmark.all do |record|
+    bookmarks = Bookmark.select do |record|
       record.user == daijiro
     end
     assert_equal([Bookmark.find(@bookmark_records[:groonga].id), google],
@@ -164,7 +164,7 @@ class TestBase < Test::Unit::TestCase
 
   def test_find_reference_by_id
     daijiro = @user_records[:daijiro]
-    bookmarks = Bookmark.all {|record| record.user == daijiro}
+    bookmarks = Bookmark.select {|record| record.user == daijiro}
     assert_equal([Bookmark.find(@bookmark_records[:groonga])],
                  bookmarks.to_a)
   end
@@ -175,7 +175,7 @@ class TestBase < Test::Unit::TestCase
                              "content" => "<html><body>...Google...</body></html>")
 
     assert_equal([google],
-                 Bookmark.all {|record| record["content"] =~ "Google"}.to_a)
+                 Bookmark.select {|record| record["content"] =~ "Google"}.to_a)
   end
 
   def test_find_by_model
@@ -192,7 +192,8 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_reload
-    groonga = Bookmark.first {|record| record.uri == "http://groonga.org/"}
+    records = Bookmark.select {|record| record.uri == "http://groonga.org/"}
+    groonga = records.first
     groonga.comment = "changed!"
     assert_equal("changed!", groonga.comment)
     groonga.reload
@@ -206,6 +207,6 @@ class TestBase < Test::Unit::TestCase
 
 
     assert_equal([google],
-                 Bookmark.all {|record| record.content =~ "Google"}.to_a)
+                 Bookmark.select {|record| record.content =~ "Google"}.to_a)
   end
 end

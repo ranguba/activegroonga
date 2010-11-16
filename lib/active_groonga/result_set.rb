@@ -17,23 +17,34 @@ module ActiveGroonga
   class ResultSet
     include Enumerable
 
-    attr_reader :records
-    def initialize(records, klass)
+    attr_reader :records, :expression, :size
+    def initialize(records, klass, options={})
       @records = records
       @klass = klass
       @groups = {}
+      @expression = options[:expression]
+      if @expression.nil? and @records.respond_to?(:expression)
+        @expression = @records.expression
+      end
+      @size = options[:size] || @records.size
+      @n_key_nested = 0
+      domain = @records.domain
+      while domain.is_a?(Groonga::Table)
+        @n_key_nested += 1
+        domain = domain.domain
+      end
     end
 
     def paginate(sort_keys, options={})
-      @records.paginate(sort_keys, options)
+      set = self.new(@records.paginate(sort_keys, options), @klass,
+                     :expression => @expression)
+      set.extend(PaginationProxy)
+      set
     end
 
-    def size
-      @records.size
-    end
-
-    def expression
-      @records.expression
+    def sort(keys, options={})
+      self.new(@records.sort(keys, options), @klass,
+               :expression => @expression)
     end
 
     def group(key)
@@ -42,13 +53,28 @@ module ActiveGroonga
 
     def each
       @records.each do |record|
-        yield(instantiate(record.key))
+        object = instantiate(record)
+        next if object.nil?
+        yield(object)
       end
     end
 
     private
     def instantiate(record)
+      @n_key_nested.times do
+        return nil if record.nil?
+        record = record.key
+      end
+      return nil if record.nil?
       @klass.instantiate(record)
+    end
+
+    module PaginationProxy
+      Groonga::Pagination.instance_methods.each do |method_name|
+        define_method(method_name) do
+          @records.send(method_name)
+        end
+      end
     end
   end
 end
