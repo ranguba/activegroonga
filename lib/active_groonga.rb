@@ -39,6 +39,7 @@ module ActiveGroonga
     autoload :ResultSet
     autoload :Schema
     autoload :Persistence
+    autoload :Validations
     autoload :Callbacks
 
     autoload :Migrator

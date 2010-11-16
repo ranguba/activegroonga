@@ -197,6 +197,10 @@ module ActiveGroonga
         @reference_mapping[column_name]
       end
 
+      def i18n_scope
+        :activegroonga
+      end
+
       protected
       def instance_method_already_implemented?(method_name)
         super(method_name)
@@ -284,11 +288,11 @@ module ActiveGroonga
       "\#<#{self.class.name} #{inspected_attributes.join(', ')}>"
     end
 
-    private
     def table
       @table ||= self.class.table
     end
 
+    private
     def attribute(name)
       read_attribute(name)
     end
@@ -298,6 +302,7 @@ module ActiveGroonga
     end
 
     include Persistence
+    include Validations
     include Callbacks
   end
 end

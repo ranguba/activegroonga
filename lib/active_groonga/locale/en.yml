@@ -1,2 +1,5 @@
 en:
-  hello: Hello
+  activegroonga:
+    errors:
+      messages:
+        missing: is missing
