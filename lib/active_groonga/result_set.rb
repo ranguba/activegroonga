@@ -62,6 +62,9 @@ module ActiveGroonga
         record = record.key
       end
       return nil if record.nil?
+      while record.key.is_a?(Groonga::Record)
+        record = record.key
+      end
       @klass.instantiate(record)
     end
 
