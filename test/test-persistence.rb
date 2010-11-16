@@ -30,6 +30,14 @@ class TestPersistence < Test::Unit::TestCase
                  [found_site.key, found_site.title])
   end
 
+  def test_create_hash
+    groonga = Site.create(:key => "http://groonga.org/",
+                          :title => "groonga")
+    found_groonga = Site.find("http://groonga.org/")
+    assert_equal(["http://groonga.org/", "groonga"],
+                 [found_groonga.key, found_groonga.title])
+  end
+
   def test_update
     groonga = Site.new
     groonga.key = "http://groonga.org/"
