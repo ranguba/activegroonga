@@ -27,16 +27,12 @@ module ActiveGroonga
         @expression = @records.expression
       end
       @size = options[:size] || @records.size
-      @n_key_nested = 0
-      domain = @records.domain
-      while domain.is_a?(Groonga::Table)
-        @n_key_nested += 1
-        domain = domain.domain
-      end
+      compute_n_key_nested
     end
 
     def paginate(sort_keys, options={})
-      set = self.class.new(@records.paginate(sort_keys, options), @klass,
+      records = @records.paginate(sort_keys, options)
+      set = self.class.new(records, @klass,
                            :expression => @expression)
       set.extend(PaginationProxy)
       set
@@ -67,6 +63,16 @@ module ActiveGroonga
       end
       return nil if record.nil?
       @klass.instantiate(record)
+    end
+
+    def compute_n_key_nested
+      @n_key_nested = 0
+      return unless @records.respond_to?(:domain)
+      domain = @records.domain
+      while domain.is_a?(Groonga::Table)
+        @n_key_nested += 1
+        domain = domain.domain
+      end
     end
 
     module PaginationProxy
