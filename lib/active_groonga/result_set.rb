@@ -36,15 +36,15 @@ module ActiveGroonga
     end
 
     def paginate(sort_keys, options={})
-      set = self.new(@records.paginate(sort_keys, options), @klass,
-                     :expression => @expression)
+      set = self.class.new(@records.paginate(sort_keys, options), @klass,
+                           :expression => @expression)
       set.extend(PaginationProxy)
       set
     end
 
     def sort(keys, options={})
-      self.new(@records.sort(keys, options), @klass,
-               :expression => @expression)
+      self.class.new(@records.sort(keys, options), @klass,
+                     :expression => @expression)
     end
 
     def group(key)
