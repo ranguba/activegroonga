@@ -103,10 +103,11 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
     end
 
     create_table("sites",
-                 :type => :patricia_trie,
+                 :type => :hash,
                  :key_type => "ShortText",
                  :force => true) do |table|
-      table.short_text("title"))
+      table.unsigned_integer32("score")
+      table.short_text("title")
     end
 
     create_table("tasks",
