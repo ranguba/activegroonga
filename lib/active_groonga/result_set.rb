@@ -17,7 +17,7 @@ module ActiveGroonga
   class ResultSet
     include Enumerable
 
-    attr_reader :records, :expression, :size
+    attr_reader :records, :expression, :n_records
     def initialize(records, klass, options={})
       @records = records
       @klass = klass
@@ -26,7 +26,7 @@ module ActiveGroonga
       if @expression.nil? and @records.respond_to?(:expression)
         @expression = @records.expression
       end
-      @size = options[:size] || @records.size
+      @n_records = options[:n_records] || @records.size
       compute_n_key_nested
     end
 
