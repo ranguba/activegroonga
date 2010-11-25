@@ -109,4 +109,16 @@ namespace :groonga do
   task :setup => [:create, "groonga:schema:load", :seed]
 
   task :reset => [:drop, :setup]
+
+  namespace :test do
+    desc "Prepare groonga database for testing"
+    task :prepare => [:purge] do
+      ActiveGroonga::Base.configure("test")
+      Rake::Task["groonga:drop"].invoke
+      Rake::Task["groonga:create"].invoke
+      Rake::Task["groonga:schema:load"].invoke
+    end
+  end
 end
+
+task "test:prepare" => "groonga:test:prepare"
