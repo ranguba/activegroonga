@@ -41,9 +41,47 @@ module ActiveGroonga
     end
   end
 
-  class Migrator
-    MANAGEMENT_TABLE_NAME = "schema_migrations"
+  class SchemaManagementTable
+    TABLE_NAME = "schema_migrations"
 
+    def initialize
+      ensure_table
+      @table = Base.context[TABLE_NAME]
+    end
+
+    def current_version
+      @current_version ||= migrated_versions.collect(&:first).max || 0
+    end
+
+    def migrated_versions
+      @migrated_versions ||= @table.collect do |record|
+        [record.key, record.migrated_at]
+      end
+    end
+
+    def update_version(version)
+      @table.add(version, :migrated_at => Time.now)
+      clear_cache
+    end
+
+    private
+    def ensure_table
+      Schema.define do |schema|
+        schema.create_table(TABLE_NAME,
+                            :type => :hash,
+                            :key_type => "UInt64") do |table|
+          table.time("migrated_at")
+        end
+      end
+    end
+
+    def clear_cache
+      @current_version = nil
+      @migrated_versions = nil
+    end
+  end
+
+  class Migrator
     def initialize(direction, migrations_path, target_version=nil)
       @direction = direction
       @migrations_path = migrations_path
@@ -51,17 +89,18 @@ module ActiveGroonga
         @migrations_path = Pathanme(@migrations_path)
       end
       @target_version = target_version
-      ensure_table
     end
 
     def migrate
-      active_groonga_schema = Schema.new(:context => @context)
+      active_groonga_schema = Schema.new(:context => Base.context)
+      _current_version = current_version
       migration_entries.each do |entry|
-        next if entry.version <= current_version
+        next if entry.version <= _current_version
         Base.logger.info("Migrating to #{entry.name} (#{entry.version})")
         active_groonga_schema.define do |schema|
           entry.migrate(@direction, schema)
         end
+        management_table.update_version(entry.version)
         break if entry.version == @target_version
       end
     end
@@ -75,30 +114,18 @@ module ActiveGroonga
     end
 
     def current_version
-      @current_version ||= migrated_versions.max || 0
+      management_table.current_version
     end
 
     def migrated_versions
-      @migrated_versions ||= management_table.collect do |record|
-        [record.key, record.migrated_at]
-      end
+      management_table.migrated_versions
     end
 
     def management_table
-      @management_table ||= Base.context[MANAGEMENT_TABLE_NAME]
+      @management_table ||= SchemaManagementTable.new
     end
 
     private
-    def ensure_table
-      Schema.define do |schema|
-        schema.create_table(MANAGEMENT_TABLE_NAME,
-                            :type => :hash,
-                            :key_type => "UInt32") do |table|
-          table.time("migrated_at")
-        end
-      end
-    end
-
     def migration_entries
       @migration_entries ||= collect_migration_entries
     end

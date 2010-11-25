@@ -44,6 +44,7 @@ module ActiveGroonga
     def define(&block)
       yield(@schema)
       @schema.define
+      update_version if @version
     end
 
     def dump(output=nil)
@@ -55,7 +56,8 @@ module ActiveGroonga
         output = StringIO.new
         return_string = true
       end
-      output << "ActiveGroonga::Schema.define(:version => 0) do |schema|\n"
+      version = @version || management_table.current_version
+      output << "ActiveGroonga::Schema.define(:version => #{version}) do |schema|\n"
       output << "  schema.instance_eval do\n"
       dumped_schema.each_line do |line|
         if /^\s*$/ =~ line
@@ -71,6 +73,15 @@ module ActiveGroonga
       else
         output
       end
+    end
+
+    private
+    def management_table
+      @management_table ||= SchemaManagementTable.new
+    end
+
+    def update_version
+      management_table.update_version(@version)
     end
   end
 end
