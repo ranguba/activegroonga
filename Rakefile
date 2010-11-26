@@ -111,7 +111,7 @@ Hoe.spec('activegroonga') do |_project|
     :extra_rdoc_files => Dir.glob("*.rdoc"),
   }
   project.readme_file = "README.ja.rdoc"
-  project.extra_deps = [["rroonga", ">= 1.0.2"],
+  project.extra_deps = [["rroonga", ">= 1.0.4"],
                         ["activemodel", ">= 3.0.1"]]
 
   news_of_current_release = File.read("NEWS.rdoc").split(/^==\s.*$/)[1]

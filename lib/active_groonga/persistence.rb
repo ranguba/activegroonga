@@ -129,7 +129,7 @@ module ActiveGroonga
     def initial_attributes
       attributes = {}
       self.class.table.columns.each do |column|
-        next if column.index_column?
+        next if column.index?
         attributes[column.local_name] = nil
       end
       attributes
@@ -145,7 +145,7 @@ module ActiveGroonga
       record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
         value = record[column.local_name]
-        if value and column.reference_column?
+        if value and column.reference?
           value_class = self.class.custom_reference_class(column.local_name)
           value_class ||= column.range.name.camelize.singularize.constantize
           value = value_class.instantiate(value)
