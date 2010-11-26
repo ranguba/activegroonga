@@ -182,10 +182,9 @@ task :prepare_docs_for_publishing do
   end
 end
 
+desc "Tag the current revision."
 task :tag do
-  repository = "svn+ssh://rubyforge.org/var/svn/groonga/activegroonga"
-  sh("svn cp -m 'release #{version}!!!' " +
-     "#{repository}/trunk #{repository}/tags/#{version}")
+  sh("git tag -a #{version} -m 'release #{version}!!!'")
 end
 
 desc "generate activegroonga.gemspec"
