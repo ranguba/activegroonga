@@ -20,6 +20,7 @@ require 'active_support/all'
 module ActiveGroonga
   class Base
     extend ActiveModel::Naming
+    include ActiveModel::Conversion
     include ActiveModel::AttributeMethods
     attribute_method_suffix ""
     attribute_method_suffix "="
