@@ -72,10 +72,11 @@ module ActiveGroonga
           rescue ArgumentError
             return nil
           end
+          return nil unless table.exist?(record_id)
         end
         record = table[record_id]
-        record = instantiate(record) if record
-        record
+        return nil if record.nil?
+        instantiate(record)
       end
 
       def select(options={})
