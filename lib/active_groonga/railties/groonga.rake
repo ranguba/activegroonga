@@ -112,7 +112,7 @@ namespace :groonga do
 
   namespace :test do
     desc "Prepare groonga database for testing"
-    task :prepare => [:purge] do
+    task :prepare do
       ActiveGroonga::Base.configure("test")
       Rake::Task["groonga:drop"].invoke
       Rake::Task["groonga:create"].invoke
