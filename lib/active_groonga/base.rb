@@ -66,6 +66,13 @@ module ActiveGroonga
 
       def find(record_id, options={})
         record_id = record_id.record_id if record_id.respond_to?(:record_id)
+        unless table.support_key?
+          begin
+            record_id = Integer(record_id)
+          rescue ArgumentError
+            return nil
+          end
+        end
         record = table[record_id]
         record = instantiate(record) if record
         record
