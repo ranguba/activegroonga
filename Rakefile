@@ -34,12 +34,12 @@ truncate_base_dir = Proc.new do |x|
   x.gsub(/^#{Regexp.escape(base_dir + File::SEPARATOR)}/, '')
 end
 
-@groonga_base_dir = File.expand_path(File.join(base_dir, '..', 'groonga'))
-groonga_ext_dir = File.join(@groonga_base_dir, 'src')
-groonga_lib_dir = File.join(groonga_ext_dir, 'lib')
-$LOAD_PATH.unshift(groonga_ext_dir)
-$LOAD_PATH.unshift(groonga_lib_dir)
-ENV["RUBYLIB"] = "#{groonga_lib_dir}:#{groonga_ext_dir}:#{ENV['RUBYLIB']}"
+@rroonga_base_dir = File.expand_path(File.join(base_dir, '..', 'rroonga'))
+rroonga_ext_dir = File.join(@rroonga_base_dir, 'ext', "groonga")
+rroonga_lib_dir = File.join(@rroonga_base_dir, 'lib')
+$LOAD_PATH.unshift(rroonga_ext_dir)
+$LOAD_PATH.unshift(rroonga_lib_dir)
+ENV["RUBYLIB"] = "#{rroonga_lib_dir}:#{rroonga_ext_dir}:#{ENV['RUBYLIB']}"
 
 active_groonga_lib_dir = File.join(base_dir, "lib")
 $LOAD_PATH.unshift(active_groonga_lib_dir)
@@ -164,7 +164,7 @@ def apply_template(file, head, header, footer)
 end
 
 def erb_template(name)
-  file = File.join(@groonga_base_dir, "html", "#{name}.html.erb")
+  file = File.join(@rroonga_base_dir, "html", "#{name}.html.erb")
   template = File.read(file)
   erb = ERB.new(template, nil, "-")
   erb.filename = file
