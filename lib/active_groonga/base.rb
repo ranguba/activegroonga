@@ -234,6 +234,10 @@ module ActiveGroonga
       end
     end
 
+    def record_raw_id
+      id
+    end
+
     def attributes
       @attributes
     end
