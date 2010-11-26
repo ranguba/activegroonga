@@ -3,9 +3,9 @@ class <%= migration_class_name %> < ActiveGroonga::Migration
 <% attributes.each do |attribute| -%>
   <%- if migration_action -%>
     change_table(:<%= table_name %>) do |table|
-    <%- if migration_action == "add" %>
+    <%- if migration_action == "add" -%>
       table.<%= attribute.type %>(:<%= attribute.name %>)
-    <%- else %>
+    <%- else -%>
       table.remove_column(:<%= attribute.name %>)
     <%- end -%>
     end
@@ -17,9 +17,9 @@ class <%= migration_class_name %> < ActiveGroonga::Migration
 <% attributes.reverse.each do |attribute| -%>
   <%- if migration_action -%>
     change_table(:<%= table_name %>) do |table|
-    <%- if migration_action == "add" %>
+    <%- if migration_action == "add" -%>
       table.remove_column(:<%= attribute.name %>)
-    <%- else %>
+    <%- else -%>
       table.<%= attribute.type %>(:<%= attribute.name %>)
     <%- end -%>
     end
