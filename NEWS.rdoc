@@ -1,5 +1,9 @@
 = NEWS
 
+== 1.0.0: 2010-11-29
+
+* Support Rails 3.
+
 == 0.0.7: 2009-10-02
 
 * Support Ruby/groonga 0.0.7.
