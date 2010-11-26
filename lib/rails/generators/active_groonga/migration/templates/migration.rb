@@ -1,29 +1,29 @@
 class <%= migration_class_name %> < ActiveGroonga::Migration
   def up
-<% attributes.each do |attribute| -%>
-  <%- if migration_action -%>
-    change_table(:<%= table_name %>) do |table|
+<%- if migration_action -%>
+  change_table(:<%= table_name %>) do |table|
+  <% columns.each do |column| -%>
     <%- if migration_action == "add" -%>
-      table.<%= attribute.type %>(:<%= attribute.name %>)
+      table.<%= column.create_code %>
     <%- else -%>
-      table.remove_column(:<%= attribute.name %>)
+      table.<%= column.remove_code %>
     <%- end -%>
-    end
   <%- end -%>
+  end
 <%- end -%>
   end
 
   def down
-<% attributes.reverse.each do |attribute| -%>
-  <%- if migration_action -%>
-    change_table(:<%= table_name %>) do |table|
+<%- if migration_action -%>
+  change_table(:<%= table_name %>) do |table|
+  <% columns.reverse.each do |column| -%>
     <%- if migration_action == "add" -%>
-      table.remove_column(:<%= attribute.name %>)
+      table.<%= column.remove_code %>
     <%- else -%>
-      table.<%= attribute.type %>(:<%= attribute.name %>)
+      table.<%= column.create_code %>
     <%- end -%>
-    end
   <%- end -%>
+  end
 <%- end -%>
   end
 end

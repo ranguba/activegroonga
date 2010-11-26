@@ -14,11 +14,18 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require 'rails/generators/active_groonga'
+require 'rails/generators/active_groonga/migration/column'
 
 module ActiveGroonga
   module Generators
     class MigrationGenerator < Base #:nodoc:
-      argument :attributes, :type => :array, :default => [], :banner => "field:type field:type"
+      argument(:columns, :type => :array, :default => [],
+               :banner => "name:type[:option:option] name:type[:option:option]")
+
+      def initialize(args, *options)
+        super
+        parse_columns!
+      end
 
       def create_migration_file
         set_local_assigns!
@@ -31,6 +38,14 @@ module ActiveGroonga
         if file_name =~ /^(add|remove)_.*_(?:to|from)_(.*)/
           @migration_action = $1
           @table_name       = $2.pluralize
+        end
+      end
+
+      private
+      def parse_columns! #:nodoc:
+        self.columns = (columns || []).map do |key_value|
+          name, type, *options = key_value.split(':')
+          Column.new(name, type, options)
         end
       end
     end
