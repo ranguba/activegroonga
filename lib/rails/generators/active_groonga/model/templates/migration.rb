@@ -11,6 +11,6 @@ class <%= migration_class_name %> < ActiveGroonga::Migration
   end
 
   def down
-    remoe_table(:<%= table_name %>)
+    remove_table(:<%= table_name %>)
   end
 end
