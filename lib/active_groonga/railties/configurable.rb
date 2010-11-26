@@ -19,7 +19,26 @@ module ActiveGroonga
       def groonga_configurations
         groonga_yml = paths.config.groonga.first
         unless File.exist?(groonga_yml)
-          cp("#{groonga_yml}.example", groonga_yml)
+          groonga_yml_example = "#{groonga_yml}.example"
+          if File.exist?(groonga_yml_example)
+            cp(groonga_yml_example, groonga_yml)
+          else
+            File.open(groonga_yml, "w") do |yml|
+              yml.puts(<<-EOC)
+development:
+  database: db/groonga/development/db
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  database: db/groonga/test/db
+
+production:
+  database: db/groonga/production/db
+              EOC
+            end
+          end
         end
         YAML.load(ERB.new(IO.read(groonga_yml)).result)
       end
