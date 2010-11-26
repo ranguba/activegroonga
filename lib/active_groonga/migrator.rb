@@ -50,17 +50,24 @@ module ActiveGroonga
     end
 
     def current_version
-      @current_version ||= migrated_versions.collect(&:first).max || 0
+      @current_version ||= (migrated_versions.last || [0]).first
     end
 
     def migrated_versions
       @migrated_versions ||= @table.collect do |record|
         [record.key, record.migrated_at]
+      end.sort_by do |version, migrated_at|
+        version
       end
     end
 
     def update_version(version)
       @table.add(version, :migrated_at => Time.now)
+      clear_cache
+    end
+
+    def remove_version(version)
+      @table[version].delete
       clear_cache
     end
 
@@ -82,26 +89,33 @@ module ActiveGroonga
   end
 
   class Migrator
-    def initialize(direction, migrations_path, target_version=nil)
+    def initialize(direction, migrations_path)
       @direction = direction
       @migrations_path = migrations_path
       unless @migrations_path.is_a?(Pathname)
         @migrations_path = Pathanme(@migrations_path)
       end
-      @target_version = target_version
     end
 
-    def migrate
-      active_groonga_schema = Schema.new(:context => Base.context)
+    def migrate(target_version=nil)
       _current_version = current_version
       migration_entries.each do |entry|
-        next if entry.version <= _current_version
+        if up?
+          next if entry.version <= _current_version
+        else
+          next if entry.version > _current_version
+        end
         Base.logger.info("Migrating to #{entry.name} (#{entry.version})")
+        active_groonga_schema = Schema.new(:context => Base.context)
         active_groonga_schema.define do |schema|
           entry.migrate(@direction, schema)
         end
-        management_table.update_version(entry.version)
-        break if entry.version == @target_version
+        if up?
+          management_table.update_version(entry.version)
+        else
+          management_table.remove_version(entry.version)
+        end
+        break if entry.version == target_version
       end
     end
 

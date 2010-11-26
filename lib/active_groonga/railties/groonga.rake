@@ -37,12 +37,55 @@ namespace :groonga do
     ActiveGroonga::Base.database.ensure_available
   end
 
-  desc "Migrate the database (options: VERSION=x, VERBOSE=false)."
+  migrations_path = Proc.new do
+    Rails.root + "db" + "groonga" + "migrate"
+  end
+  desc "Migrate the database (options: VERSION=x)."
   task :migrate => :environment do
-    migrations_path = Rails.root + "db" + "groonga" + "migrate"
-    migrator = ActiveGroonga::Migrator.new(:up, migrations_path)
-    migrator.migrate
+    version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+    migrator = ActiveGroonga::Migrator.new(:up, migrations_path.call)
+    migrator.migrate(version)
     Rake::Task["groonga:schema:dump"].invoke
+  end
+
+  desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n).'
+  task :rollback => :environment do
+    step = ENV['STEP'] ? ENV['STEP'].to_i : 1
+    migrator = ActiveGroonga::Migrator.new(:down, migrations_path.call)
+    version, migrated_at = migrator.migrated_versions[-step]
+    migrator.migrate(version)
+    Rake::Task["groonga:schema:dump"].invoke
+  end
+
+  namespace :migrate do
+    desc 'Rolls the schema back and migrate the schema again.'
+    task :redo => :environment do
+      if ENV["VERSION"]
+        Rake::Task["groonga:migrate:down"].invoke
+        Rake::Task["groonga:migrate:up"].invoke
+      else
+        Rake::Task["groonga:rollback"].invoke
+        Rake::Task["groonga:migrate"].invoke
+      end
+    end
+
+    desc 'Migrate the schema up to the version (options: VERSION=x).'
+    task :up => :environment do
+      version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+      raise "VERSION is required" unless version
+      migrator = ActiveGroonga::Migrator.new(:up, migrations_path.call)
+      migrator.migrate(version)
+      Rake::Task["groonga:schema:dump"].invoke
+    end
+
+    desc 'Migrate the schema down to the version (options: VERSION=x).'
+    task :down => :environment do
+      version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
+      raise "VERSION is required" unless version
+      migrator = ActiveGroonga::Migrator.new(:down, migrations_path.call)
+      migrator.migrate(version)
+      Rake::Task["groonga:schema:dump"].invoke
+    end
   end
 
   namespace :schema do
