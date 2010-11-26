@@ -35,6 +35,7 @@ module ActiveGroonga
     autoload :Error
 
     autoload :Base
+    autoload :Vector
     autoload :Database
     autoload :ResultSet
     autoload :Schema

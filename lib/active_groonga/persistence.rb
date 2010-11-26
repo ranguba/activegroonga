@@ -148,7 +148,11 @@ module ActiveGroonga
         if value and column.reference?
           value_class = self.class.custom_reference_class(column.local_name)
           value_class ||= column.range.name.camelize.singularize.constantize
-          value = value_class.instantiate(value)
+          if column.vector?
+            value = Vector.new(self, value_class, value)
+          else
+            value = value_class.instantiate(value)
+          end
         end
         attributes[column.local_name] = value
       end
