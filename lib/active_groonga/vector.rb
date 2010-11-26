@@ -25,6 +25,18 @@ module ActiveGroonga
       @values = [@values] unless @values.is_a?(Array)
     end
 
+    def build(*args, &block)
+      @klass.new(*args, &block)
+    end
+
+    def create(*args, &block)
+      @klass.create(*args, &block)
+    end
+
+    def create!(*args, &block)
+      @klass.create!(*args, &block)
+    end
+
     def each
       @values.each do |value|
         yield(instantiate(value))
