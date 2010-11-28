@@ -238,6 +238,10 @@ module ActiveGroonga
       id
     end
 
+    def to_key
+      persisted? ? [record_id] : nil
+    end
+
     def attributes
       @attributes
     end
