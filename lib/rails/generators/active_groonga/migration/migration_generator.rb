@@ -43,7 +43,7 @@ module ActiveGroonga
 
       private
       def parse_columns! #:nodoc:
-        self.columns = (columns || []).map do |key_value|
+        self.columns = (columns || []).collect do |key_value|
           name, type, *options = key_value.split(':')
           Column.new(name, type, options)
         end

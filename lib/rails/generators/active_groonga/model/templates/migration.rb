@@ -1,8 +1,8 @@
 class <%= migration_class_name %> < ActiveGroonga::Migration
   def up
-    create_table(:<%= table_name %>) do |table|
-<% attributes.each do |attribute| -%>
-      table.<%= attribute.type %>(:<%= attribute.name %>)
+    <%= create_table_code %> do |table|
+<% columns.each do |column| -%>
+      table.<%= column.create_code %>
 <% end -%>
 <% if options[:timestamps] -%>
       table.timestamps
@@ -11,6 +11,6 @@ class <%= migration_class_name %> < ActiveGroonga::Migration
   end
 
   def down
-    remove_table(:<%= table_name %>)
+    <%= remove_table_code %>
   end
 end

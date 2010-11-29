@@ -14,14 +14,13 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require 'rails/generators/active_groonga'
+require 'rails/generators/active_groonga/migration/column'
 
 module ActiveGroonga
   module Generators
     class ModelGenerator < Base
-      argument(:attributes,
-               :type => :array,
-               :default => [],
-               :banner => "field:type field:type")
+      argument(:columns, :type => :array, :default => [],
+               :banner => "name:type[:option:option] name:type[:option:option]")
 
       check_class_collision
 
@@ -30,6 +29,15 @@ module ActiveGroonga
       class_option(:parent,
                    :type => :string,
                    :desc => "The parent class for the generated model")
+
+      def initialize(args, *options)
+        super
+        @key = nil
+        @table_type = nil
+        @key_normalize = false
+        @default_tokenizer = nil
+        parse_columns!
+      end
 
       def create_migration_file
         return unless options[:migration] && options[:parent].nil?
@@ -49,11 +57,51 @@ module ActiveGroonga
         end
       end
 
+      def create_table_code
+        code = "create_table(:#{table_name}"
+        options = []
+        options << ":type => :#{@table_type}" if @table_type
+        options << ":key_type => \"#{@key}\"" if @key
+        options << ":key_normalize => #{@key_normalize}" if @key_normalize
+        options << ":default_tokenizer => \"#{@tokenizer}\"" if @tokenizer
+        code << ", #{options.join(', ')}" unless options.empty?
+        code << ")"
+        code
+      end
+
+      def remove_table_code
+        "remove_table(:#{table_name})"
+      end
+
       hook_for :test_framework
 
       protected
       def parent_class_name
         options[:parent] || "ActiveGroonga::Base"
+      end
+
+      private
+      def parse_columns! #:nodoc:
+        parsed_columns = []
+        (columns || []).each do |key_value|
+          name, type, *options = key_value.split(':')
+          case name
+          when "_key"
+            @key = Groonga::Schema.normalize_type(type)
+            @table_type = options.find do |option|
+              ["hash", "patricia_trie"].include?(option)
+            end
+            @table_type ||= "hash"
+            if @table_type == "patricia_trie"
+              @key_normalize = options.include?("normalize")
+            end
+          when "_tokenizer"
+            @tokenizer = Groonga::Schema.normalize_type(type)
+          else
+            parsed_columns << Column.new(name, type, options)
+          end
+        end
+        self.columns = parsed_columns
       end
     end
   end
