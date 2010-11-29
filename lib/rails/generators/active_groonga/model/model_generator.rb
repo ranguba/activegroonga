@@ -86,17 +86,21 @@ module ActiveGroonga
         (columns || []).each do |key_value|
           name, type, *options = key_value.split(':')
           case name
-          when "_key"
+          when "key"
             @key = Groonga::Schema.normalize_type(type)
             @table_type = options.find do |option|
               ["hash", "patricia_trie"].include?(option)
             end
-            @table_type ||= "hash"
+            key_normalize = options.include?("normalize")
+            @table_type ||= @key_normalize ? "patricia_trie" : "hash"
             if @table_type == "patricia_trie"
-              @key_normalize = options.include?("normalize")
+              @key_normalize = key_normalize
             end
-          when "_tokenizer"
-            @tokenizer = Groonga::Schema.normalize_type(type)
+            tokenizer_label_index = options.index("tokenizer")
+            if tokenizer_label_index
+              tokenizer = options[tokenizer_label_index + 1]
+              @tokenizer = Groonga::Schema.normalize_type(tokenizer)
+            end
           else
             parsed_columns << Column.new(name, type, options)
           end
