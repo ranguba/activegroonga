@@ -80,14 +80,15 @@ module ActiveGroonga
       end
 
       def select(options={})
-        if block_given?
-          records = table.select do |record|
-            yield(record)
-          end
-          ResultSet.new(records, self, :expression => records.expression)
-        else
-          ResultSet.new(table, self)
+        return all(options) unless block_given?
+        records = table.select do |record|
+          yield(record)
         end
+        ResultSet.new(records, self, :expression => records.expression)
+      end
+
+      def all(options={})
+        ResultSet.new(table, self)
       end
 
       def count
