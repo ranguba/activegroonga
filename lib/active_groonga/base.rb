@@ -79,6 +79,20 @@ module ActiveGroonga
         instantiate(record)
       end
 
+      def exists?(record_id)
+        record_id = record_id.record_id if record_id.respond_to?(:record_id)
+        if table.support_key?
+          not table[record_id].nil?
+        else
+          begin
+            record_id = Integer(record_id)
+          rescue ArgumentError
+            return false
+          end
+          table.exist?(record_id)
+        end
+      end
+
       def select(options={})
         return all(options) unless block_given?
         records = table.select do |record|

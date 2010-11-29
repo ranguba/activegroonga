@@ -209,4 +209,11 @@ class TestBase < Test::Unit::TestCase
     assert_equal([google],
                  Bookmark.select {|record| record.content =~ "Google"}.to_a)
   end
+
+  def test_exists?
+    daijiro = @user_records[:daijiro]
+    assert_true(User.exists?(daijiro.record_id))
+    daijiro.delete
+    assert_false(User.exists?(daijiro.record_id))
+  end
 end
