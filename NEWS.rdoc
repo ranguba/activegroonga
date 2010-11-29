@@ -1,5 +1,18 @@
 = NEWS
 
+== 1.0.1: 2010-11-29
+
+=== Improvments
+
+* generator: Supported table type customize.
+* Added ActiveGroonga::Base.exists?.
+* Added ActiveGroonga::Base.all.
+
+=== Changes
+
+* Changed to use record key instead of record ID for record
+  identifier for hash table and patricia trie.
+
 == 1.0.0: 2010-11-29
 
 * Support Rails 3.
