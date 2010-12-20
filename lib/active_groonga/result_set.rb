@@ -57,15 +57,18 @@ module ActiveGroonga
 
     private
     def instantiate(record)
+      resolved_record = record
       @n_key_nested.times do
-        return nil if record.nil?
-        record = record.key
+        return nil if resolved_record.nil?
+        resolved_record = resolved_record.key
       end
-      return nil if record.nil?
-      while record.key.is_a?(Groonga::Record)
-        record = record.key
+      return nil if resolved_record.nil?
+      while resolved_record.key.is_a?(Groonga::Record)
+        resolved_record = resolved_record.key
       end
-      @klass.instantiate(record)
+      instance = @klass.instantiate(resolved_record)
+      instance.score = record.score if record.support_sub_records?
+      instance
     end
 
     def compute_n_key_nested

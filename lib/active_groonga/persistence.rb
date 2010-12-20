@@ -142,6 +142,7 @@ module ActiveGroonga
       else
         attributes["id"] = record.id
       end
+      attributes["score"] = record.score if record.support_sub_records?
       record.columns.each do |column|
         next if column.is_a?(Groonga::IndexColumn)
         value = record[column.local_name]
@@ -167,6 +168,7 @@ module ActiveGroonga
       end
       @id = @attributes.delete("id")
       @key = @attributes.delete("key")
+      @score = @attributes.delete("score")
     end
   end
 end

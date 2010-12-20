@@ -138,6 +138,17 @@ module ActiveGroongaTestUtils
 
     columns_dir = @tables_dir + "terms.columns"
     columns_dir.mkpath
+
+    @bookmarks_comment_index_column_path = columns_dir + "bookmarks_comment"
+    path = @bookmarks_comment_index_column_path.to_s
+    @bookmarks_comment_index_column =
+      @terms.define_index_column("bookmarks_comment", @bookmarks,
+                                 :with_section => true,
+                                 :with_weight => true,
+                                 :with_position => true,
+                                 :path => path)
+    @bookmarks_comment_index_column.source = @comment_column
+
     @bookmarks_content_index_column_path = columns_dir + "bookmarks_content"
     path = @bookmarks_content_index_column_path.to_s
     @bookmarks_content_index_column =

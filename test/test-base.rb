@@ -216,4 +216,16 @@ class TestBase < Test::Unit::TestCase
     daijiro.delete
     assert_false(User.exists?(daijiro.record_id))
   end
+
+  def test_score
+    bookmarks = Bookmark.select do |record|
+      target = record.match_target do |match_record|
+        (match_record.content * 10) |
+          (match_record.comment * 5)
+      end
+      target =~ "groonga"
+    end
+    assert_equal([["http://groonga.org/", 10]],
+                 bookmarks.collect {|bookmark| [bookmark.uri, bookmark.score]})
+  end
 end

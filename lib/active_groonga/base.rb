@@ -211,6 +211,7 @@ module ActiveGroonga
       self.class.define_column_accessors
       @id = nil
       @key = nil
+      @score = nil
       @new_record = true
       @destroyed = false
       @attributes = initial_attributes
@@ -239,6 +240,14 @@ module ActiveGroonga
       raise NoKeyTableError.new(table) unless table.support_key?
       raise KeyOverrideError.new(table, key) unless new_record?
       @key = key
+    end
+
+    def score
+      @score
+    end
+
+    def score=(score)
+      @score = score
     end
 
     def record_id
