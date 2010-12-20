@@ -13,6 +13,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require 'fileutils'
+
 module ActiveGroonga
   module Railties
     module Configurable
@@ -21,7 +23,7 @@ module ActiveGroonga
         unless File.exist?(groonga_yml)
           groonga_yml_example = "#{groonga_yml}.example"
           if File.exist?(groonga_yml_example)
-            cp(groonga_yml_example, groonga_yml)
+            FileUtils.cp(groonga_yml_example, groonga_yml)
           else
             File.open(groonga_yml, "w") do |yml|
               yml.puts(<<-EOC)
