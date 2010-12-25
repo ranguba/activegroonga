@@ -1,5 +1,11 @@
 = NEWS
 
+== 1.0.3: 2010-12-25
+
+=== Improvements
+
+* Supported score.
+
 == 1.0.1: 2010-11-29
 
 === Improvments
