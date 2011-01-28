@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -118,6 +118,7 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
     create_table("terms",
                  :type => :patricia_trie,
                  :key_type => "ShortText",
+                 :default_tokenizer => "TokenBigram",
                  :force => true) do |table|
     end
 
@@ -131,6 +132,7 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
     end
 
     change_table("terms") do |table|
+      table.index("bookmarks", "comment", :name => "bookmarks_comment")
       table.index("bookmarks", "content", :name => "bookmarks_content")
     end
   end
