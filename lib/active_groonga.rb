@@ -18,7 +18,7 @@ require 'pathname'
 require 'active_model'
 
 base_dir = Pathname(__FILE__).dirname
-rroonga_dir = (base_dir + "../../groonga").expand_path
+rroonga_dir = (base_dir + "../../rroonga").expand_path
 if rroonga_dir.exist?
   $LOAD_PATH.unshift(rroonga_dir + "ext" + "groonga")
   $LOAD_PATH.unshift(rroonga_dir + "lib")
