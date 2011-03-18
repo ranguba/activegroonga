@@ -121,7 +121,7 @@ Hoe.spec('activegroonga') do |_project|
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   project.summary, project.description, = description.split(/\n\n+/, 3)
 
-  project.remote_rdoc_dir = "active_groonga"
+  project.remote_rdoc_dir = "activegroonga"
 end
 
 project.spec.dependencies.delete_if {|dependency| dependency.name == "hoe"}

@@ -41,7 +41,7 @@ contributed patches.)
 
 Japanese only. Sorry.
 
-http://groonga.rubyforge.org/active_groonga/
+http://groonga.rubyforge.org/activegroonga/
 
 == Mailing list
 
