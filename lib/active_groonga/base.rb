@@ -33,6 +33,8 @@ module ActiveGroonga
     cattr_accessor :configurations
 
     @@context = nil
+    cattr_writer :context, :instance_writer => false
+
     @@encoding = "utf8"
     cattr_reader :encoding, :instance_reader => false
 
@@ -110,7 +112,7 @@ module ActiveGroonga
       end
 
       def context
-        Groonga::Context.default
+        @@context ||= Groonga::Context.default
       end
 
       def encoding=(new_encoding)

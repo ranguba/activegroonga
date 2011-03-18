@@ -27,6 +27,7 @@ module ActiveGroongaTestUtils
   end
 
   def setup_sand_box
+    ActiveGroonga::Base.context = nil
     Groonga::Context.default = nil
     @context = Groonga::Context.default
 
