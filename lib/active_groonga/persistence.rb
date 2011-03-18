@@ -24,7 +24,7 @@ module ActiveGroonga
     end
 
     def persisted?
-      not (new_record? or destroyed?)
+      !new_record? and !destroyed?
     end
 
     def save(options={})
