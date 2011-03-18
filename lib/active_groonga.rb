@@ -17,13 +17,6 @@ require 'pathname'
 
 require 'active_model'
 
-base_dir = Pathname(__FILE__).dirname
-rroonga_dir = (base_dir + "../../rroonga").expand_path
-if rroonga_dir.exist?
-  $LOAD_PATH.unshift(rroonga_dir + "ext" + "groonga")
-  $LOAD_PATH.unshift(rroonga_dir + "lib")
-end
-
 require 'groonga'
 
 module ActiveGroonga
@@ -48,4 +41,5 @@ module ActiveGroonga
   end
 end
 
+base_dir = Pathname(__FILE__).dirname
 I18n.load_path << (base_dir + 'active_groonga/locale/en.yml').to_s
