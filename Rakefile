@@ -182,6 +182,24 @@ task :prepare_docs_for_publishing do
   end
 end
 
+namespace :backward_compatibility do
+  desc "Publish HTML for backward compatibility."
+  task :publish_html do
+    config = YAML.load(File.read(File.expand_path("~/.rubyforge/user-config.yml")))
+    host = "#{config["username"]}@rubyforge.org"
+
+    rsync_args = "-av --exclude .svn --delete"
+    remote_dir = "/var/www/gforge-projects/#{project.rubyforge_name}/"
+    mkdir_p "active_groonga"
+    File.open("active_groonga/.htaccess", "w") do |htaccess|
+      htaccess.puts(<<-EOH)
+Redirect permanent / http://groonga.rubyforge.org/activegroonga/
+EOH
+    end
+    sh "rsync #{rsync_args} active_groonga/ #{host}:#{remote_dir}"
+  end
+end
+
 desc "Tag the current revision."
 task :tag do
   sh("git tag -a #{version} -m 'release #{version}!!!'")
