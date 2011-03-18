@@ -12,10 +12,10 @@ groongaは全文検索機能とカラムストアの機能を提供していま�
 ActiveRecordとRDBの組み合わせの代わりに、ActiveGroongaと
 groongaの組み合わせを使うことができます。
 
-Ruby/groongaをベースとしています。Ruby/groongaとgroongaに関
-する情報は以下を参照して下さい。
+rroongaをベースとしています。rroongaとgroongaに関する情報は以
+下を参照して下さい。
 
-* Ruby/groonga: http://groonga.rubyforge.org/
+* rroonga: http://groonga.rubyforge.org/
 * groonga: http://groonga.org/
 
 == 作者
