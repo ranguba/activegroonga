@@ -87,6 +87,10 @@ module ActiveGroonga
           @records.send(method_name)
         end
       end
+
+      # For kaminari.
+      alias_method :num_pages, :n_pages
+      alias_method :limit_value, :page_size
     end
   end
 end
