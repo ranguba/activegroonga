@@ -1,5 +1,11 @@
 = NEWS
 
+== 1.0.4: 2011-04-01
+
+=== Improvements
+
+* Supported Kaminari. (View interface only)
+
 == 1.0.3: 2010-12-25
 
 === Improvements
