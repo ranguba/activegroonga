@@ -31,6 +31,7 @@ module ActiveGroonga
     end
 
     def paginate(sort_keys, options={})
+      options[:page] = normalize_page_value(options[:page])
       records = @records.paginate(sort_keys, options)
       set = self.class.new(records, @klass,
                            :expression => @expression)
@@ -78,6 +79,18 @@ module ActiveGroonga
       while domain.is_a?(Groonga::Table)
         @n_key_nested += 1
         domain = domain.domain
+      end
+    end
+
+    def normalize_page_value(page)
+      if page.blank?
+        1
+      else
+        begin
+          Integer(page)
+        rescue ArgumentError
+          1
+        end
       end
     end
 
