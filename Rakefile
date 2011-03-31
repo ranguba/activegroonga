@@ -189,7 +189,7 @@ namespace :backward_compatibility do
     host = "#{config["username"]}@rubyforge.org"
 
     rsync_args = "-av --exclude .svn --delete"
-    remote_dir = "/var/www/gforge-projects/#{project.rubyforge_name}/"
+    remote_dir = "/var/www/gforge-projects/#{project.rubyforge_name}/active_groonga/"
     mkdir_p "active_groonga"
     File.open("active_groonga/.htaccess", "w") do |htaccess|
       htaccess.puts(<<-EOH)
