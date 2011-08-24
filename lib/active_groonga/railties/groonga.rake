@@ -1,6 +1,6 @@
 # -*- ruby -*-
 #
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -121,7 +121,7 @@ namespace :groonga do
   desc('Load the seed data from db/groonga/seeds/#{RAILS_ENV}.grn, ' +
        'db/groonga/seeds/#{RAILS_ENV}.rb, db/groonga/seeds.grn or ' +
        'db/groonga/seeds.rb')
-  task :seed => :load_config do
+  task :seed => :environment do
     base_dir = Rails.root + "db" + "groonga"
     candidates = [base_dir + "seeds" + "#{Rails.env}.grn",
                   base_dir + "seeds" + "#{Rails.env}.rb",
