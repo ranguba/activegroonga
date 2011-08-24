@@ -128,8 +128,9 @@ namespace :groonga do
                   base_dir + "seeds.grn",
                   base_dir + "seeds.rb"]
     seed_file_path = candidates.find(&:exist?)
-    break unless seed_file_path
-    case seed_file_path.extname
+    extension = nil
+    extension = seed_file_path.extname if seed_file_path
+    case extension
     when /\A\.grn\z/i
       ActiveGroonga::Base.database.ensure_available
       context = ActiveGroonga::Base.context
@@ -143,6 +144,9 @@ namespace :groonga do
       end
     when /\A\.rb\z/i
       load(seed_file_path)
+    when nil
+      candidate_paths = candidates.collect(&:to_s)
+      raise "seed file doesn't exist. candidates: #{candidate_paths.inspect}"
     else
       raise "unsupported seed file type: <#{seed_file_path}>"
     end
