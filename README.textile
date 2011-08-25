@@ -1,0 +1,55 @@
+h1. README
+
+h2. Name
+
+ActiveGroonga
+
+h2. Description
+
+A library to use groonga with ActiveRecord like API.
+
+groonga provides both of full text search and column store
+features. ActiveGroonga + groonga can be used as an
+alternative of ActiveRecord + RDB.
+
+ActiveGroonga is based on rroonga. See the following URLs
+about rroonga and groonga.
+
+* "rroonga":http://groonga.rubyforge.org/
+* "groonga":http://groonga.org/
+
+h2. Authors
+
+* Kouhei Sutou <kou@clear-code.com>
+
+h2. License
+
+LGPL 2.1. See license/LGPL for details.
+
+(Kouhei Sutou has a right to change license inclidng
+contributed patches.)
+
+h2. Dependencies
+
+* rroonga
+
+h2. Install
+
+<pre>
+!!!command_line
+% sudo gem install activegroonga
+</pre>
+
+h2. Documents
+
+* "Reference manual in English":http://groonga.rubyforge.org/rroonga/en/
+* "Reference manual in Japanese":http://groonga.rubyforge.org/rroonga/ja/
+
+h2. Mailing list
+
+* English: "groonga-users-en":http://rubyforge.org/mailman/listinfo/groonga-users-en
+* Japanese: "groonga-dev":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev
+
+h2. Thanks
+
+* ...
