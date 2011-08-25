@@ -80,6 +80,9 @@ Packnga::DocumentTask.new(spec) do |task|
   task.yard do |yard_task|
     yard_task.options += ["--exclude", "/templates/"]
   end
+  task.reference do |reference_task|
+    # reference_task.mode = "xhtml"
+  end
 end
 
 Packnga::ReleaseTask.new(spec) do |task|
