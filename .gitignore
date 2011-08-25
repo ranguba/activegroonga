@@ -5,3 +5,4 @@
 /test-unit-notify/
 /test/.test-result/
 /*.gemspec
+/Gemfile.lock
