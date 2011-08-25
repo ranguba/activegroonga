@@ -1,8 +1,5 @@
-/doc
-/email.txt
+/doc/html/
+/doc/reference/
 /pkg
-/test-unit/
-/test-unit-notify/
 /test/.test-result/
-/*.gemspec
 /Gemfile.lock
