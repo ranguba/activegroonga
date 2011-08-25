@@ -3,3 +3,4 @@
 /pkg
 /test/.test-result/
 /Gemfile.lock
+/.yardoc/
