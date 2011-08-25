@@ -23,10 +23,7 @@ gem "activemodel", ">= 3.1.0rc6"
 group :development, :test do
   gem "test-unit"
   gem "test-unit-notify"
-  gem "packnga"
+  gem "jeweler"
+  gem "packnga", ">= 0.9.2"
   gem "RedCloth"
-
-  gem "jeweler" # TODO: remove me.
-  gem "rake" # TODO: remove me.
-  gem "yard" # TODO: remove me.
 end

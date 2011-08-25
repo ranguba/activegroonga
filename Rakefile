@@ -18,7 +18,6 @@
 require 'English'
 
 require 'pathname'
-require "erb" # TODO: remove me.
 require 'rubygems'
 require 'rubygems/package_task'
 require "jeweler"
@@ -77,7 +76,10 @@ Gem::PackageTask.new(spec) do |pkg|
   pkg.need_tar_gz = true
 end
 
-Packnga::DocumentTask.new(spec) do |t|
+Packnga::DocumentTask.new(spec) do |task|
+  task.yard do |yard_task|
+    yard_task.options += ["--exclude", "/templates/"]
+  end
 end
 
 Packnga::ReleaseTask.new(spec) do |task|
