@@ -1,46 +1,46 @@
-= NEWS
+h1. NEWS
 
-== 1.0.4: 2011-04-01
+h2. 1.0.4: 2011-04-01
 
-=== Improvements
+h3. Improvements
 
 * Supported Kaminari. (View interface only)
 
-== 1.0.3: 2010-12-25
+h2. 1.0.3: 2010-12-25
 
-=== Improvements
+h3. Improvements
 
 * Supported score.
 
-== 1.0.1: 2010-11-29
+h2. 1.0.1: 2010-11-29
 
-=== Improvments
+h3. Improvments
 
 * generator: Supported table type customize.
 * Added ActiveGroonga::Base.exists?.
 * Added ActiveGroonga::Base.all.
 
-=== Changes
+h3. Changes
 
 * Changed to use record key instead of record ID for record
   identifier for hash table and patricia trie.
 
-== 1.0.0: 2010-11-29
+h2. 1.0.0: 2010-11-29
 
 * Support Rails 3.
 
-== 0.0.7: 2009-10-02
+h2. 0.0.7: 2009-10-02
 
 * Support Ruby/groonga 0.0.7.
 
-== 0.0.6: 2009-07-31
+h2. 0.0.6: 2009-07-31
 
 * Support Ruby/groonga 0.0.6.
 
-== 0.0.2: 2009-06-05
+h2. 0.0.2: 2009-06-05
 
 * Support Ruby/groonga 0.0.2.
 
-== 0.0.1: 2009-04-30
+h2. 0.0.1: 2009-04-30
 
 * Initial release!
