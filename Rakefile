@@ -59,13 +59,10 @@ Jeweler::Tasks.new do |_spec|
   description = cleanup_white_space(entries[entries.index("Description") + 1])
   spec.summary, spec.description, = description.split(/\n\n+/, 3)
   spec.license = "LGPLv2"
-  spec.files = FileList["{lib,benchmark,misc}/**/*.rb",
-                        "bin/*",
-                        "*.rb",
-                        "example/*.rb",
+  spec.files = FileList["{lib,test}/**/*.rb",
                         "Rakefile",
-                        "ext/**/*"]
-  spec.test_files = FileList["test/**/*.rb"]
+                        "README.textile",
+                        "doc/text/**/*"]
 end
 
 Rake::Task["release"].prerequisites.clear
