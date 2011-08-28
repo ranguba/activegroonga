@@ -14,7 +14,7 @@ h3. Improvements
 
 h2. 1.0.1: 2010-11-29
 
-h3. Improvments
+h3. Improvements
 
 * generator: Supported table type customize.
 * Added ActiveGroonga::Base.exists?.
