@@ -22,6 +22,30 @@ class TestResultSet < Test::Unit::TestCase
     Bookmark.limit = nil
   end
 
+  class TestPaginate < self
+    def test_explicit
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
+    end
+  end
+
+  class TestPaginateSortKeys < self
+    def test_implicit
+      Bookmark.sort_keys = ["uri"]
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.paginate(:size => 1).collect(&:uri))
+    end
+
+    def test_explicit
+      Bookmark.sort_keys = ["uri"]
+      bookmarks = Bookmark.select
+      assert_equal([User.find(@user_records[:daijiro].id)].sort,
+                   bookmarks.paginate(["user"], :size => 1).collect(&:user))
+    end
+  end
+
   class TestPaginateLimit < self
     def test_implicit
       Bookmark.limit = 2
@@ -32,16 +56,52 @@ class TestResultSet < Test::Unit::TestCase
     end
 
     def test_explicit
-      bookmarks = Bookmark.select
-      assert_equal(["http://cutter.sourceforge.net/"].sort,
-                   bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
-    end
-
-    def test_explicit_override
       Bookmark.limit = 2
       bookmarks = Bookmark.select
       assert_equal(["http://cutter.sourceforge.net/"].sort,
                    bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
+    end
+  end
+
+  class TestPaginateAll < self
+    def test_implicit
+      Bookmark.sort_keys = ["uri"]
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.paginate(:size => 1).collect(&:uri))
+    end
+
+    def test_explicit
+      Bookmark.sort_keys = ["uri"]
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal([User.find(@user_records[:daijiro].id)].sort,
+                   bookmarks.paginate(["user"], :size => 1).collect(&:user))
+    end
+  end
+
+  class TestSort < self
+    def test_explicit
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
+    end
+  end
+
+  class TestSortSortKeys < self
+    def test_implicit
+      Bookmark.sort_keys = ["uri"]
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.sort(:limit => 1).collect(&:uri))
+    end
+
+    def test_explicit
+      Bookmark.sort_keys = ["uri"]
+      bookmarks = Bookmark.select
+      assert_equal([User.find(@user_records[:daijiro].id)].sort,
+                   bookmarks.sort(["user"], :limit => 1).collect(&:user))
     end
   end
 
@@ -55,16 +115,29 @@ class TestResultSet < Test::Unit::TestCase
     end
 
     def test_explicit
-      bookmarks = Bookmark.select
-      assert_equal(["http://cutter.sourceforge.net/"].sort,
-                   bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
-    end
-
-    def test_explicit_override
       Bookmark.limit = 2
       bookmarks = Bookmark.select
       assert_equal(["http://cutter.sourceforge.net/"].sort,
                    bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
+    end
+  end
+
+  class TestSortAll < self
+    def test_implicit
+      Bookmark.sort_keys = ["uri"]
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/",
+                    "http://groonga.org/"].sort,
+                   bookmarks.sort.collect(&:uri))
+    end
+
+    def test_explicit
+      Bookmark.sort_keys = ["uri"]
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal([User.find(@user_records[:daijiro].id)].sort,
+                   bookmarks.sort(["user"], :limit => 1).collect(&:user))
     end
   end
 end

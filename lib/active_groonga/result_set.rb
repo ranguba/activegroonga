@@ -32,7 +32,56 @@ module ActiveGroonga
       compute_n_key_nested
     end
 
-    def paginate(sort_keys, options={})
+    # Paginates the result set.
+    #
+    # @overload paginate(sort_keys, options={})
+    #   @param [Array<Array<String, Symbol>>] sort_keys
+    #     The array of sort key for paginating. Each sort
+    #     key is an array of sort key column name and order.
+    #   @option options [Integer] :size The page size.
+    #     {Base.limit} is used as the default value.
+    #   @option options [Integer] :page The current page.
+    #     The page is 1 origin not 0 origin. 1 is used as
+    #     the default value.
+    #   @return [ResultSet] paginated result set.
+    #
+    #   @example
+    #     result_set = User.all
+    #     # Paginates by sorting by "name" column value in
+    #     # ascending order. The paginated result set has
+    #     # less than or equal 10 records. And the current
+    #     # page is user requested page. If user doesn't
+    #     # specify page, the first page is returned.
+    #     result_set.paginate([["name", :ascending]],
+    #                         :size => 10,
+    #                         :page => param[:page])
+    #
+    # @overload paginate(options={})
+    #   @option options [Integer] :size The page size.
+    #     {Base.limit} is used as the default value.
+    #   @option options [Integer] :page The current page.
+    #     1 is used as the default value.
+    #   @return [ResultSet] paginated result set.
+    #
+    #   @example
+    #     # The default sort keys.
+    #     User.sort_keys = [["name", :ascending]]
+    #     result_set = User.all
+    #     # Paginates by sorting by "name" column value in
+    #     # ascending order because it is the default sort
+    #     # keys. The paginated result set has
+    #     # less than or equal 10 records. And the current
+    #     # page is user requested page. If user doesn't
+    #     # specify page, the first page is returned.
+    #     result_set.paginate(:size => 10,
+    #                         :page => param[:page])
+    #
+    #   {Base.sort_keys} is used as the sort keys.
+    def paginate(sort_keys=nil, options={})
+      if sort_keys.is_a?(Hash) and options.empty?
+        options = sort_keys
+        sort_keys = nil
+      end
       options[:size] = normalize_limit(options[:size])
       options[:page] = normalize_page(options[:page])
       sort_keys = normalize_sort_keys(sort_keys)
@@ -42,7 +91,57 @@ module ActiveGroonga
       set
     end
 
-    def sort(keys, options={})
+    # Sorts the result set.
+    #
+    # @overload sort(keys, options={})
+    #   @param [Array<Array<String, Symbol>>] keys
+    #     The array of sort key for sort. Each sort
+    #     key is an array of sort key column name and order.
+    #   @option options [Integer] :limit The max number of records.
+    #     {Base.limit} is used as the default value.
+    #     If {Base.limit} is nil, all records are returned.
+    #   @option options [Integer] :offset The record start offset.
+    #     The offset is 0-origin not 1-origin.
+    #     {Base.offset} is used as the default value.
+    #     If {Base.offset} is nil, 0 is used.
+    #   @return [ResultSet] sorted result set.
+    #
+    #   @example
+    #     result_set = User.all
+    #     # Sorts by "name" column value in
+    #     # ascending order. The sorted result set has
+    #     # from the 5th records to the 14th records.
+    #     result_set.paginate([["name", :ascending]],
+    #                         :limit => 10,
+    #                         :offset => 4)
+    #
+    # @overload sort(options={})
+    #   @option options [Integer] :limit The max number of records.
+    #     {Base.limit} is used as the default value.
+    #     If {Base.limit} is nil, all records are returned.
+    #   @option options [Integer] :offset The record start offset.
+    #     The offset is 0-origin not 1-origin.
+    #     {Base.offset} is used as the default value.
+    #     If {Base.offset} is nil, 0 is used.
+    #   @return [ResultSet] sorted result set.
+    #
+    #   @example
+    #     # The default sort keys.
+    #     User.sort_keys = [["name", :ascending]]
+    #     result_set = User.all
+    #     # Sorts by "name" column value in
+    #     # ascending order because it is the default sort
+    #     # keys. The sorted result set has
+    #     # from the 5th records to the 14th records.
+    #     result_set.paginate(:limit => 10,
+    #                         :offset => 4)
+    #
+    #   {Base.sort_keys} is used as the sort keys.
+    def sort(keys=nil, options={})
+      if keys.is_a?(Hash) and options.empty?
+        options = keys
+        keys = nil
+      end
       keys = normalize_sort_keys(keys)
       options[:limit] = normalize_limit(options[:limit]) || @n_records
       create_result_set(@records.sort(keys, options))
@@ -110,11 +209,9 @@ module ActiveGroonga
     end
 
     def normalize_sort_keys(keys)
-      if keys.blank?
-        [["_id", :ascending]]
-      else
-        keys
-      end
+      keys = @default_sort_keys if keys.blank?
+      keys = [["_id", :ascending]] if keys.blank?
+      keys
     end
 
     def create_result_set(records)
