@@ -1,4 +1,4 @@
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -23,14 +23,15 @@ module ActiveGroonga
   class Railtie < Rails::Railtie
     config.active_groonga = ActiveSupport::OrderedOptions.new
 
-    config.generators.orm(:active_groonga,
-                          :migration => true,
-                          :timestamps => true)
+    config.app_generators.orm(:active_groonga,
+                              :migration => true,
+                              :timestamps => true)
 
     config.before_configuration do
       application_config = Rails.application.config
       application_config.extend(Railties::Configurable)
-      application_config.paths.config.groonga("config/groonga.yml")
+      application_config.paths.add("config/groonga",
+                                   :with => "config/groonga.yml")
     end
 
     rake_tasks do
