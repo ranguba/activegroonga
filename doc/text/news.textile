@@ -1,5 +1,19 @@
 h1. NEWS
 
+h2. 1.0.5: 2011-05-01
+
+h3. Improvements
+
+* Supported Rails 3.1.0.
+* groonga:seed showes seed candidates files.
+* Used YARD.
+* Added {ActiveGroonga::Base.sort_keys}.
+* Added {ActiveGroonga::Base.limit}.
+
+h3. Fixes
+
+* Fixed groonga:seed dependency.
+
 h2. 1.0.4: 2011-04-01
 
 h3. Improvements
