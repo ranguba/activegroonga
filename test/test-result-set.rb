@@ -1,4 +1,4 @@
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,15 +17,54 @@
 class TestResultSet < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
-  def test_paginate
-    bookmarks = Bookmark.select
-    assert_equal(["http://cutter.sourceforge.net/"].sort,
-                 bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
+  def teardown
+    Bookmark.sort_keys = nil
+    Bookmark.limit = nil
   end
 
-  def test_sort
-    bookmarks = Bookmark.select
-    assert_equal(["http://cutter.sourceforge.net/"].sort,
-                 bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
+  class TestPaginateLimit < self
+    def test_implicit
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/",
+                    "http://groonga.org/"].sort,
+                   bookmarks.paginate(["uri"]).collect(&:uri))
+    end
+
+    def test_explicit
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
+    end
+
+    def test_explicit_override
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.paginate(["uri"], :size => 1).collect(&:uri))
+    end
+  end
+
+  class TestSortLimit < self
+    def test_implicit
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/",
+                    "http://groonga.org/",].sort,
+                   bookmarks.sort(["uri"]).collect(&:uri))
+    end
+
+    def test_explicit
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
+    end
+
+    def test_explicit_override
+      Bookmark.limit = 2
+      bookmarks = Bookmark.select
+      assert_equal(["http://cutter.sourceforge.net/"].sort,
+                   bookmarks.sort(["uri"], :limit => 1).collect(&:uri))
+    end
   end
 end

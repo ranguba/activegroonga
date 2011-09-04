@@ -27,21 +27,25 @@ module ActiveGroonga
         @expression = @records.expression
       end
       @n_records = options[:n_records] || @records.size
+      @default_sort_keys = options[:default_sort_keys]
+      @default_limit = options[:default_limit]
       compute_n_key_nested
     end
 
     def paginate(sort_keys, options={})
-      options[:page] = normalize_page_value(options[:page])
+      options[:size] = normalize_limit(options[:size])
+      options[:page] = normalize_page(options[:page])
+      sort_keys = normalize_sort_keys(sort_keys)
       records = @records.paginate(sort_keys, options)
-      set = self.class.new(records, @klass,
-                           :expression => @expression)
+      set = create_result_set(records)
       set.extend(PaginationProxy)
       set
     end
 
     def sort(keys, options={})
-      self.class.new(@records.sort(keys, options), @klass,
-                     :expression => @expression)
+      keys = normalize_sort_keys(keys)
+      options[:limit] = normalize_limit(options[:limit]) || @n_records
+      create_result_set(@records.sort(keys, options))
     end
 
     def group(key)
@@ -82,7 +86,18 @@ module ActiveGroonga
       end
     end
 
-    def normalize_page_value(page)
+    def normalize_limit(limit)
+      unless limit.blank?
+        begin
+          Integer(limit)
+        rescue
+          limit = nil
+        end
+      end
+      limit || @default_limit
+    end
+
+    def normalize_page(page)
       if page.blank?
         1
       else
@@ -92,6 +107,21 @@ module ActiveGroonga
           1
         end
       end
+    end
+
+    def normalize_sort_keys(keys)
+      if keys.blank?
+        [["_id", :ascending]]
+      else
+        keys
+      end
+    end
+
+    def create_result_set(records)
+      self.class.new(records, @klass,
+                     :default_sort_keys => @default_sort_keys,
+                     :default_limit => @default_limit,
+                     :expression => @expression)
     end
 
     module PaginationProxy

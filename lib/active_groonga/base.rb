@@ -38,6 +38,45 @@ module ActiveGroonga
     @@encoding = "utf8"
     cattr_reader :encoding, :instance_reader => false
 
+    # The default sort keys for {ResultSet#sort} and
+    # {ResultSet#paginate}.
+    #
+    # @scope class
+    # @attribute [rw] sort_keys
+    # @return [Array<Array<String, Symbol>>] An array of
+    #   sort key. Each sort key is an array of sort key
+    #   column name and order.
+    # @example
+    #   # Sorts by "name" column value in ascending order by default.
+    #   User.sort_keys = [["name", :ascending]]
+    #
+    #   # Sorts by "name" column value in ascending order and
+    #   # sorts by "age" column value in descending order for
+    #   # the same name records by default.
+    #   User.sort_keys = [["name", :ascending], ["age", :descending]]
+    #
+    #   # Sorts by id value in ascending order by default.
+    #   User.sort_keys = nil
+    #
+    # @since 1.0.5
+    class_attribute :sort_keys
+
+    # The default limit for {ResultSet#sort} and
+    # {ResultSet#paginate}.
+    #
+    # @scope class
+    # @attribute [rw] limit
+    # @return [Integer] The default limit value.
+    # @example
+    #   # Limits sorted records by default.
+    #   User.limit = 20
+    #
+    #   # Doesn't limit sorted records by default.
+    #   User.limit = nil
+    #
+    # @since 1.0.5
+    class_attribute :limit
+
     class << self
       def configure(configuration)
         case configuration
@@ -100,11 +139,11 @@ module ActiveGroonga
         records = table.select do |record|
           yield(record)
         end
-        ResultSet.new(records, self, :expression => records.expression)
+        create_result_set(records, :expression => records.expression)
       end
 
       def all(options={})
-        ResultSet.new(table, self)
+        create_result_set(table)
       end
 
       def count
@@ -206,6 +245,15 @@ module ActiveGroonga
       protected
       def instance_method_already_implemented?(method_name)
         super(method_name)
+      end
+
+      private
+      def create_result_set(records, options={})
+        default_options = {
+          :default_sort_keys => sort_keys,
+          :default_limit => limit,
+        }
+        ResultSet.new(records, self, default_options.merge(options))
       end
     end
 
