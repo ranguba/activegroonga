@@ -59,4 +59,7 @@ Dir.glob("test/**/test{_,-}*.rb") do |file|
   require file.sub(/\.rb$/, '')
 end
 
-exit Test::Unit::AutoRunner.run(false)
+success = Test::Unit::AutoRunner.run do |runner|
+  runner.runner_options[:show_detail_immediately] = true
+end
+exit(success)
