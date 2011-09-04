@@ -18,7 +18,7 @@
 source "http://rubygems.org/"
 
 gem "rroonga"
-gem "activemodel", ">= 3.1.0rc6"
+gem "activemodel", ">= 3.1.0"
 
 group :development, :test do
   gem "test-unit"
