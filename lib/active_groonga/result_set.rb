@@ -101,9 +101,8 @@ module ActiveGroonga
     #     {Base.limit} is used as the default value.
     #     If {Base.limit} is nil, all records are returned.
     #   @option options [Integer] :offset The record start offset.
-    #     The offset is 0-origin not 1-origin.
-    #     {Base.offset} is used as the default value.
-    #     If {Base.offset} is nil, 0 is used.
+    #     Offset is 0-origin not 1-origin.
+    #     The default value is 0.
     #   @return [ResultSet] sorted result set.
     #
     #   @example
@@ -120,9 +119,8 @@ module ActiveGroonga
     #     {Base.limit} is used as the default value.
     #     If {Base.limit} is nil, all records are returned.
     #   @option options [Integer] :offset The record start offset.
-    #     The offset is 0-origin not 1-origin.
-    #     {Base.offset} is used as the default value.
-    #     If {Base.offset} is nil, 0 is used.
+    #     Offset is 0-origin not 1-origin.
+    #     The default value is 0.
     #   @return [ResultSet] sorted result set.
     #
     #   @example
