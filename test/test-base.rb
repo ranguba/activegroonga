@@ -19,7 +19,9 @@ class TestBase < Test::Unit::TestCase
 
   def test_select
     bookmarks = Bookmark.select
-    assert_equal(["http://groonga.org/", "http://cutter.sourceforge.net/"].sort,
+    assert_equal(["http://groonga.org/",
+                  "http://groonga.rubyforge.org/",
+                  "http://cutter.sourceforge.net/"].sort,
                  bookmarks.collect(&:uri).sort)
   end
 
@@ -158,14 +160,17 @@ class TestBase < Test::Unit::TestCase
     bookmarks = Bookmark.select do |record|
       record.user == daijiro
     end
-    assert_equal([Bookmark.find(@bookmark_records[:groonga].id), google],
+    assert_equal([Bookmark.find(@bookmark_records[:groonga].id),
+                  Bookmark.find(@bookmark_records[:rroonga].id),
+                  google],
                  bookmarks.to_a)
   end
 
   def test_find_reference_by_id
     daijiro = @user_records[:daijiro]
     bookmarks = Bookmark.select {|record| record.user == daijiro}
-    assert_equal([Bookmark.find(@bookmark_records[:groonga])],
+    assert_equal([Bookmark.find(@bookmark_records[:groonga]),
+                  Bookmark.find(@bookmark_records[:rroonga])],
                  bookmarks.to_a)
   end
 
@@ -225,7 +230,8 @@ class TestBase < Test::Unit::TestCase
       end
       target =~ "groonga"
     end
-    assert_equal([["http://groonga.org/", 10]],
+    assert_equal([["http://groonga.org/", 10],
+                  ["http://groonga.rubyforge.org/", 5]],
                  bookmarks.collect {|bookmark| [bookmark.uri, bookmark.score]})
   end
 end

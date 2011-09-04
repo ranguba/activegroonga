@@ -208,6 +208,12 @@ module ActiveGroongaTestUtils
                       "fulltext search engine",
                       "<html><body>groonga</body></html>")
 
+    @bookmark_records[:rroonga] =
+      create_bookmark(@user_records[:daijiro],
+                      "http://groonga.rubyforge.org/",
+                      "The Ruby bindings for groonga",
+                      "<html><body>rroonga</body></html>")
+
     @bookmark_records[:cutter] =
       create_bookmark(@user_records[:gunyarakun],
                       "http://cutter.sourceforge.net/",
