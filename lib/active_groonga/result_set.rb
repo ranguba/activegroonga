@@ -40,7 +40,7 @@ module ActiveGroonga
     #     key is an array of sort key column name and order.
     #   @option options [Integer] :size The page size.
     #     {Base.limit} is used as the default value.
-    #   @option options [Integer] :page The current page.
+    #   @option options [Integer] :page The target page.
     #     The page is 1 origin not 0 origin. 1 is used as
     #     the default value.
     #   @return [ResultSet] paginated result set.
@@ -49,7 +49,7 @@ module ActiveGroonga
     #     result_set = User.all
     #     # Paginates by sorting by "name" column value in
     #     # ascending order. The paginated result set has
-    #     # less than or equal 10 records. And the current
+    #     # less than or equal 10 records. And the returned
     #     # page is user requested page. If user doesn't
     #     # specify page, the first page is returned.
     #     result_set.paginate([["name", :ascending]],
@@ -59,7 +59,7 @@ module ActiveGroonga
     # @overload paginate(options={})
     #   @option options [Integer] :size The page size.
     #     {Base.limit} is used as the default value.
-    #   @option options [Integer] :page The current page.
+    #   @option options [Integer] :page The target page.
     #     1 is used as the default value.
     #   @return [ResultSet] paginated result set.
     #
@@ -70,7 +70,7 @@ module ActiveGroonga
     #     # Paginates by sorting by "name" column value in
     #     # ascending order because it is the default sort
     #     # keys. The paginated result set has
-    #     # less than or equal 10 records. And the current
+    #     # less than or equal 10 records. And the returned
     #     # page is user requested page. If user doesn't
     #     # specify page, the first page is returned.
     #     result_set.paginate(:size => 10,
