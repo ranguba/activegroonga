@@ -60,6 +60,8 @@ Jeweler::Tasks.new do |_spec|
   spec.summary, spec.description, = description.split(/\n\n+/, 3)
   spec.license = "LGPLv2"
   spec.files = FileList["{lib,test}/**/*.rb",
+                        "lib/**/railties/**/*.rake",
+                        "lib/**/locale/**/*.yml",
                         "Rakefile",
                         "README.textile",
                         "doc/text/**/*"]
