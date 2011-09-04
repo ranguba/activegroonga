@@ -52,7 +52,7 @@ Jeweler::Tasks.new do |_spec|
   spec.name = "activegroonga"
   spec.version = version
   spec.rubyforge_project = "groonga"
-  spec.homepage = "http://groonga.rubyforge.org/activegroonga/"
+  spec.homepage = "http://groonga.rubyforge.org/"
   spec.authors = ["Kouhei Sutou"]
   spec.email = ["kou@clear-code.com"]
   entries = File.read("README.textile").split(/^h2\.\s(.*)$/)
