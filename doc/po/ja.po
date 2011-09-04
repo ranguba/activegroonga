@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ActiveGroonga 1.0.5\n"
-"POT-Creation-Date: 2011-09-04 23:48+0900\n"
-"PO-Revision-Date: 2011-09-04 23:56+0900\n"
+"POT-Creation-Date: 2011-09-05 00:03+0900\n"
+"PO-Revision-Date: 2011-09-05 00:03+0900\n"
 "Last-Translator: Kouhei Sutou <kou@claer-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -731,48 +731,90 @@ msgid "NEWS"
 msgstr "お知らせ"
 
 #: doc/reference/en/file.news.html:58(h2)
-msgid "1.0.4: 2011-04-01"
+msgid "1.0.5: 2011-05-01"
 msgstr ""
 
 #: doc/reference/en/file.news.html:59(h3)
-#: doc/reference/en/file.news.html:64(h3)
-#: doc/reference/en/file.news.html:69(h3)
+#: doc/reference/en/file.news.html:72(h3)
+#: doc/reference/en/file.news.html:77(h3)
+#: doc/reference/en/file.news.html:82(h3)
 msgid "Improvements"
 msgstr "改良"
 
 #: doc/reference/en/file.news.html:61(li)
+msgid "Supported Rails 3.1.0."
+msgstr "Rails 3.1.0対応。"
+
+#: doc/reference/en/file.news.html:62(li)
+msgid "groonga:seed showes seed candidate files on not found."
+msgstr "groonga:seedがseedファイルが見つからなかった場合はseedファイルを置いて欲しいパスを表示するようになった。"
+
+#: doc/reference/en/file.news.html:63(span)
+msgid "YARD"
+msgstr ""
+
+#: doc/reference/en/file.news.html:63(li)
+msgid "Used <placeholder-1/>."
+msgstr "<placeholder-1/>を使った。"
+
+#: doc/reference/en/file.news.html:64(a)
+msgid "ActiveGroonga::Base.sort_keys"
+msgstr ""
+
+#: doc/reference/en/file.news.html:64(li)
+#: doc/reference/en/file.news.html:65(li)
+msgid "Added <span class=\"object_link\"><placeholder-1/></span>."
+msgstr "<span class=\"object_link\"><placeholder-1/></span>を追加。"
+
+#: doc/reference/en/file.news.html:65(a)
+msgid "ActiveGroonga::Base.limit"
+msgstr ""
+
+#: doc/reference/en/file.news.html:67(h3)
+msgid "Fixes"
+msgstr "修正。"
+
+#: doc/reference/en/file.news.html:69(li)
+msgid "Fixed groonga:seed dependency."
+msgstr "groonga:seedの依存関係を修正。"
+
+#: doc/reference/en/file.news.html:71(h2)
+msgid "1.0.4: 2011-04-01"
+msgstr ""
+
+#: doc/reference/en/file.news.html:74(li)
 msgid "Supported Kaminari. (View interface only)"
 msgstr "Kaminari対応。（Viewのみ）"
 
-#: doc/reference/en/file.news.html:63(h2)
+#: doc/reference/en/file.news.html:76(h2)
 msgid "1.0.3: 2010-12-25"
 msgstr ""
 
-#: doc/reference/en/file.news.html:66(li)
+#: doc/reference/en/file.news.html:79(li)
 msgid "Supported score."
 msgstr "score対応。"
 
-#: doc/reference/en/file.news.html:68(h2)
+#: doc/reference/en/file.news.html:81(h2)
 msgid "1.0.1: 2010-11-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:71(li)
+#: doc/reference/en/file.news.html:84(li)
 msgid "generator: Supported table type customize."
 msgstr "ジェネレータ: テーブルの種類の指定に対応。"
 
-#: doc/reference/en/file.news.html:72(li)
+#: doc/reference/en/file.news.html:85(li)
 msgid "Added ActiveGroonga::Base.exists?."
 msgstr "ActiveGroonga::Base.exists?を追加。"
 
-#: doc/reference/en/file.news.html:73(li)
+#: doc/reference/en/file.news.html:86(li)
 msgid "Added ActiveGroonga::Base.all."
 msgstr "ActiveGroonga::Base.allを追加。"
 
-#: doc/reference/en/file.news.html:75(h3)
+#: doc/reference/en/file.news.html:88(h3)
 msgid "Changes"
 msgstr "変更"
 
-#: doc/reference/en/file.news.html:77(li)
+#: doc/reference/en/file.news.html:90(li)
 msgid ""
 "Changed to use record key instead of record ID for record identifier for "
 "hash table and patricia trie."
@@ -780,43 +822,43 @@ msgstr ""
 "ハッシュテーブル・パトリシアトライを利用しているときはレコード識別子としてID"
 "ではなくキーを使うように変更。"
 
-#: doc/reference/en/file.news.html:80(h2)
+#: doc/reference/en/file.news.html:93(h2)
 msgid "1.0.0: 2010-11-29"
 msgstr ""
 
-#: doc/reference/en/file.news.html:82(li)
+#: doc/reference/en/file.news.html:95(li)
 msgid "Support Rails 3."
 msgstr "Rails 3対応。"
 
-#: doc/reference/en/file.news.html:84(h2)
+#: doc/reference/en/file.news.html:97(h2)
 msgid "0.0.7: 2009-10-02"
 msgstr ""
 
-#: doc/reference/en/file.news.html:86(li)
+#: doc/reference/en/file.news.html:99(li)
 msgid "Support Ruby/groonga 0.0.7."
 msgstr "Ruby/groonga 0.0.7対応。"
 
-#: doc/reference/en/file.news.html:88(h2)
+#: doc/reference/en/file.news.html:101(h2)
 msgid "0.0.6: 2009-07-31"
 msgstr ""
 
-#: doc/reference/en/file.news.html:90(li)
+#: doc/reference/en/file.news.html:103(li)
 msgid "Support Ruby/groonga 0.0.6."
 msgstr "Ruby/groonga 0.0.6対応。"
 
-#: doc/reference/en/file.news.html:92(h2)
+#: doc/reference/en/file.news.html:105(h2)
 msgid "0.0.2: 2009-06-05"
 msgstr ""
 
-#: doc/reference/en/file.news.html:94(li)
+#: doc/reference/en/file.news.html:107(li)
 msgid "Support Ruby/groonga 0.0.2."
 msgstr "Ruby/groonga 0.0.2対応。"
 
-#: doc/reference/en/file.news.html:96(h2)
+#: doc/reference/en/file.news.html:109(h2)
 msgid "0.0.1: 2009-04-30"
 msgstr ""
 
-#: doc/reference/en/file.news.html:98(li)
+#: doc/reference/en/file.news.html:111(li)
 msgid "Initial release!"
 msgstr "最初のリリース！"
 
@@ -10472,7 +10514,9 @@ msgstr ""
 msgid ""
 "The array of sort key for sort. Each sort key is an array of sort key column "
 "name and order."
-msgstr "ソート用のソートキーの配列。各ソートキーは配列で、中身はソートに使うカラムの名前と昇順か降順の指定。"
+msgstr ""
+"ソート用のソートキーの配列。各ソートキーは配列で、中身はソートに使うカラムの"
+"名前と昇順か降順の指定。"
 
 #: doc/reference/en/ActiveGroonga/ResultSet.html:900(p)
 #: doc/reference/en/ActiveGroonga/ResultSet.html:979(p)
@@ -10480,14 +10524,19 @@ msgid ""
 "The max number of records. <span class=\"object_link\"><placeholder-1/></"
 "span> is used as the default value. If <span class=\"object_link"
 "\"><placeholder-2/></span> is nil, all records are returned."
-msgstr "最大レコード数。デフォルト値として<span class=\"object_link\"><placeholder-1/></span>を使います。もし<span class=\"object_link\"><placeholder-2/></span>がnilなら、全てのレコードを返します。"
+msgstr ""
+"最大レコード数。デフォルト値として<span class=\"object_link\"><placeholder-1/"
+"></span>を使います。もし<span class=\"object_link\"><placeholder-2/></span>が"
+"nilなら、全てのレコードを返します。"
 
 #: doc/reference/en/ActiveGroonga/ResultSet.html:911(p)
 #: doc/reference/en/ActiveGroonga/ResultSet.html:990(p)
 msgid ""
 "The record start offset. Offset is 0-origin not 1-origin. The default value "
 "is 0."
-msgstr "何番目のレコードから返すか。オフセットは1基点ではなく0基点です。デフォルト値は0です。"
+msgstr ""
+"何番目のレコードから返すか。オフセットは1基点ではなく0基点です。デフォルト値"
+"は0です。"
 
 #: doc/reference/en/ActiveGroonga/ResultSet.html:930(p)
 #: doc/reference/en/ActiveGroonga/ResultSet.html:1009(p)

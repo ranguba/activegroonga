@@ -5,7 +5,7 @@ h2. 1.0.5: 2011-05-01
 h3. Improvements
 
 * Supported Rails 3.1.0.
-* groonga:seed showes seed candidates files.
+* groonga:seed showes seed candidate files on not found.
 * Used YARD.
 * Added {ActiveGroonga::Base.sort_keys}.
 * Added {ActiveGroonga::Base.limit}.
