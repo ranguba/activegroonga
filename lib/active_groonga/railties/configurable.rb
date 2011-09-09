@@ -1,4 +1,4 @@
-# Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,7 @@ module ActiveGroonga
   module Railties
     module Configurable
       def groonga_configurations
-        groonga_yml = paths.config.groonga.first
+        groonga_yml = paths["config/groonga"].first
         unless File.exist?(groonga_yml)
           groonga_yml_example = "#{groonga_yml}.example"
           if File.exist?(groonga_yml_example)
