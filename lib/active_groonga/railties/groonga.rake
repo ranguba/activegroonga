@@ -168,4 +168,15 @@ namespace :groonga do
   end
 end
 
-task "test:prepare" => "groonga:test:prepare"
+case Rails.configuration.generators.options[:rails][:test_framework]
+when :rspec
+  rspec_task_names = ["spec"]
+  rspec_sub_task_names = [:requests, :models, :controllers, :views, :helpers,
+                          :mailers, :lib, :routing, :rcov]
+  rspec_task_names += rspec_sub_task_names.collect {|name| "spec:#{name}"}
+  rspec_task_names.each do |task_name|
+    task task_name => "groonga:test:prepare"
+  end
+else
+  task "test:prepare" => "groonga:test:prepare"
+end
