@@ -159,7 +159,7 @@ module ActiveGroonga
 
     # Returns whether this result set has records or not.
     #
-    # @return [true, false] true if the result set has one
+    # @return [Boolean] true if the result set has one
     #    or more records, false otherwise.
     def empty?
       records.empty?
