@@ -157,6 +157,14 @@ module ActiveGroonga
       end
     end
 
+    # Returns whether this result set has records or not.
+    #
+    # @return [true, false] true if the result set has one
+    #    or more records, false otherwise.
+    def empty?
+      records.empty?
+    end
+
     private
     def instantiate(record)
       resolved_record = record

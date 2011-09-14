@@ -140,4 +140,18 @@ class TestResultSet < Test::Unit::TestCase
                    bookmarks.sort(["user"], :limit => 1).collect(&:user))
     end
   end
+
+  class TestEmpty < self
+    def test_have_records
+      all_bookmarks = Bookmark.all
+      assert_not_predicate(all_bookmarks, :empty?)
+    end
+
+    def test_not_have_records
+      no_bookmarks = Bookmark.select do |bookmark|
+        bookmark.uri == "http://example.com/"
+      end
+      assert_predicate(no_bookmarks, :empty?)
+    end
+  end
 end
