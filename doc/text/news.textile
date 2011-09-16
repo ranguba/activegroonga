@@ -1,6 +1,19 @@
 h1. NEWS
 
-h2. 1.0.5: 2011-05-01
+h2. 1.0.6: 2011-09-16
+
+h3. Improvements
+
+* supported rspec-rails.
+* added {ActiveGroonga::ResultSet#empty?}.
+
+h3. Fixes
+
+* suppressed warnings on Rails 3.1.0.
+
+h1. NEWS
+
+h2. 1.0.5: 2011-09-04
 
 h3. Improvements
 
