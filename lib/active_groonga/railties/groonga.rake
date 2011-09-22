@@ -158,13 +158,16 @@ namespace :groonga do
   task :reset => [:drop, :setup]
 
   namespace :test do
-    desc "Prepare groonga database for testing"
-    task :prepare do
-      ActiveGroonga::Base.configure("test")
-      Rake::Task["groonga:drop"].invoke
-      Rake::Task["groonga:create"].invoke
-      Rake::Task["groonga:schema:load"].invoke
+    desc "Set Rails.env = 'test'"
+    task :env do
+      Rails.env = "test"
     end
+
+    desc "Prepare groonga database for testing"
+    task :prepare => [:env,
+                      "groonga:drop",
+                      "groonga:create",
+                      "groonga:schema:load"]
   end
 end
 
