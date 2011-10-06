@@ -160,6 +160,7 @@ namespace :groonga do
   namespace :test do
     desc "Set Rails.env = 'test'"
     task :env do
+      ENV["RAILS_ENV"] = "test"
       Rails.env = "test"
     end
 
