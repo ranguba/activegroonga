@@ -1,5 +1,11 @@
 h1. NEWS
 
+h2(#1-0-7). 1.0.7: 2011-11-29
+
+h3. Improvements
+
+* Forced to set Rails.env = "test" on test.
+
 h2. 1.0.6: 2011-09-16
 
 h3. Improvements
