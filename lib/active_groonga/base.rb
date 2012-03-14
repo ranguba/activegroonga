@@ -22,7 +22,6 @@ module ActiveGroonga
     extend ActiveModel::Naming
     include ActiveModel::Conversion
     include ActiveModel::AttributeMethods
-    attribute_method_suffix ""
     attribute_method_suffix "="
 
     cattr_accessor :logger, :instance_writer => false
