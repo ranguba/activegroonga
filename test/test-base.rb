@@ -108,21 +108,21 @@ class TestBase < Test::Unit::TestCase
   end
 
   def test_inspect
-    assert_equal("Bookmark(user: users, uri: ShortText, " +
-                 "updated_at: Time, created_at: Time, " +
-                 "content: LongText, comment: Text)",
+    assert_equal("Bookmark(comment: Text, content: LongText, " +
+                 "created_at: Time, updated_at: Time, " +
+                 "uri: ShortText, user: users)",
                  Bookmark.inspect)
 
     daijiro = User.select {|record| record.name == "daijiro"}.first
     groonga = Bookmark.select {|record| record.uri == "http://groonga.org/"}.first
     assert_equal("#<Bookmark " +
                  "id: #{groonga.id}, " +
-                 "user: #{daijiro.inspect}, " +
-                 "uri: \"http://groonga.org/\", " +
-                 "updated_at: 2009-02-09 02:29:00 +0900, " +
-                 "created_at: 2009-02-09 02:09:29 +0900, " +
+                 "comment: \"fulltext search engine\", " +
                  "content: \"<html><body>groonga</body></html>\", " +
-                 "comment: \"fulltext search engine\">",
+                 "created_at: 2009-02-09 02:09:29 +0900, " +
+                 "updated_at: 2009-02-09 02:29:00 +0900, " +
+                 "uri: \"http://groonga.org/\", " +
+                 "user: #{daijiro.inspect}>",
                  groonga.inspect)
   end
 
