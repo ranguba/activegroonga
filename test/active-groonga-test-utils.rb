@@ -236,6 +236,7 @@ module ActiveGroongaTestUtils
   end
 
   def teardown_sand_box
+    @database.close
     teardown_tmp_directory
   end
 
