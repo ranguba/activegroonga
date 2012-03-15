@@ -187,7 +187,7 @@ module ActiveGroonga
 
       def inspect
         return super if table.nil?
-        columns_info = table.columns.collect do |column|
+        columns_info = table.columns.sort{|x, y| x.local_name <=> y.local_name}.collect do |column|
           "#{column.local_name}: #{column.range.name}"
         end
         "#{name}(#{columns_info.join(', ')})"
