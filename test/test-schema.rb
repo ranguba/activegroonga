@@ -18,24 +18,22 @@ class TestSchema < Test::Unit::TestCase
   include ActiveGroongaTestUtils
 
   def test_create_table
-    table_file = @tables_dir + "posts"
-    assert_not_predicate(table_file, :exist?)
+    assert_nil(@context["posts"])
     ActiveGroonga::Schema.define do |schema|
       schema.create_table(:posts) do |table|
       end
     end
-    assert_predicate(table_file, :exist?)
+    assert_not_nil(@context["posts"])
   end
 
   def test_string_column
-    column_file = @tables_dir + "posts.columns" + "title"
-    assert_not_predicate(column_file, :exist?)
+    assert_nil(@context["posts.title"])
     ActiveGroonga::Schema.define do |schema|
       schema.create_table(:posts) do |table|
         table.string :title
       end
     end
-    assert_predicate(column_file, :exist?)
+    assert_not_nil(@context["posts.title"])
   end
 
   def test_reference_column
@@ -45,20 +43,17 @@ class TestSchema < Test::Unit::TestCase
       end
     end
 
-    column_file = @tables_dir + "posts.columns" + "category"
-    assert_not_predicate(column_file, :exist?)
+    assert_nil(@context["posts.category"])
     ActiveGroonga::Schema.define do |schema|
       schema.create_table(:posts) do |table|
         table.reference(:category)
       end
     end
-    assert_predicate(column_file, :exist?)
+    assert_not_nil(@context["posts.category"])
   end
 
   def test_add_index
-    columns_dir = @tables_dir + "words.columns"
-    index_file = columns_dir + "posts_content"
-    assert_not_predicate(index_file, :exist?)
+    assert_nil(@context["words.posts_content"])
 
     ActiveGroonga::Schema.define do |schema|
       schema.create_table(:posts) do |table|
@@ -70,23 +65,22 @@ class TestSchema < Test::Unit::TestCase
       end
     end
 
-    assert_predicate(index_file, :exist?)
+    assert_not_nil(@context["words.posts_content"])
   end
 
   def test_remove_column
-    column_file = @tables_dir + "posts.columns" + "title"
-    assert_not_predicate(column_file, :exist?)
+    assert_nil(@context["posts.title"])
     ActiveGroonga::Schema.define do |schema|
       schema.create_table(:posts) do |table|
         table.string(:title)
       end
     end
-    assert_predicate(column_file, :exist?)
+    assert_not_nil(@context["posts.title"])
 
     ActiveGroonga::Schema.define do |schema|
       schema.remove_column(:posts, :title)
     end
-    assert_not_predicate(column_file, :exist?)
+    assert_nil(@context["posts.title"])
   end
 
   def test_dump
