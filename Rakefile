@@ -63,6 +63,7 @@ Jeweler::Tasks.new do |_spec|
                         "lib/**/railties/**/*.rake",
                         "lib/**/locale/**/*.yml",
                         "Rakefile",
+                        ".yardopts",
                         "README.textile",
                         "doc/text/**/*"]
 end
