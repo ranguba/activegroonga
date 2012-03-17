@@ -77,10 +77,6 @@ Gem::PackageTask.new(spec) do |pkg|
 end
 
 Packnga::DocumentTask.new(spec) do |task|
-  task.yard do |yard_task|
-    yard_task.options += ["--exclude", "/templates/"]
-    yard_task.options += ["--markup", "textile"]
-  end
   task.reference do |reference_task|
     # reference_task.mode = "xhtml"
   end
