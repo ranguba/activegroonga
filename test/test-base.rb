@@ -119,8 +119,8 @@ class TestBase < Test::Unit::TestCase
                  "id: #{groonga.id}, " +
                  "comment: \"fulltext search engine\", " +
                  "content: \"<html><body>groonga</body></html>\", " +
-                 "created_at: #{daijiro.created_at.inspect}, " +
-                 "updated_at: #{daijiro.updated_at.inspect}, " +
+                 "created_at: #{groonga.created_at.inspect}, " +
+                 "updated_at: #{groonga.updated_at.inspect}, " +
                  "uri: \"http://groonga.org/\", " +
                  "user: #{daijiro.inspect}>",
                  groonga.inspect)
