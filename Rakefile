@@ -19,7 +19,7 @@ require 'English'
 
 require 'pathname'
 require 'rubygems'
-require "jeweler"
+require "bundler/gem_helper"
 require "packnga"
 
 base_dir = Pathname.new(__FILE__).dirname.expand_path
@@ -31,45 +31,9 @@ $LOAD_PATH.unshift(rroonga_ext_dir.to_s)
 $LOAD_PATH.unshift(rroonga_lib_dir.to_s)
 ENV["RUBYLIB"] = "#{rroonga_lib_dir}:#{rroonga_ext_dir}:#{ENV['RUBYLIB']}"
 
-active_groonga_lib_dir = base_dir + "lib"
-$LOAD_PATH.unshift(active_groonga_lib_dir.to_s)
-
-def guess_version
-  require 'active_groonga/version'
-  ActiveGroonga::VERSION::STRING
-end
-
-def cleanup_white_space(entry)
-  entry.gsub(/(\A\n+|\n+\z)/, '') + "\n"
-end
-
-ENV["VERSION"] ||= guess_version
-version = ENV["VERSION"].dup
-spec = nil
-Jeweler::Tasks.new do |_spec|
-  spec = _spec
-  spec.name = "activegroonga"
-  spec.version = version
-  spec.rubyforge_project = "groonga"
-  spec.homepage = "http://groonga.rubyforge.org/"
-  spec.authors = ["Kouhei Sutou"]
-  spec.email = ["kou@clear-code.com"]
-  entries = File.read("README.textile").split(/^h2\.\s(.*)$/)
-  description = cleanup_white_space(entries[entries.index("Description") + 1])
-  spec.summary, spec.description, = description.split(/\n\n+/, 3)
-  spec.license = "LGPLv2"
-  spec.files = FileList["{lib,test}/**/*.rb",
-                        "lib/**/railties/**/*.rake",
-                        "lib/**/locale/**/*.yml",
-                        "Rakefile",
-                        ".yardopts",
-                        "README.textile",
-                        "doc/text/**/*"]
-end
-
-Rake::Task["release"].prerequisites.clear
-Jeweler::RubygemsDotOrgTasks.new do
-end
+helper = Bundler::GemHelper.new(base_dir)
+helper.install
+spec = helper.gemspec
 
 Packnga::DocumentTask.new(spec) do |task|
   task.reference do |reference_task|

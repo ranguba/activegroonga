@@ -17,13 +17,4 @@
 
 source "http://rubygems.org/"
 
-gem "rroonga"
-gem "activemodel", ">= 3.1.0"
-
-group :development, :test do
-  gem "test-unit"
-  gem "test-unit-notify"
-  gem "jeweler"
-  gem "packnga", ">= 0.9.2"
-  gem "RedCloth"
-end
+gemfile
