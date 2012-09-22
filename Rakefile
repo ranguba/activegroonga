@@ -1,6 +1,6 @@
 # -*- coding: utf-8; mode: ruby -*-
 #
-# Copyright (C) 2009-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2012  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,7 +19,6 @@ require 'English'
 
 require 'pathname'
 require 'rubygems'
-require 'rubygems/package_task'
 require "jeweler"
 require "packnga"
 
@@ -70,10 +69,6 @@ end
 
 Rake::Task["release"].prerequisites.clear
 Jeweler::RubygemsDotOrgTasks.new do
-end
-
-Gem::PackageTask.new(spec) do |pkg|
-  pkg.need_tar_gz = true
 end
 
 Packnga::DocumentTask.new(spec) do |task|
