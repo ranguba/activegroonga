@@ -351,7 +351,10 @@ module ActiveGroonga
       else
         inspected_attributes << "id: #{id}"
       end
-      @attributes.each do |key, value|
+      sorted_attributes = @attributes.sort_by do |key, _|
+        key
+      end
+      sorted_attributes.each do |key, value|
         inspected_attributes << "#{key}: #{value.inspect}"
       end
       "\#<#{self.class.name} #{inspected_attributes.join(', ')}>"
