@@ -32,6 +32,10 @@ $LOAD_PATH.unshift(rroonga_lib_dir.to_s)
 ENV["RUBYLIB"] = [rroonga_lib_dir, rroonga_ext_dir, ENV["RUBYLIB"]].join(":")
 
 helper = Bundler::GemHelper.new(base_dir)
+def helper.version_tag
+  version
+end
+
 helper.install
 spec = helper.gemspec
 
