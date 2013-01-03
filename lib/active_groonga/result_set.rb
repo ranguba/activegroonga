@@ -170,7 +170,11 @@ module ActiveGroonga
       resolved_record = record
       @n_key_nested.times do
         return nil if resolved_record.nil?
-        resolved_record = resolved_record.key
+        if resolved_record.table.is_a?(Groonga::Array)
+          resolved_record = resolved_record.value
+        else
+          resolved_record = resolved_record.key
+        end
       end
       return nil if resolved_record.nil?
       while resolved_record.key.is_a?(Groonga::Record)
