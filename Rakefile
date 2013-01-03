@@ -36,9 +36,8 @@ helper.install
 spec = helper.gemspec
 
 Packnga::DocumentTask.new(spec) do |task|
-  task.reference do |reference_task|
-    # reference_task.mode = "xhtml"
-  end
+  task.original_language = "en"
+  task.translate_languages = ["ja"]
 end
 
 Packnga::ReleaseTask.new(spec) do |task|
