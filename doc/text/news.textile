@@ -1,5 +1,26 @@
 h1. NEWS
 
+h2(#2-1-1). 2.1.1: 2013-01-03
+
+h3. Improvements
+
+* Required rroogna 2.1.1 or later.
+* [GitHub#4] Sorted columns in inspect. [Patch by SHIMADA Koji]
+* [GitHub#5] Added missing YARD related configurations. [Patch by SHIMADA Koji]
+* [GitHub#7] Migrated to Bundler from Jeweler. [Suggested by YasuOza]
+
+h3. Fixes
+
+* [GitHub#1] Suppressed warnings on Rails 3.2.0. [Patch by SHIMADA Koji]
+* [GitHub#2] Fixed test script path. [Patch by SHIMADA Koji]
+* [GitHub#3] Added missing database close on test. [Patch by SHIMADA Koji]
+* [GitHub#6] FIxed wrong assertions in test. [Patch by SHIMADA Koji]
+
+h3. Thanks
+
+* SHIMADA Koji
+* YasuOza
+
 h2(#1-0-7). 1.0.7: 2011-11-29
 
 h3. Improvements
