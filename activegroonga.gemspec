@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.test_files += Dir.glob("test/**/*.rb")
 
   spec.add_runtime_dependency("rroonga", ">= 2.1.1")
-  spec.add_runtime_dependency("activemodel", ">= 3.1.0")
+  spec.add_runtime_dependency("activemodel", ">= 3.2.10")
   spec.add_development_dependency("test-unit")
   spec.add_development_dependency("test-unit-notify")
   spec.add_development_dependency("rake")
