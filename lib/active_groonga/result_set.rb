@@ -238,9 +238,13 @@ module ActiveGroonga
         end
       end
 
-      # For kaminari.
-      alias_method :num_pages, :n_pages
+      # For Kaminari.
       alias_method :limit_value, :page_size
+      ## For Kaminari >= 0.14.0.
+      alias_method :total_pages, :n_pages
+      ## For Kaminari < 0.14.0.
+      ## TODO: Remove me when old Kaminari support is dropped.
+      alias_method :num_pages, :n_pages
     end
   end
 end
