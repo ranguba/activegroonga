@@ -1,5 +1,17 @@
 h1. NEWS
 
+h2(#2-1-2). 2.1.2: 2013-01-04
+
+h3. Improvements
+
+* Required activemodel 3.2.10 or later.
+* Required rroonga 2.1.2 or later.
+* Supported Kaminari 0.14.0 or later.
+
+h3. Thanks
+
+* Kazuhiro Yoshida
+
 h2(#2-1-1). 2.1.1: 2013-01-03
 
 h3. Improvements
