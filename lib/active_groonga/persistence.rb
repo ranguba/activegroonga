@@ -95,7 +95,7 @@ module ActiveGroonga
         next if value.nil?
         if value.is_a?(Base)
           value.save if value.new_record?
-          value = value.id
+          value = value.record_id
         end
         attributes[key] = value
       end

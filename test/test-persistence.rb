@@ -38,6 +38,25 @@ class TestPersistence < Test::Unit::TestCase
       assert_equal(["http://groonga.org/", "groonga"],
                    [found_groonga.key, found_groonga.title])
     end
+
+    class TestReference < self
+      def test_have_key
+        groonga = Site.create(:key => "http://groonga.org/",
+                              :title => "groonga")
+        doc = Page.create(:key => "http://groonga.org/doc/",
+                          :site => groonga)
+        found_doc = Page.find("http://groonga.org/doc/")
+        assert_equal(groonga.key, found_doc.site.key)
+      end
+
+      def test_no_key
+        daijiro = @user_records[:daijiro]
+        groonga = Bookmark.create(:uri => "http://groonga.org/",
+                                  :user => daijiro)
+        found_groonga = Bookmark.find(groonga.id)
+        assert_equal(daijiro.id, found_groonga.user.id)
+      end
+    end
   end
 
   def test_update

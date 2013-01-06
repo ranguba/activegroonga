@@ -96,6 +96,12 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
       table.short_text("uri")
     end
 
+    create_table("pages",
+                 :type => :hash,
+                 :key_type => "ShortText",
+                 :force => true) do |table|
+    end
+
     create_table("sites",
                  :type => :hash,
                  :key_type => "ShortText",
@@ -123,6 +129,10 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
 
     change_table("bookmarks") do |table|
       table.reference("user", "users")
+    end
+
+    change_table("pages") do |table|
+      table.reference("site", "sites")
     end
 
     change_table("terms") do |table|
