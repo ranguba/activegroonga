@@ -1,5 +1,16 @@
 h1. NEWS
 
+h2(#2-1-3). 2.1.3: 2013-01-06
+
+h3. Improvements
+
+* [GitHub#8] Supported reference column to key support tables such as
+  hash table. [Reported by Kenta Sato]
+
+h3. Thanks
+
+* Kenta Sato
+
 h2(#2-1-2). 2.1.2: 2013-01-04
 
 h3. Improvements
