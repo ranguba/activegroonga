@@ -447,7 +447,7 @@ msgstr ""
 msgid "That's all there is to it!"
 msgstr ""
 
-#: ./doc/text/news.textile:1 ./doc/text/news.textile:64
+#: ./doc/text/news.textile:1
 msgid "h1. NEWS"
 msgstr ""
 
@@ -457,9 +457,9 @@ msgstr ""
 
 #: ./doc/text/news.textile:5 ./doc/text/news.textile:16
 #: ./doc/text/news.textile:28 ./doc/text/news.textile:49
-#: ./doc/text/news.textile:55 ./doc/text/news.textile:68
-#: ./doc/text/news.textile:82 ./doc/text/news.textile:88
-#: ./doc/text/news.textile:94
+#: ./doc/text/news.textile:55 ./doc/text/news.textile:66
+#: ./doc/text/news.textile:80 ./doc/text/news.textile:86
+#: ./doc/text/news.textile:92
 msgid "h3. Improvements"
 msgstr "h3. 改良"
 
@@ -504,7 +504,7 @@ msgstr ""
 "* [GitHub#7] JewelerからBundlerに移行した。[Yasuharu Ozakiさんが提案]"
 
 #: ./doc/text/news.textile:35 ./doc/text/news.textile:60
-#: ./doc/text/news.textile:76
+#: ./doc/text/news.textile:74
 msgid "h3. Fixes"
 msgstr "h3. 修正"
 
@@ -544,11 +544,11 @@ msgstr ""
 msgid "* suppressed warnings on Rails 3.1.0."
 msgstr "* Rails3.1.0使用時、 {Railties::Configurable#groonga_configurations} 実行時に起きる警告が出ないように対応した。"
 
-#: ./doc/text/news.textile:66
+#: ./doc/text/news.textile:64
 msgid "h2. 1.0.5: 2011-09-04"
 msgstr ""
 
-#: ./doc/text/news.textile:70
+#: ./doc/text/news.textile:68
 msgid "* Supported Rails 3.1.0.\n* groonga:seed showes seed candidate files on not found.\n* Used YARD.\n* Added {ActiveGroonga::Base.sort_keys}.\n* Added {ActiveGroonga::Base.limit}."
 msgstr ""
 "* Rails 3.1.0対応。\n"
@@ -557,79 +557,79 @@ msgstr ""
 "* ActiveGroonga::Base.sort_keysを追加。\n"
 "* ActiveGroonga::Base.limitを追加。"
 
-#: ./doc/text/news.textile:78
+#: ./doc/text/news.textile:76
 msgid "* Fixed groonga:seed dependency."
 msgstr "* groonga:seedの依存関係を修正。"
 
-#: ./doc/text/news.textile:80
+#: ./doc/text/news.textile:78
 msgid "h2. 1.0.4: 2011-04-01"
 msgstr ""
 
-#: ./doc/text/news.textile:84
+#: ./doc/text/news.textile:82
 msgid "* Supported Kaminari. (View interface only)"
 msgstr "* Kaminari対応。（Viewのみ）"
 
-#: ./doc/text/news.textile:86
+#: ./doc/text/news.textile:84
 msgid "h2. 1.0.3: 2010-12-25"
 msgstr ""
 
-#: ./doc/text/news.textile:90
+#: ./doc/text/news.textile:88
 msgid "* Supported score."
 msgstr "* score対応。"
 
-#: ./doc/text/news.textile:92
+#: ./doc/text/news.textile:90
 msgid "h2. 1.0.1: 2010-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:96
+#: ./doc/text/news.textile:94
 msgid "* generator: Supported table type customize.\n* Added ActiveGroonga::Base.exists?.\n* Added ActiveGroonga::Base.all."
 msgstr ""
 
-#: ./doc/text/news.textile:100
+#: ./doc/text/news.textile:98
 msgid "h3. Changes"
 msgstr "h3. 変更"
 
-#: ./doc/text/news.textile:102
+#: ./doc/text/news.textile:100
 msgid "* Changed to use record key instead of record ID for record\n  identifier for hash table and patricia trie."
 msgstr "* ハッシュテーブル・パトリシアトライを利用しているときはレコード識別子としてIDではなくキーを使うように変更。"
 
-#: ./doc/text/news.textile:105
+#: ./doc/text/news.textile:103
 msgid "h2. 1.0.0: 2010-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:107
+#: ./doc/text/news.textile:105
 msgid "* Support Rails 3."
 msgstr "* Rails 3対応。"
 
-#: ./doc/text/news.textile:109
+#: ./doc/text/news.textile:107
 msgid "h2. 0.0.7: 2009-10-02"
 msgstr ""
 
-#: ./doc/text/news.textile:111
+#: ./doc/text/news.textile:109
 msgid "* Support Ruby/groonga 0.0.7."
 msgstr "* Ruby/groonga 0.0.7対応。"
 
-#: ./doc/text/news.textile:113
+#: ./doc/text/news.textile:111
 msgid "h2. 0.0.6: 2009-07-31"
 msgstr ""
 
-#: ./doc/text/news.textile:115
+#: ./doc/text/news.textile:113
 msgid "* Support Ruby/groonga 0.0.6."
 msgstr "* Ruby/groonga 0.0.6対応。"
 
-#: ./doc/text/news.textile:117
+#: ./doc/text/news.textile:115
 msgid "h2. 0.0.2: 2009-06-05"
 msgstr ""
 
-#: ./doc/text/news.textile:119
+#: ./doc/text/news.textile:117
 msgid "* Support Ruby/groonga 0.0.2."
 msgstr "* Ruby/groonga 0.0.2対応。"
 
-#: ./doc/text/news.textile:121
+#: ./doc/text/news.textile:119
 msgid "h2. 0.0.1: 2009-04-30"
 msgstr ""
 
-#: ./doc/text/news.textile:123
+#: ./doc/text/news.textile:121
 msgid "* Initial release!"
 msgstr "* 最初のリリース！"
 
