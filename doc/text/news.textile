@@ -61,8 +61,6 @@ h3. Fixes
 
 * suppressed warnings on Rails 3.1.0.
 
-h1. NEWS
-
 h2. 1.0.5: 2011-09-04
 
 h3. Improvements
