@@ -52,4 +52,8 @@ h2. Mailing list
 
 h2. Thanks
 
+* SHIMADA Koji
+* YasuOza
+* Kazuhiro Yoshida
+* Kenta Sato
 * ...
