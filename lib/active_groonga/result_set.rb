@@ -181,7 +181,7 @@ module ActiveGroonga
         resolved_record = resolved_record.key
       end
       instance = @klass.instantiate(resolved_record)
-      instance.score = record.score if record.support_sub_records?
+      instance.score = record.score
       instance
     end
 
