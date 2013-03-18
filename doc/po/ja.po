@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ActiveGroonga 1.0.5\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-01-09 11:39+0900\n"
+"PO-Revision-Date: 2013-03-18 22:00+0900\n"
 "Last-Translator: Kouhei Sutou <kou@claer-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -895,7 +895,7 @@ msgstr "h3. 修正"
 
 #: ./doc/text/news.textile:7
 msgid "* Fixed a bug that sorted records don't have score."
-msgstr ""
+msgstr "* ソートしたレコードにスコアが設定されていない問題を修正。"
 
 #: ./doc/text/news.textile:9
 msgid "h2(#2-1-3). 2.1.3: 2013-01-06"
