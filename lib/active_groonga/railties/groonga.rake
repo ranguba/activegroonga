@@ -16,7 +16,10 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace :groonga do
-  task :load_config => :rails_env do
+  task :load_config do
+    if Rake::Task.task_defined?("rails_env")
+      Rake::Task["rails_env"].invoke
+    end
     require "active_groonga"
     configurations = Rails.application.config.groonga_configurations
     ActiveGroonga::Base.configurations = configurations
