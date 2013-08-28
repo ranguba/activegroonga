@@ -1,6 +1,6 @@
 # -*- mode: ruby; coding: utf-8 -*-
 #
-# Copyright (C) 2012  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2012-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -46,7 +46,7 @@ Gem::Specification.new do |spec|
   spec.test_files += Dir.glob("test/**/*.rb")
 
   spec.add_runtime_dependency("rroonga", ">= 2.1.2")
-  spec.add_runtime_dependency("activemodel", ">= 3.2.10")
+  spec.add_runtime_dependency("activemodel", ">= 4.0.0")
   spec.add_development_dependency("test-unit")
   spec.add_development_dependency("test-unit-notify")
   spec.add_development_dependency("rake")

@@ -1,6 +1,6 @@
 # -*- ruby -*-
 #
-# Copyright (C) 2010-2011  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 namespace :groonga do
-  task :load_config => :rails_env do
+  task :load_config do
     require "active_groonga"
     configurations = Rails.application.config.groonga_configurations
     ActiveGroonga::Base.configurations = configurations
