@@ -1,6 +1,6 @@
 notifications:
   recipients:
-    - groonga-commit@rubyforge.org
+    - groonga-ci-notify@rubyforge.org
 rvm:
   - 1.9.3
   - 2.0.0
