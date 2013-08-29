@@ -11,80 +11,80 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ./README.textile:1
+#: ../../README.textile:1
 msgid "h1. README"
 msgstr "h1. はじめに"
 
-#: ./README.textile:3
+#: ../../README.textile:3
 msgid "h2. Name"
 msgstr "h2. 名前"
 
-#: ./README.textile:5
+#: ../../README.textile:5
 msgid "ActiveGroonga"
 msgstr ""
 
-#: ./README.textile:7
+#: ../../README.textile:7
 msgid "h2. Description"
 msgstr "h2. 説明"
 
-#: ./README.textile:9
+#: ../../README.textile:9
 msgid "A library to use groonga with ActiveRecord like API."
 msgstr "ActiveRecord風のAPIを使ってgroongaを使うためのライブラリです。"
 
-#: ./README.textile:11
+#: ../../README.textile:11
 msgid ""
 "groonga provides both of full text search and column store\n"
 "features. ActiveGroonga + groonga can be used as an\n"
 "alternative of ActiveRecord + RDB."
 msgstr "groongaは全文検索機能とカラムストアの機能を提供しています。ActiveRecordとRDBの組み合わせの代わりに、ActiveGroongaとgroongaの組み合わせを使うことができます。"
 
-#: ./README.textile:15
+#: ../../README.textile:15
 msgid ""
 "ActiveGroonga is based on rroonga. See the following URLs\n"
 "about rroonga and groonga."
 msgstr "rroongaをベースとしています。rroongaとgroongaに関する情報は以下を参照して下さい。"
 
-#: ./README.textile:18
+#: ../../README.textile:18
 msgid ""
 "* \"rroonga\":http://groonga.rubyforge.org/\n"
 "* \"groonga\":http://groonga.org/"
 msgstr ""
 
-#: ./README.textile:21
+#: ../../README.textile:21
 msgid "h2. Authors"
 msgstr "h2. 作者"
 
-#: ./README.textile:23
+#: ../../README.textile:23
 msgid "* Kouhei Sutou <kou@clear-code.com>"
 msgstr ""
 
-#: ./README.textile:25
+#: ../../README.textile:25
 msgid "h2. License"
 msgstr "h2. ライセンス"
 
-#: ./README.textile:27
+#: ../../README.textile:27
 msgid "LGPL 2.1. See license/LGPL for details."
 msgstr "LGPL 2.1です。詳しくはlicense/LGPLを見てください。"
 
-#: ./README.textile:29
+#: ../../README.textile:29
 msgid ""
 "(Kouhei Sutou has a right to change license inclidng\n"
 "contributed patches.)"
 msgstr "（コントリビュートされたパッチなども含み、Kouhei Sutouがライセンスを変更する権利を持ちます。）"
 
-#: ./README.textile:32
+#: ../../README.textile:32
 msgid "h2. Dependencies"
 msgstr "h2. 依存ソフトウェア"
 
-#: ./README.textile:34
+#: ../../README.textile:34
 msgid "* rroonga"
 msgstr ""
 
-#: ./README.textile:36
+#: ../../README.textile:36
 msgid "h2. Install"
 msgstr "h2. インストール"
 
-#: ./README.textile:38
+#: ../../README.textile:38
 msgid ""
 "<pre>\n"
 "!!!command_line\n"
@@ -92,11 +92,11 @@ msgid ""
 "</pre>"
 msgstr ""
 
-#: ./README.textile:43
+#: ../../README.textile:43
 msgid "h2. Documents"
 msgstr "h2. ドキュメント"
 
-#: ./README.textile:45
+#: ../../README.textile:45
 msgid ""
 "* \"Reference manual in English\":http://groonga.rubyforge.org/rroonga/en/\n"
 "* \"Reference manual in Japanese\":http://groonga.rubyforge.org/rroonga/ja/"
@@ -104,11 +104,11 @@ msgstr ""
 "* \"英語\":http://groonga.rubyforge.org/rroonga/en/\n"
 "* \"日本語\":http://groonga.rubyforge.org/rroonga/ja/"
 
-#: ./README.textile:48
+#: ../../README.textile:48
 msgid "h2. Mailing list"
 msgstr "h2. メーリングリスト"
 
-#: ./README.textile:50
+#: ../../README.textile:50
 msgid ""
 "* English: \"groonga-users-en\":http://rubyforge.org/mailman/listinfo/groonga-users-en\n"
 "* Japanese: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
@@ -116,11 +116,11 @@ msgstr ""
 "* 英語: \"groonga-users-en\":http://rubyforge.org/mailman/listinfo/groonga-users-en\n"
 "* 日本語: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
 
-#: ./README.textile:53
+#: ../../README.textile:53
 msgid "h2. Thanks"
 msgstr "h2. 感謝"
 
-#: ./README.textile:55
+#: ../../README.textile:55
 msgid ""
 "* SHIMADA Koji\n"
 "* YasuOza\n"
@@ -129,13 +129,13 @@ msgid ""
 "* ..."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:1
+#: ../../doc/text/lgpl.txt:1
 msgid ""
 "		  GNU LESSER GENERAL PUBLIC LICENSE\n"
 "		       Version 2.1, February 1999"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:4
+#: ../../doc/text/lgpl.txt:4
 msgid ""
 " Copyright (C) 1991, 1999 Free Software Foundation, Inc.\n"
 "     59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
@@ -143,18 +143,18 @@ msgid ""
 " of this license document, but changing it is not allowed."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:9
+#: ../../doc/text/lgpl.txt:9
 msgid ""
 "[This is the first released version of the Lesser GPL.  It also counts\n"
 " as the successor of the GNU Library Public License, version 2, hence\n"
 " the version number 2.1.]"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:13
+#: ../../doc/text/lgpl.txt:13
 msgid "			    Preamble"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:15
+#: ../../doc/text/lgpl.txt:15
 msgid ""
 "  The licenses for most software are designed to take away your\n"
 "freedom to share and change it.  By contrast, the GNU General Public\n"
@@ -162,7 +162,7 @@ msgid ""
 "free software--to make sure the software is free for all its users."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:20
+#: ../../doc/text/lgpl.txt:20
 msgid ""
 "  This license, the Lesser General Public License, applies to some\n"
 "specially designated software packages--typically libraries--of the\n"
@@ -172,7 +172,7 @@ msgid ""
 "strategy to use in any particular case, based on the explanations below."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:27
+#: ../../doc/text/lgpl.txt:27
 msgid ""
 "  When we speak of free software, we are referring to freedom of use,\n"
 "not price.  Our General Public Licenses are designed to make sure that\n"
@@ -183,7 +183,7 @@ msgid ""
 "these things."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:35
+#: ../../doc/text/lgpl.txt:35
 msgid ""
 "  To protect your rights, we need to make restrictions that forbid\n"
 "distributors to deny you these rights or to ask you to surrender these\n"
@@ -191,7 +191,7 @@ msgid ""
 "you if you distribute copies of the library or if you modify it."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:40
+#: ../../doc/text/lgpl.txt:40
 msgid ""
 "  For example, if you distribute copies of the library, whether gratis\n"
 "or for a fee, you must give the recipients all the rights that we gave\n"
@@ -202,14 +202,14 @@ msgid ""
 "it.  And you must show them these terms so they know their rights."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:48
+#: ../../doc/text/lgpl.txt:48
 msgid ""
 "  We protect your rights with a two-step method: (1) we copyright the\n"
 "library, and (2) we offer you this license, which gives you legal\n"
 "permission to copy, distribute and/or modify the library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:52
+#: ../../doc/text/lgpl.txt:52
 msgid ""
 "  To protect each distributor, we want to make it very clear that\n"
 "there is no warranty for the free library.  Also, if the library is\n"
@@ -219,7 +219,7 @@ msgid ""
 "introduced by others."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:59
+#: ../../doc/text/lgpl.txt:59
 msgid ""
 "  Finally, software patents pose a constant threat to the existence of\n"
 "any free program.  We wish to make sure that a company cannot\n"
@@ -229,7 +229,7 @@ msgid ""
 "consistent with the full freedom of use specified in this license."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:66
+#: ../../doc/text/lgpl.txt:66
 msgid ""
 "  Most GNU software, including some libraries, is covered by the\n"
 "ordinary GNU General Public License.  This license, the GNU Lesser\n"
@@ -239,7 +239,7 @@ msgid ""
 "libraries into non-free programs."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:73
+#: ../../doc/text/lgpl.txt:73
 msgid ""
 "  When a program is linked with a library, whether statically or using\n"
 "a shared library, the combination of the two is legally speaking a\n"
@@ -250,7 +250,7 @@ msgid ""
 "the library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:81
+#: ../../doc/text/lgpl.txt:81
 msgid ""
 "  We call this license the \"Lesser\" General Public License because it\n"
 "does Less to protect the user's freedom than the ordinary General\n"
@@ -261,7 +261,7 @@ msgid ""
 "special circumstances."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:89
+#: ../../doc/text/lgpl.txt:89
 msgid ""
 "  For example, on rare occasions, there may be a special need to\n"
 "encourage the widest possible use of a certain library, so that it becomes\n"
@@ -272,7 +272,7 @@ msgid ""
 "software only, so we use the Lesser General Public License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:97
+#: ../../doc/text/lgpl.txt:97
 msgid ""
 "  In other cases, permission to use a particular library in non-free\n"
 "programs enables a greater number of people to use a large body of\n"
@@ -282,7 +282,7 @@ msgid ""
 "system."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:104
+#: ../../doc/text/lgpl.txt:104
 msgid ""
 "  Although the Lesser General Public License is Less protective of the\n"
 "users' freedom, it does ensure that the user of a program that is\n"
@@ -290,7 +290,7 @@ msgid ""
 "that program using a modified version of the Library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:109
+#: ../../doc/text/lgpl.txt:109
 msgid ""
 "  The precise terms and conditions for copying, distribution and\n"
 "modification follow.  Pay close attention to the difference between a\n"
@@ -299,13 +299,13 @@ msgid ""
 "be combined with the library in order to run."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:115
+#: ../../doc/text/lgpl.txt:115
 msgid ""
 "		  GNU LESSER GENERAL PUBLIC LICENSE\n"
 "   TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:118
+#: ../../doc/text/lgpl.txt:118
 msgid ""
 "  0. This License Agreement applies to any software library or other\n"
 "program which contains a notice placed by the copyright holder or\n"
@@ -314,14 +314,14 @@ msgid ""
 "Each licensee is addressed as \"you\"."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:124
+#: ../../doc/text/lgpl.txt:124
 msgid ""
 "  A \"library\" means a collection of software functions and/or data\n"
 "prepared so as to be conveniently linked with application programs\n"
 "(which use some of those functions and data) to form executables."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:128
+#: ../../doc/text/lgpl.txt:128
 msgid ""
 "  The \"Library\", below, refers to any such software library or work\n"
 "which has been distributed under these terms.  A \"work based on the\n"
@@ -332,7 +332,7 @@ msgid ""
 "included without limitation in the term \"modification\".)"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:136
+#: ../../doc/text/lgpl.txt:136
 msgid ""
 "  \"Source code\" for a work means the preferred form of the work for\n"
 "making modifications to it.  For a library, complete source code means\n"
@@ -341,7 +341,7 @@ msgid ""
 "and installation of the library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:142
+#: ../../doc/text/lgpl.txt:142
 msgid ""
 "  Activities other than copying, distribution and modification are not\n"
 "covered by this License; they are outside its scope.  The act of\n"
@@ -352,7 +352,7 @@ msgid ""
 "and what the program that uses the Library does."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:150
+#: ../../doc/text/lgpl.txt:150
 msgid ""
 "  1. You may copy and distribute verbatim copies of the Library's\n"
 "complete source code as you receive it, in any medium, provided that\n"
@@ -363,14 +363,14 @@ msgid ""
 "Library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:158
+#: ../../doc/text/lgpl.txt:158
 msgid ""
 "  You may charge a fee for the physical act of transferring a copy,\n"
 "and you may at your option offer warranty protection in exchange for a\n"
 "fee."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:162
+#: ../../doc/text/lgpl.txt:162
 msgid ""
 "  2. You may modify your copy or copies of the Library or any portion\n"
 "of it, thus forming a work based on the Library, and copy and\n"
@@ -378,23 +378,23 @@ msgid ""
 "above, provided that you also meet all of these conditions:"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:167
+#: ../../doc/text/lgpl.txt:167
 msgid "    a) The modified work must itself be a software library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:169
+#: ../../doc/text/lgpl.txt:169
 msgid ""
 "    b) You must cause the files modified to carry prominent notices\n"
 "    stating that you changed the files and the date of any change."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:172
+#: ../../doc/text/lgpl.txt:172
 msgid ""
 "    c) You must cause the whole of the work to be licensed at no\n"
 "    charge to all third parties under the terms of this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:175
+#: ../../doc/text/lgpl.txt:175
 msgid ""
 "    d) If a facility in the modified Library refers to a function or a\n"
 "    table of data to be supplied by an application program that uses\n"
@@ -405,7 +405,7 @@ msgid ""
 "    its purpose remains meaningful."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:183
+#: ../../doc/text/lgpl.txt:183
 msgid ""
 "    (For example, a function in a library to compute square roots has\n"
 "    a purpose that is entirely well-defined independent of the\n"
@@ -415,7 +415,7 @@ msgid ""
 "    root function must still compute square roots.)"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:190
+#: ../../doc/text/lgpl.txt:190
 msgid ""
 "These requirements apply to the modified work as a whole.  If\n"
 "identifiable sections of that work are not derived from the Library,\n"
@@ -429,7 +429,7 @@ msgid ""
 "it."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:201
+#: ../../doc/text/lgpl.txt:201
 msgid ""
 "Thus, it is not the intent of this section to claim rights or contest\n"
 "your rights to work written entirely by you; rather, the intent is to\n"
@@ -437,7 +437,7 @@ msgid ""
 "collective works based on the Library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:206
+#: ../../doc/text/lgpl.txt:206
 msgid ""
 "In addition, mere aggregation of another work not based on the Library\n"
 "with the Library (or with a work based on the Library) on a volume of\n"
@@ -445,7 +445,7 @@ msgid ""
 "the scope of this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:211
+#: ../../doc/text/lgpl.txt:211
 msgid ""
 "  3. You may opt to apply the terms of the ordinary GNU General Public\n"
 "License instead of this License to a given copy of the Library.  To do\n"
@@ -457,20 +457,20 @@ msgid ""
 "these notices."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:220
+#: ../../doc/text/lgpl.txt:220
 msgid ""
 "  Once this change is made in a given copy, it is irreversible for\n"
 "that copy, so the ordinary GNU General Public License applies to all\n"
 "subsequent copies and derivative works made from that copy."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:224
+#: ../../doc/text/lgpl.txt:224
 msgid ""
 "  This option is useful when you wish to copy part of the code of\n"
 "the Library into a program that is not a library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:227
+#: ../../doc/text/lgpl.txt:227
 msgid ""
 "  4. You may copy and distribute the Library (or a portion or\n"
 "derivative of it, under Section 2) in object code or executable form\n"
@@ -480,7 +480,7 @@ msgid ""
 "medium customarily used for software interchange."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:234
+#: ../../doc/text/lgpl.txt:234
 msgid ""
 "  If distribution of object code is made by offering access to copy\n"
 "from a designated place, then offering equivalent access to copy the\n"
@@ -489,7 +489,7 @@ msgid ""
 "compelled to copy the source along with the object code."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:240
+#: ../../doc/text/lgpl.txt:240
 msgid ""
 "  5. A program that contains no derivative of any portion of the\n"
 "Library, but is designed to work with the Library by being compiled or\n"
@@ -498,7 +498,7 @@ msgid ""
 "therefore falls outside the scope of this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:246
+#: ../../doc/text/lgpl.txt:246
 msgid ""
 "  However, linking a \"work that uses the Library\" with the Library\n"
 "creates an executable that is a derivative of the Library (because it\n"
@@ -507,7 +507,7 @@ msgid ""
 "Section 6 states terms for distribution of such executables."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:252
+#: ../../doc/text/lgpl.txt:252
 msgid ""
 "  When a \"work that uses the Library\" uses material from a header file\n"
 "that is part of the Library, the object code for the work may be a\n"
@@ -517,7 +517,7 @@ msgid ""
 "threshold for this to be true is not precisely defined by law."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:259
+#: ../../doc/text/lgpl.txt:259
 msgid ""
 "  If such an object file uses only numerical parameters, data\n"
 "structure layouts and accessors, and small macros and small inline\n"
@@ -527,7 +527,7 @@ msgid ""
 "Library will still fall under Section 6.)"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:266
+#: ../../doc/text/lgpl.txt:266
 msgid ""
 "  Otherwise, if the work is a derivative of the Library, you may\n"
 "distribute the object code for the work under the terms of Section 6.\n"
@@ -535,7 +535,7 @@ msgid ""
 "whether or not they are linked directly with the Library itself."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:271
+#: ../../doc/text/lgpl.txt:271
 msgid ""
 "  6. As an exception to the Sections above, you may also combine or\n"
 "link a \"work that uses the Library\" with the Library to produce a\n"
@@ -545,7 +545,7 @@ msgid ""
 "engineering for debugging such modifications."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:278
+#: ../../doc/text/lgpl.txt:278
 msgid ""
 "  You must give prominent notice with each copy of the work that the\n"
 "Library is used in it and that the Library and its use are covered by\n"
@@ -556,7 +556,7 @@ msgid ""
 "of these things:"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:286
+#: ../../doc/text/lgpl.txt:286
 msgid ""
 "    a) Accompany the work with the complete corresponding\n"
 "    machine-readable source code for the Library including whatever\n"
@@ -571,7 +571,7 @@ msgid ""
 "    to use the modified definitions.)"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:298
+#: ../../doc/text/lgpl.txt:298
 msgid ""
 "    b) Use a suitable shared library mechanism for linking with the\n"
 "    Library.  A suitable mechanism is one that (1) uses at run time a\n"
@@ -582,7 +582,7 @@ msgid ""
 "    interface-compatible with the version that the work was made with."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:306
+#: ../../doc/text/lgpl.txt:306
 msgid ""
 "    c) Accompany the work with a written offer, valid for at\n"
 "    least three years, to give the same user the materials\n"
@@ -590,20 +590,20 @@ msgid ""
 "    than the cost of performing this distribution."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:311
+#: ../../doc/text/lgpl.txt:311
 msgid ""
 "    d) If distribution of the work is made by offering access to copy\n"
 "    from a designated place, offer equivalent access to copy the above\n"
 "    specified materials from the same place."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:315
+#: ../../doc/text/lgpl.txt:315
 msgid ""
 "    e) Verify that the user has already received a copy of these\n"
 "    materials or that you have already sent this user a copy."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:318
+#: ../../doc/text/lgpl.txt:318
 msgid ""
 "  For an executable, the required form of the \"work that uses the\n"
 "Library\" must include any data and utility programs needed for\n"
@@ -615,7 +615,7 @@ msgid ""
 "the executable."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:327
+#: ../../doc/text/lgpl.txt:327
 msgid ""
 "  It may happen that this requirement contradicts the license\n"
 "restrictions of other proprietary libraries that do not normally\n"
@@ -624,7 +624,7 @@ msgid ""
 "distribute."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:333
+#: ../../doc/text/lgpl.txt:333
 msgid ""
 "  7. You may place library facilities that are a work based on the\n"
 "Library side-by-side in a single library together with other library\n"
@@ -634,7 +634,7 @@ msgid ""
 "permitted, and provided that you do these two things:"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:340
+#: ../../doc/text/lgpl.txt:340
 msgid ""
 "    a) Accompany the combined library with a copy of the same work\n"
 "    based on the Library, uncombined with any other library\n"
@@ -642,14 +642,14 @@ msgid ""
 "    Sections above."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:345
+#: ../../doc/text/lgpl.txt:345
 msgid ""
 "    b) Give prominent notice with the combined library of the fact\n"
 "    that part of it is a work based on the Library, and explaining\n"
 "    where to find the accompanying uncombined form of the same work."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:349
+#: ../../doc/text/lgpl.txt:349
 msgid ""
 "  8. You may not copy, modify, sublicense, link with, or distribute\n"
 "the Library except as expressly provided under this License.  Any\n"
@@ -660,7 +660,7 @@ msgid ""
 "terminated so long as such parties remain in full compliance."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:357
+#: ../../doc/text/lgpl.txt:357
 msgid ""
 "  9. You are not required to accept this License, since you have not\n"
 "signed it.  However, nothing else grants you permission to modify or\n"
@@ -672,7 +672,7 @@ msgid ""
 "the Library or works based on it."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:366
+#: ../../doc/text/lgpl.txt:366
 msgid ""
 "  10. Each time you redistribute the Library (or any work based on the\n"
 "Library), the recipient automatically receives a license from the\n"
@@ -683,7 +683,7 @@ msgid ""
 "this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:374
+#: ../../doc/text/lgpl.txt:374
 msgid ""
 "  11. If, as a consequence of a court judgment or allegation of patent\n"
 "infringement or for any other reason (not limited to patent issues),\n"
@@ -699,14 +699,14 @@ msgid ""
 "refrain entirely from distribution of the Library."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:387
+#: ../../doc/text/lgpl.txt:387
 msgid ""
 "If any portion of this section is held invalid or unenforceable under any\n"
 "particular circumstance, the balance of the section is intended to apply,\n"
 "and the section as a whole is intended to apply in other circumstances."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:391
+#: ../../doc/text/lgpl.txt:391
 msgid ""
 "It is not the purpose of this section to induce you to infringe any\n"
 "patents or other property right claims or to contest validity of any\n"
@@ -720,13 +720,13 @@ msgid ""
 "impose that choice."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:402
+#: ../../doc/text/lgpl.txt:402
 msgid ""
 "This section is intended to make thoroughly clear what is believed to\n"
 "be a consequence of the rest of this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:405
+#: ../../doc/text/lgpl.txt:405
 msgid ""
 "  12. If the distribution and/or use of the Library is restricted in\n"
 "certain countries either by patents or by copyrighted interfaces, the\n"
@@ -737,7 +737,7 @@ msgid ""
 "written in the body of this License."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:413
+#: ../../doc/text/lgpl.txt:413
 msgid ""
 "  13. The Free Software Foundation may publish revised and/or new\n"
 "versions of the Lesser General Public License from time to time.\n"
@@ -745,7 +745,7 @@ msgid ""
 "but may differ in detail to address new problems or concerns."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:418
+#: ../../doc/text/lgpl.txt:418
 msgid ""
 "Each version is given a distinguishing version number.  If the Library\n"
 "specifies a version number of this License which applies to it and\n"
@@ -756,7 +756,7 @@ msgid ""
 "the Free Software Foundation."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:426
+#: ../../doc/text/lgpl.txt:426
 msgid ""
 "  14. If you wish to incorporate parts of the Library into other free\n"
 "programs whose distribution conditions are incompatible with these,\n"
@@ -768,11 +768,11 @@ msgid ""
 "and reuse of software generally."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:435
+#: ../../doc/text/lgpl.txt:435
 msgid "			    NO WARRANTY"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:437
+#: ../../doc/text/lgpl.txt:437
 msgid ""
 "  15. BECAUSE THE LIBRARY IS LICENSED FREE OF CHARGE, THERE IS NO\n"
 "WARRANTY FOR THE LIBRARY, TO THE EXTENT PERMITTED BY APPLICABLE LAW.\n"
@@ -785,7 +785,7 @@ msgid ""
 "THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:447
+#: ../../doc/text/lgpl.txt:447
 msgid ""
 "  16. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN\n"
 "WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY\n"
@@ -799,15 +799,15 @@ msgid ""
 "DAMAGES."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:458
+#: ../../doc/text/lgpl.txt:458
 msgid "		     END OF TERMS AND CONDITIONS"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:460
+#: ../../doc/text/lgpl.txt:460
 msgid "           How to Apply These Terms to Your New Libraries"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:462
+#: ../../doc/text/lgpl.txt:462
 msgid ""
 "  If you develop a new library, and you want it to be of the greatest\n"
 "possible use to the public, we recommend making it free software that\n"
@@ -816,7 +816,7 @@ msgid ""
 "ordinary General Public License)."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:468
+#: ../../doc/text/lgpl.txt:468
 msgid ""
 "  To apply these terms, attach the following notices to the library.  It is\n"
 "safest to attach them to the start of each source file to most effectively\n"
@@ -824,13 +824,13 @@ msgid ""
 "\"copyright\" line and a pointer to where the full notice is found."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:473
+#: ../../doc/text/lgpl.txt:473
 msgid ""
 "    <one line to give the library's name and a brief idea of what it does.>\n"
 "    Copyright (C) <year>  <name of author>"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:476
+#: ../../doc/text/lgpl.txt:476
 msgid ""
 "    This library is free software; you can redistribute it and/or\n"
 "    modify it under the terms of the GNU Lesser General Public\n"
@@ -838,7 +838,7 @@ msgid ""
 "    version 2 of the License, or (at your option) any later version."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:481
+#: ../../doc/text/lgpl.txt:481
 msgid ""
 "    This library is distributed in the hope that it will be useful,\n"
 "    but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -846,89 +846,103 @@ msgid ""
 "    Lesser General Public License for more details."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:486
+#: ../../doc/text/lgpl.txt:486
 msgid ""
 "    You should have received a copy of the GNU Lesser General Public\n"
 "    License along with this library; if not, write to the Free Software\n"
 "    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:490
+#: ../../doc/text/lgpl.txt:490
 msgid "Also add information on how to contact you by electronic and paper mail."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:492
+#: ../../doc/text/lgpl.txt:492
 msgid ""
 "You should also get your employer (if you work as a programmer) or your\n"
 "school, if any, to sign a \"copyright disclaimer\" for the library, if\n"
 "necessary.  Here is a sample; alter the names:"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:496
+#: ../../doc/text/lgpl.txt:496
 msgid ""
 "  Yoyodyne, Inc., hereby disclaims all copyright interest in the\n"
 "  library `Frob' (a library for tweaking knobs) written by James Random Hacker."
 msgstr ""
 
-#: ./doc/text/lgpl.txt:499
+#: ../../doc/text/lgpl.txt:499
 msgid ""
 "  <signature of Ty Coon>, 1 April 1990\n"
 "  Ty Coon, President of Vice"
 msgstr ""
 
-#: ./doc/text/lgpl.txt:502
+#: ../../doc/text/lgpl.txt:502
 msgid "That's all there is to it!"
 msgstr ""
 
-#: ./doc/text/news.textile:1
+#: ../../doc/text/news.textile:1
 msgid "h1. NEWS"
 msgstr ""
 
-#: ./doc/text/news.textile:3
-msgid "h2(#2-1-4). 2.1.4: 2013-03-18"
+#: ../../doc/text/news.textile:3
+msgid "h2(#4-0-0). 4.0.0: 2013-08-29"
 msgstr ""
 
-#: ./doc/text/news.textile:5 ./doc/text/news.textile:41
-#: ./doc/text/news.textile:66 ./doc/text/news.textile:80
-msgid "h3. Fixes"
-msgstr "h3. 修正"
-
-#: ./doc/text/news.textile:7
-msgid "* Fixed a bug that sorted records don't have score."
-msgstr "* ソートしたレコードにスコアが設定されていない問題を修正。"
-
-#: ./doc/text/news.textile:9
-msgid "h2(#2-1-3). 2.1.3: 2013-01-06"
-msgstr ""
-
-#: ./doc/text/news.textile:11 ./doc/text/news.textile:22
-#: ./doc/text/news.textile:34 ./doc/text/news.textile:55
-#: ./doc/text/news.textile:61 ./doc/text/news.textile:72
-#: ./doc/text/news.textile:86 ./doc/text/news.textile:92
-#: ./doc/text/news.textile:98
+#: ../../doc/text/news.textile:5 ../../doc/text/news.textile:22
+#: ../../doc/text/news.textile:33 ../../doc/text/news.textile:45
+#: ../../doc/text/news.textile:66 ../../doc/text/news.textile:72
+#: ../../doc/text/news.textile:83 ../../doc/text/news.textile:97
+#: ../../doc/text/news.textile:103 ../../doc/text/news.textile:109
 msgid "h3. Improvements"
 msgstr "h3. 改良"
 
-#: ./doc/text/news.textile:13
+#: ../../doc/text/news.textile:7
+msgid ""
+"* [GitHub#9] Supported Rails 4.0.0. Rails < 4 support is dropped.\n"
+"  [Reported by Eito Katagiri]"
+msgstr ""
+
+#: ../../doc/text/news.textile:10 ../../doc/text/news.textile:27
+#: ../../doc/text/news.textile:39 ../../doc/text/news.textile:59
+msgid "h3. Thanks"
+msgstr "h3. 感謝"
+
+#: ../../doc/text/news.textile:12
+msgid "* Eito Katagiri"
+msgstr ""
+
+#: ../../doc/text/news.textile:14
+msgid "h2(#2-1-4). 2.1.4: 2013-03-18"
+msgstr ""
+
+#: ../../doc/text/news.textile:16 ../../doc/text/news.textile:52
+#: ../../doc/text/news.textile:77 ../../doc/text/news.textile:91
+msgid "h3. Fixes"
+msgstr "h3. 修正"
+
+#: ../../doc/text/news.textile:18
+msgid "* Fixed a bug that sorted records don't have score."
+msgstr "* ソートしたレコードにスコアが設定されていない問題を修正。"
+
+#: ../../doc/text/news.textile:20
+msgid "h2(#2-1-3). 2.1.3: 2013-01-06"
+msgstr ""
+
+#: ../../doc/text/news.textile:24
 msgid ""
 "* [GitHub#8] Supported reference column to key support tables such as\n"
 "  hash table. [Reported by Kenta Sato]"
 msgstr "* [GitHub#8] ハッシュテーブルなどの各種テーブルへの参照カラムをサポート。[佐藤健太さんが報告]"
 
-#: ./doc/text/news.textile:16 ./doc/text/news.textile:28
-#: ./doc/text/news.textile:48
-msgid "h3. Thanks"
-msgstr "h3. 感謝"
-
-#: ./doc/text/news.textile:18
+#: ../../doc/text/news.textile:29
 msgid "* Kenta Sato"
 msgstr "* 佐藤健太さん"
 
-#: ./doc/text/news.textile:20
+#: ../../doc/text/news.textile:31
 msgid "h2(#2-1-2). 2.1.2: 2013-01-04"
 msgstr ""
 
-#: ./doc/text/news.textile:24
+#: ../../doc/text/news.textile:35
 msgid ""
 "* Required activemodel 3.2.10 or later.\n"
 "* Required rroonga 2.1.2 or later.\n"
@@ -938,15 +952,15 @@ msgstr ""
 "* rroonga 2.1.2以降が必須になった。\n"
 "* Kaminari 0.14.0以降をサポート。"
 
-#: ./doc/text/news.textile:30
+#: ../../doc/text/news.textile:41
 msgid "* Kazuhiro Yoshida"
 msgstr "* Kazuhiro Yoshidaさん"
 
-#: ./doc/text/news.textile:32
+#: ../../doc/text/news.textile:43
 msgid "h2(#2-1-1). 2.1.1: 2013-01-03"
 msgstr ""
 
-#: ./doc/text/news.textile:36
+#: ../../doc/text/news.textile:47
 msgid ""
 "* Required rroogna 2.1.1 or later.\n"
 "* [GitHub#4] Sorted columns in inspect. [Patch by SHIMADA Koji]\n"
@@ -958,7 +972,7 @@ msgstr ""
 "* [GitHub#5] YARDまわりの足りない設定を追加。[島田浩二さんがパッチ提供]\n"
 "* [GitHub#7] JewelerからBundlerに移行した。[Yasuharu Ozakiさんが提案]"
 
-#: ./doc/text/news.textile:43
+#: ../../doc/text/news.textile:54
 msgid ""
 "* [GitHub#1] Suppressed warnings on Rails 3.2.0. [Patch by SHIMADA Koji]\n"
 "* [GitHub#2] Fixed test script path. [Patch by SHIMADA Koji]\n"
@@ -970,7 +984,7 @@ msgstr ""
 "* [GitHub#3] テスト実行時にデータベースを閉じるように修正。[島田浩二さんがパッチ提供]\n"
 "* [GitHub#6] テストのアサーションの間違いを修正。[島田浩二さんがパッチ提供]"
 
-#: ./doc/text/news.textile:50
+#: ../../doc/text/news.textile:61
 msgid ""
 "* SHIMADA Koji\n"
 "* YasuOza"
@@ -978,19 +992,19 @@ msgstr ""
 "* 島田浩二さん\n"
 "* Ozaki Yasuharuさん"
 
-#: ./doc/text/news.textile:53
+#: ../../doc/text/news.textile:64
 msgid "h2(#1-0-7). 1.0.7: 2011-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:57
+#: ../../doc/text/news.textile:68
 msgid "* Forced to set Rails.env = \"test\" on test."
 msgstr "* テストのときは強制的にRails.env = \"test\"とするようにした。"
 
-#: ./doc/text/news.textile:59
+#: ../../doc/text/news.textile:70
 msgid "h2. 1.0.6: 2011-09-16"
 msgstr ""
 
-#: ./doc/text/news.textile:63
+#: ../../doc/text/news.textile:74
 msgid ""
 "* supported rspec-rails.\n"
 "* added {ActiveGroonga::ResultSet#empty?}."
@@ -998,15 +1012,15 @@ msgstr ""
 "* rspec-railsに対応。\n"
 "* {ActiveGroonga::ResultSet#empty?} を追加。"
 
-#: ./doc/text/news.textile:68
+#: ../../doc/text/news.textile:79
 msgid "* suppressed warnings on Rails 3.1.0."
 msgstr "* Rails3.1.0使用時、 {Railties::Configurable#groonga_configurations} 実行時に起きる警告が出ないように対応した。"
 
-#: ./doc/text/news.textile:70
+#: ../../doc/text/news.textile:81
 msgid "h2. 1.0.5: 2011-09-04"
 msgstr ""
 
-#: ./doc/text/news.textile:74
+#: ../../doc/text/news.textile:85
 msgid ""
 "* Supported Rails 3.1.0.\n"
 "* groonga:seed showes seed candidate files on not found.\n"
@@ -1020,155 +1034,164 @@ msgstr ""
 "* ActiveGroonga::Base.sort_keysを追加。\n"
 "* ActiveGroonga::Base.limitを追加。"
 
-#: ./doc/text/news.textile:82
+#: ../../doc/text/news.textile:93
 msgid "* Fixed groonga:seed dependency."
 msgstr "* groonga:seedの依存関係を修正。"
 
-#: ./doc/text/news.textile:84
+#: ../../doc/text/news.textile:95
 msgid "h2. 1.0.4: 2011-04-01"
 msgstr ""
 
-#: ./doc/text/news.textile:88
+#: ../../doc/text/news.textile:99
 msgid "* Supported Kaminari. (View interface only)"
 msgstr "* Kaminari対応。（Viewのみ）"
 
-#: ./doc/text/news.textile:90
+#: ../../doc/text/news.textile:101
 msgid "h2. 1.0.3: 2010-12-25"
 msgstr ""
 
-#: ./doc/text/news.textile:94
+#: ../../doc/text/news.textile:105
 msgid "* Supported score."
 msgstr "* score対応。"
 
-#: ./doc/text/news.textile:96
+#: ../../doc/text/news.textile:107
 msgid "h2. 1.0.1: 2010-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:100
+#: ../../doc/text/news.textile:111
 msgid ""
 "* generator: Supported table type customize.\n"
 "* Added ActiveGroonga::Base.exists?.\n"
 "* Added ActiveGroonga::Base.all."
 msgstr ""
 
-#: ./doc/text/news.textile:104
+#: ../../doc/text/news.textile:115
 msgid "h3. Changes"
 msgstr "h3. 変更"
 
-#: ./doc/text/news.textile:106
+#: ../../doc/text/news.textile:117
 msgid ""
 "* Changed to use record key instead of record ID for record\n"
 "  identifier for hash table and patricia trie."
 msgstr "* ハッシュテーブル・パトリシアトライを利用しているときはレコード識別子としてIDではなくキーを使うように変更。"
 
-#: ./doc/text/news.textile:109
+#: ../../doc/text/news.textile:120
 msgid "h2. 1.0.0: 2010-11-29"
 msgstr ""
 
-#: ./doc/text/news.textile:111
+#: ../../doc/text/news.textile:122
 msgid "* Support Rails 3."
 msgstr "* Rails 3対応。"
 
-#: ./doc/text/news.textile:113
+#: ../../doc/text/news.textile:124
 msgid "h2. 0.0.7: 2009-10-02"
 msgstr ""
 
-#: ./doc/text/news.textile:115
+#: ../../doc/text/news.textile:126
 msgid "* Support Ruby/groonga 0.0.7."
 msgstr "* Ruby/groonga 0.0.7対応。"
 
-#: ./doc/text/news.textile:117
+#: ../../doc/text/news.textile:128
 msgid "h2. 0.0.6: 2009-07-31"
 msgstr ""
 
-#: ./doc/text/news.textile:119
+#: ../../doc/text/news.textile:130
 msgid "* Support Ruby/groonga 0.0.6."
 msgstr "* Ruby/groonga 0.0.6対応。"
 
-#: ./doc/text/news.textile:121
+#: ../../doc/text/news.textile:132
 msgid "h2. 0.0.2: 2009-06-05"
 msgstr ""
 
-#: ./doc/text/news.textile:123
+#: ../../doc/text/news.textile:134
 msgid "* Support Ruby/groonga 0.0.2."
 msgstr "* Ruby/groonga 0.0.2対応。"
 
-#: ./doc/text/news.textile:125
+#: ../../doc/text/news.textile:136
 msgid "h2. 0.0.1: 2009-04-30"
 msgstr ""
 
-#: ./doc/text/news.textile:127
+#: ../../doc/text/news.textile:138
 msgid "* Initial release!"
 msgstr "* 最初のリリース！"
 
-#: ./doc/text/tutorial.textile:1
+#: ../../doc/text/tutorial.textile:1
 msgid "h1. Tutorial"
 msgstr "h1. チュートリアル"
 
-#: ./doc/text/tutorial.textile:3
+#: ../../doc/text/tutorial.textile:3
 msgid "Comming soon..."
 msgstr ""
 
-#: ./lib/active_groonga.rb:2 ./lib/active_groonga/base.rb:2
-#: ./lib/active_groonga/callbacks.rb:2
-#: ./lib/active_groonga/database.rb:2 ./lib/active_groonga/error.rb:2
-#: ./lib/active_groonga/fixtures.rb:2
-#: ./lib/active_groonga/migration.rb:2
-#: ./lib/active_groonga/migrator.rb:2
-#: ./lib/active_groonga/persistence.rb:2
-#: ./lib/active_groonga/railtie.rb:2
-#: ./lib/active_groonga/railties/configurable.rb:2
-#: ./lib/active_groonga/result_set.rb:2
-#: ./lib/active_groonga/schema.rb:2 ./lib/active_groonga/test_case.rb:2
-#: ./lib/active_groonga/validations.rb:2
-#: ./lib/active_groonga/vector.rb:2 ./lib/active_groonga/version.rb:2
-#: ./lib/rails/generators/active_groonga.rb:2
-#: ./lib/rails/generators/active_groonga/migration/column.rb:2
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:2
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:2
+#: ../../lib/active_groonga.rb:2 ../../lib/active_groonga/base.rb:2
+#: ../../lib/active_groonga/callbacks.rb:2
+#: ../../lib/active_groonga/database.rb:2
+#: ../../lib/active_groonga/error.rb:2
+#: ../../lib/active_groonga/fixtures.rb:2
+#: ../../lib/active_groonga/migration.rb:2
+#: ../../lib/active_groonga/migrator.rb:2
+#: ../../lib/active_groonga/persistence.rb:2
+#: ../../lib/active_groonga/railtie.rb:2
+#: ../../lib/active_groonga/railties/configurable.rb:2
+#: ../../lib/active_groonga/result_set.rb:2
+#: ../../lib/active_groonga/schema.rb:2
+#: ../../lib/active_groonga/test_case.rb:2
+#: ../../lib/active_groonga/validations.rb:2
+#: ../../lib/active_groonga/vector.rb:2
+#: ../../lib/active_groonga/version.rb:2
+#: ../../lib/rails/generators/active_groonga.rb:2
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:2
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:2
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:2
 msgid "Copyright (C) 2010  Kouhei Sutou <kou@clear-code.com>"
 msgstr ""
 
-#: ./lib/active_groonga.rb:4 ./lib/active_groonga/base.rb:4
-#: ./lib/active_groonga/callbacks.rb:4
-#: ./lib/active_groonga/database.rb:4 ./lib/active_groonga/error.rb:4
-#: ./lib/active_groonga/fixtures.rb:4
-#: ./lib/active_groonga/migration.rb:4
-#: ./lib/active_groonga/migrator.rb:4
-#: ./lib/active_groonga/persistence.rb:4
-#: ./lib/active_groonga/railtie.rb:4
-#: ./lib/active_groonga/railties/configurable.rb:4
-#: ./lib/active_groonga/result_set.rb:4
-#: ./lib/active_groonga/schema.rb:4 ./lib/active_groonga/test_case.rb:4
-#: ./lib/active_groonga/validations.rb:4
-#: ./lib/active_groonga/vector.rb:4 ./lib/active_groonga/version.rb:4
-#: ./lib/rails/generators/active_groonga.rb:4
-#: ./lib/rails/generators/active_groonga/migration/column.rb:4
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:4
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:4
+#: ../../lib/active_groonga.rb:4 ../../lib/active_groonga/base.rb:4
+#: ../../lib/active_groonga/callbacks.rb:4
+#: ../../lib/active_groonga/database.rb:4
+#: ../../lib/active_groonga/error.rb:4
+#: ../../lib/active_groonga/fixtures.rb:4
+#: ../../lib/active_groonga/migration.rb:4
+#: ../../lib/active_groonga/migrator.rb:4
+#: ../../lib/active_groonga/persistence.rb:4
+#: ../../lib/active_groonga/railtie.rb:4
+#: ../../lib/active_groonga/railties/configurable.rb:4
+#: ../../lib/active_groonga/result_set.rb:4
+#: ../../lib/active_groonga/schema.rb:4
+#: ../../lib/active_groonga/test_case.rb:4
+#: ../../lib/active_groonga/validations.rb:4
+#: ../../lib/active_groonga/vector.rb:4
+#: ../../lib/active_groonga/version.rb:4
+#: ../../lib/rails/generators/active_groonga.rb:4
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:4
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:4
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:4
 msgid ""
 "This library is free software; you can redistribute it and/or\n"
 "modify it under the terms of the GNU Lesser General Public\n"
 "License version 2.1 as published by the Free Software Foundation."
 msgstr ""
 
-#: ./lib/active_groonga.rb:8 ./lib/active_groonga/base.rb:8
-#: ./lib/active_groonga/callbacks.rb:8
-#: ./lib/active_groonga/database.rb:8 ./lib/active_groonga/error.rb:8
-#: ./lib/active_groonga/fixtures.rb:8
-#: ./lib/active_groonga/migration.rb:8
-#: ./lib/active_groonga/migrator.rb:8
-#: ./lib/active_groonga/persistence.rb:8
-#: ./lib/active_groonga/railtie.rb:8
-#: ./lib/active_groonga/railties/configurable.rb:8
-#: ./lib/active_groonga/result_set.rb:8
-#: ./lib/active_groonga/schema.rb:8 ./lib/active_groonga/test_case.rb:8
-#: ./lib/active_groonga/validations.rb:8
-#: ./lib/active_groonga/vector.rb:8 ./lib/active_groonga/version.rb:8
-#: ./lib/rails/generators/active_groonga.rb:8
-#: ./lib/rails/generators/active_groonga/migration/column.rb:8
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:8
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:8
+#: ../../lib/active_groonga.rb:8 ../../lib/active_groonga/base.rb:8
+#: ../../lib/active_groonga/callbacks.rb:8
+#: ../../lib/active_groonga/database.rb:8
+#: ../../lib/active_groonga/error.rb:8
+#: ../../lib/active_groonga/fixtures.rb:8
+#: ../../lib/active_groonga/migration.rb:8
+#: ../../lib/active_groonga/migrator.rb:8
+#: ../../lib/active_groonga/persistence.rb:8
+#: ../../lib/active_groonga/railtie.rb:8
+#: ../../lib/active_groonga/railties/configurable.rb:8
+#: ../../lib/active_groonga/result_set.rb:8
+#: ../../lib/active_groonga/schema.rb:8
+#: ../../lib/active_groonga/test_case.rb:8
+#: ../../lib/active_groonga/validations.rb:8
+#: ../../lib/active_groonga/vector.rb:8
+#: ../../lib/active_groonga/version.rb:8
+#: ../../lib/rails/generators/active_groonga.rb:8
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:8
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:8
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:8
 msgid ""
 "This library is distributed in the hope that it will be useful,\n"
 "but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
@@ -1176,36 +1199,39 @@ msgid ""
 "Lesser General Public License for more details."
 msgstr ""
 
-#: ./lib/active_groonga.rb:13 ./lib/active_groonga/base.rb:13
-#: ./lib/active_groonga/callbacks.rb:13
-#: ./lib/active_groonga/database.rb:13 ./lib/active_groonga/error.rb:13
-#: ./lib/active_groonga/fixtures.rb:13
-#: ./lib/active_groonga/migration.rb:13
-#: ./lib/active_groonga/migrator.rb:13
-#: ./lib/active_groonga/persistence.rb:13
-#: ./lib/active_groonga/railtie.rb:13
-#: ./lib/active_groonga/railties/configurable.rb:13
-#: ./lib/active_groonga/result_set.rb:13
-#: ./lib/active_groonga/schema.rb:13
-#: ./lib/active_groonga/test_case.rb:13
-#: ./lib/active_groonga/validations.rb:13
-#: ./lib/active_groonga/vector.rb:13 ./lib/active_groonga/version.rb:13
-#: ./lib/rails/generators/active_groonga.rb:13
-#: ./lib/rails/generators/active_groonga/migration/column.rb:13
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:13
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:13
+#: ../../lib/active_groonga.rb:13 ../../lib/active_groonga/base.rb:13
+#: ../../lib/active_groonga/callbacks.rb:13
+#: ../../lib/active_groonga/database.rb:13
+#: ../../lib/active_groonga/error.rb:13
+#: ../../lib/active_groonga/fixtures.rb:13
+#: ../../lib/active_groonga/migration.rb:13
+#: ../../lib/active_groonga/migrator.rb:13
+#: ../../lib/active_groonga/persistence.rb:13
+#: ../../lib/active_groonga/railtie.rb:13
+#: ../../lib/active_groonga/railties/configurable.rb:13
+#: ../../lib/active_groonga/result_set.rb:13
+#: ../../lib/active_groonga/schema.rb:13
+#: ../../lib/active_groonga/test_case.rb:13
+#: ../../lib/active_groonga/validations.rb:13
+#: ../../lib/active_groonga/vector.rb:13
+#: ../../lib/active_groonga/version.rb:13
+#: ../../lib/rails/generators/active_groonga.rb:13
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:13
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:13
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:13
 msgid ""
 "You should have received a copy of the GNU Lesser General Public\n"
 "License along with this library; if not, write to the Free Software\n"
 "Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA"
 msgstr ""
 
-#: ./lib/active_groonga/base.rb:61 ./lib/active_groonga/base.rb:77
+#: ../../lib/active_groonga/base.rb:59
+#: ../../lib/active_groonga/base.rb:75
 msgid "1.0.5"
 msgstr ""
 
 # @example
-#: ./lib/active_groonga/base.rb:61
+#: ../../lib/active_groonga/base.rb:59
 msgid ""
 "# Sorts by \"name\" column value in ascending order by default.\n"
 "User.sort_keys = [[\"name\", :ascending]]\n"
@@ -1219,7 +1245,7 @@ msgid ""
 "User.sort_keys = nil"
 msgstr ""
 
-#: ./lib/active_groonga/base.rb:61
+#: ../../lib/active_groonga/base.rb:59
 msgid ""
 "An array of\n"
 "sort key. Each sort key is an array of sort key\n"
@@ -1227,14 +1253,14 @@ msgid ""
 msgstr "ソートキーの配列。各ソートキーは配列で、中身はソートに使うカラムの名前と昇順か降順の指定。"
 
 # ActiveGroonga::Base.sort_keys
-#: ./lib/active_groonga/base.rb:62
+#: ../../lib/active_groonga/base.rb:60
 msgid ""
 "The default sort keys for {ResultSet#sort} and\n"
 "{ResultSet#paginate}."
 msgstr ""
 
 # @example
-#: ./lib/active_groonga/base.rb:77
+#: ../../lib/active_groonga/base.rb:75
 msgid ""
 "# Limits sorted records by default.\n"
 "User.limit = 20\n"
@@ -1243,241 +1269,243 @@ msgid ""
 "User.limit = nil"
 msgstr ""
 
-#: ./lib/active_groonga/base.rb:77
+#: ../../lib/active_groonga/base.rb:75
 msgid "The default limit value."
 msgstr "デフォルトのlimit値。"
 
 # ActiveGroonga::Base.limit
-#: ./lib/active_groonga/base.rb:78
+#: ../../lib/active_groonga/base.rb:76
 msgid ""
 "The default limit for {ResultSet#sort} and\n"
 "{ResultSet#paginate}."
 msgstr ""
 
-#: ./lib/active_groonga/base.rb:262
+#: ../../lib/active_groonga/base.rb:260
 msgid "a new instance of Base"
 msgstr ""
 
-#: ./lib/active_groonga/callbacks.rb:29
-#: ./lib/active_groonga/callbacks.rb:34
-#: ./lib/active_groonga/callbacks.rb:38
-#: ./lib/active_groonga/callbacks.rb:42
-#: ./lib/active_groonga/migrator.rb:18
-#: ./lib/rails/generators/active_groonga.rb:24
-#: ./lib/rails/generators/active_groonga.rb:32
-#: ./lib/rails/generators/active_groonga/migration/column.rb:19
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:22
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:46
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:85
+#: ../../lib/active_groonga/callbacks.rb:29
+#: ../../lib/active_groonga/callbacks.rb:34
+#: ../../lib/active_groonga/callbacks.rb:38
+#: ../../lib/active_groonga/callbacks.rb:42
+#: ../../lib/active_groonga/migrator.rb:18
+#: ../../lib/rails/generators/active_groonga.rb:24
+#: ../../lib/rails/generators/active_groonga.rb:32
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:19
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:22
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:46
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:85
 msgid ":nodoc:"
 msgstr ""
 
-#: ./lib/active_groonga/database.rb:20
+#: ../../lib/active_groonga/database.rb:20
 msgid "a new instance of Database"
 msgstr ""
 
-#: ./lib/active_groonga/error.rb:18
+#: ../../lib/active_groonga/error.rb:18
 msgid "Generic ActiveGroonga exception class."
 msgstr ""
 
-#: ./lib/active_groonga/error.rb:26 ./lib/active_groonga/error.rb:34
+#: ../../lib/active_groonga/error.rb:26
+#: ../../lib/active_groonga/error.rb:34
 msgid "Returns the value of attribute table"
 msgstr ""
 
-#: ./lib/active_groonga/error.rb:26
+#: ../../lib/active_groonga/error.rb:26
 msgid "a new instance of NoKeyTableError"
 msgstr ""
 
-#: ./lib/active_groonga/error.rb:34
+#: ../../lib/active_groonga/error.rb:34
 msgid "a new instance of KeyOverrideError"
 msgstr ""
 
-#: ./lib/active_groonga/error.rb:34
+#: ../../lib/active_groonga/error.rb:34
 msgid "Returns the value of attribute key"
 msgstr ""
 
-#: ./lib/active_groonga/fixtures.rb:55
+#: ../../lib/active_groonga/fixtures.rb:55
 msgid "a new instance of ConnectionMock"
 msgstr ""
 
-#: ./lib/active_groonga/migration.rb:35
+#: ../../lib/active_groonga/migration.rb:35
 msgid "a new instance of Migration"
 msgstr ""
 
-#: ./lib/active_groonga/migration.rb:35
-#: ./lib/active_groonga/migrator.rb:19
-#: ./lib/active_groonga/migrator.rb:28
+#: ../../lib/active_groonga/migration.rb:35
+#: ../../lib/active_groonga/migrator.rb:19
+#: ../../lib/active_groonga/migrator.rb:28
 msgid "Returns the value of attribute path"
 msgstr ""
 
-#: ./lib/active_groonga/migration.rb:35
-#: ./lib/active_groonga/migrator.rb:19
-#: ./lib/active_groonga/migrator.rb:28
+#: ../../lib/active_groonga/migration.rb:35
+#: ../../lib/active_groonga/migrator.rb:19
+#: ../../lib/active_groonga/migrator.rb:28
 msgid "Returns the value of attribute version"
 msgstr ""
 
-#: ./lib/active_groonga/migrator.rb:19
+#: ../../lib/active_groonga/migrator.rb:19
 msgid "a new instance of DuplicateMigrationVersionError"
 msgstr ""
 
-#: ./lib/active_groonga/migrator.rb:28
+#: ../../lib/active_groonga/migrator.rb:28
 msgid "a new instance of MigrationEntry"
 msgstr ""
 
-#: ./lib/active_groonga/migrator.rb:47
+#: ../../lib/active_groonga/migrator.rb:47
 msgid "a new instance of SchemaManagementTable"
 msgstr ""
 
-#: ./lib/active_groonga/migrator.rb:92
+#: ../../lib/active_groonga/migrator.rb:92
 msgid "a new instance of Migrator"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:21
+#: ../../lib/active_groonga/result_set.rb:21
 msgid "Returns the value of attribute records"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:21
+#: ../../lib/active_groonga/result_set.rb:21
 msgid "Returns the value of attribute expression"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:21
+#: ../../lib/active_groonga/result_set.rb:21
 msgid "Returns the value of attribute n_records"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:21
+#: ../../lib/active_groonga/result_set.rb:21
 msgid "a new instance of ResultSet"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:36
+#: ../../lib/active_groonga/result_set.rb:36
 msgid "Paginates the result set."
 msgstr "結果セットをページネーションします。"
 
 # @overload
-#: ./lib/active_groonga/result_set.rb:80
+#: ../../lib/active_groonga/result_set.rb:80
 msgid "tag|overload|paginate"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:95
+#: ../../lib/active_groonga/result_set.rb:95
 msgid "Sorts the result set."
 msgstr "結果セットをソートします。"
 
 # @overload
-#: ./lib/active_groonga/result_set.rb:138
+#: ../../lib/active_groonga/result_set.rb:138
 msgid "tag|overload|sort"
 msgstr ""
 
-#: ./lib/active_groonga/result_set.rb:161
+#: ../../lib/active_groonga/result_set.rb:161
 msgid "Returns whether this result set has records or not."
 msgstr "この結果セットがレコードを持っているかどうかを返します。"
 
-#: ./lib/active_groonga/result_set.rb:164
+#: ../../lib/active_groonga/result_set.rb:164
 msgid ""
 "true if the result set has one\n"
 "or more records, false otherwise."
 msgstr "この結果セットが1つ以上レコードを持っていればtrue、持っていなければfalse。"
 
 # ActiveGroonga::ResultSet::PaginationProxy#limit_value
-#: ./lib/active_groonga/result_set.rb:242
+#: ../../lib/active_groonga/result_set.rb:242
 msgid "For Kaminari."
 msgstr ""
 
 # ActiveGroonga::ResultSet::PaginationProxy#total_pages
-#: ./lib/active_groonga/result_set.rb:244
+#: ../../lib/active_groonga/result_set.rb:244
 msgid "For Kaminari >= 0.14.0."
 msgstr ""
 
 # ActiveGroonga::ResultSet::PaginationProxy#num_pages
-#: ./lib/active_groonga/result_set.rb:246
+#: ../../lib/active_groonga/result_set.rb:246
 msgid ""
 "For Kaminari < 0.14.0.\n"
 "TODO: Remove me when old Kaminari support is dropped."
 msgstr ""
 
-#: ./lib/active_groonga/schema.rb:37
+#: ../../lib/active_groonga/schema.rb:37
 msgid "a new instance of Schema"
 msgstr ""
 
-#: ./lib/active_groonga/validations.rb:19
+#: ../../lib/active_groonga/validations.rb:19
 msgid "Returns the value of attribute record"
 msgstr ""
 
-#: ./lib/active_groonga/validations.rb:19
+#: ../../lib/active_groonga/validations.rb:19
 msgid "a new instance of RecordInvalid"
 msgstr ""
 
-#: ./lib/active_groonga/vector.rb:21
+#: ../../lib/active_groonga/vector.rb:21
 msgid "Returns the value of attribute owner"
 msgstr ""
 
-#: ./lib/active_groonga/vector.rb:21
+#: ../../lib/active_groonga/vector.rb:21
 msgid "Returns the value of attribute klass"
 msgstr ""
 
-#: ./lib/active_groonga/vector.rb:21
+#: ../../lib/active_groonga/vector.rb:21
 msgid "Returns the value of attribute values"
 msgstr ""
 
-#: ./lib/active_groonga/vector.rb:21
+#: ../../lib/active_groonga/vector.rb:21
 msgid "a new instance of Vector"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:19
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:19
 msgid "the value to set the attribute options to."
 msgstr ""
 
 # @param
-#: ./lib/rails/generators/active_groonga/migration/column.rb:19
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:19
 msgid "tag|param|value"
 msgstr ""
 
 # @param value
-#: ./lib/rails/generators/active_groonga/migration/column.rb:19
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:19
 msgid "the value to set the attribute name to."
 msgstr ""
 
 # @param value
-#: ./lib/rails/generators/active_groonga/migration/column.rb:19
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:19
 msgid "the value to set the attribute type to."
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Sets the attribute type"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Sets the attribute name"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Returns the value of attribute type"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Sets the attribute options"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Returns the value of attribute name"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:20
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:20
 msgid "Returns the value of attribute options"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/migration/column.rb:21
+#: ../../lib/rails/generators/active_groonga/migration/column.rb:21
 msgid "a new instance of Column"
 msgstr ""
 
 #:
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:25
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:25
 msgid "a new instance of MigrationGenerator"
 msgstr ""
 
 #:
-#: ./lib/rails/generators/active_groonga/migration/migration_generator.rb:37
+#: ../../lib/rails/generators/active_groonga/migration/migration_generator.rb:37
 msgid "Returns the value of attribute migration_action"
 msgstr ""
 
-#: ./lib/rails/generators/active_groonga/model/model_generator.rb:33
+#:
+#: ../../lib/rails/generators/active_groonga/model/model_generator.rb:33
 msgid "a new instance of ModelGenerator"
 msgstr ""
