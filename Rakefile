@@ -44,8 +44,9 @@ Packnga::DocumentTask.new(spec) do |task|
   task.translate_languages = ["ja"]
 end
 
+ranguba_org_dir = Dir.glob("{..,../../www}/ranguba.org").first
 Packnga::ReleaseTask.new(spec) do |task|
-  task.index_html_dir = "../rroonga/doc/html"
+  task.index_html_dir = ranguba_org_dir
 end
 
 task :test do
