@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ActiveGroonga 1.0.5\n"
 "POT-Creation-Date: 2011-11-20 22:17+0900\n"
-"PO-Revision-Date: 2013-03-18 22:00+0900\n"
+"PO-Revision-Date: 2013-08-29 11:25+0900\n"
 "Last-Translator: Kouhei Sutou <kou@claer-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -901,6 +901,8 @@ msgid ""
 "* [GitHub#9] Supported Rails 4.0.0. Rails < 4 support is dropped.\n"
 "  [Reported by Eito Katagiri]"
 msgstr ""
+"* [GitHub#9] Rails 4.0.0をサポート。Rails 4.0.0以前のサポートは終了した。\n"
+"  [Eito Katagiriさんが報告]"
 
 #: ../../doc/text/news.textile:10 ../../doc/text/news.textile:27
 #: ../../doc/text/news.textile:39 ../../doc/text/news.textile:59
@@ -909,7 +911,7 @@ msgstr "h3. 感謝"
 
 #: ../../doc/text/news.textile:12
 msgid "* Eito Katagiri"
-msgstr ""
+msgstr "* Eito Katagiriさん"
 
 #: ../../doc/text/news.textile:14
 msgid "h2(#2-1-4). 2.1.4: 2013-03-18"
