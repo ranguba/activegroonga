@@ -1,4 +1,4 @@
-# Copyright (C) 2009  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2013  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -13,10 +13,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require 'fileutils'
-require 'pathname'
+require "fileutils"
+require "pathname"
 
-require 'active_groonga'
+require "active_groonga"
 
 module ActiveGroongaTestUtils
   class << self
@@ -255,11 +255,11 @@ module ActiveGroongaTestUtils
       remove_const(:Site) if const_defined?(:Site)
       remove_const(:Page) if const_defined?(:Page)
     end
-    load((base_dir + 'user.rb').to_s)
-    load((base_dir + 'bookmark.rb').to_s)
-    load((base_dir + 'task.rb').to_s)
-    load((base_dir + 'site.rb').to_s)
-    load((base_dir + 'page.rb').to_s)
+    load((base_dir + "user.rb").to_s)
+    load((base_dir + "bookmark.rb").to_s)
+    load((base_dir + "task.rb").to_s)
+    load((base_dir + "site.rb").to_s)
+    load((base_dir + "page.rb").to_s)
   end
 
   def teardown_sand_box
