@@ -27,24 +27,8 @@ require "test/unit/notify"
 
 base_dir = Pathname(__FILE__).dirname.parent.expand_path
 
-rroonga_dir = base_dir.parent + "rroonga"
 lib_dir = base_dir + "lib"
 test_dir = base_dir + "test"
-
-if rroonga_dir.exist?
-  make = nil
-  if system("which gmake > /dev/null")
-    make = "gmake"
-  elsif system("which make > /dev/null")
-    make = "make"
-  end
-  if make
-    escaped_rroonga_dir = Shellwords.escape(rroonga_dir.to_s)
-    system("cd #{escaped_rroonga_dir} && #{make} > /dev/null") or exit(false)
-  end
-  $LOAD_PATH.unshift(rroonga_dir + "ext" + "groonga")
-  $LOAD_PATH.unshift(rroonga_dir + "lib")
-end
 
 ENV["TEST_UNIT_MAX_DIFF_TARGET_STRING_SIZE"] = "10000"
 
