@@ -1,5 +1,16 @@
 h1. NEWS
 
+h2(#4-0-0). 4.0.0: 2013-08-29
+
+h3. Improvements
+
+* [GitHub#9] Supported Rails 4.0.0. Rails < 4 support is dropped.
+  [Reported by Eito Katagiri]
+
+h3. Thanks
+
+* Eito Katagiri
+
 h2(#2-1-4). 2.1.4: 2013-03-18
 
 h3. Fixes
