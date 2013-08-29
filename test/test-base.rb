@@ -47,6 +47,16 @@ class TestBase < Test::Unit::TestCase
     assert_equal("send mails", send_mail.name)
   end
 
+  def test_create_with_block
+    yahoo_japan = Site.new do |s|
+      s.key = 'http://www.yahoo.co.jp/'
+      s.title = 'Yahoo! Japan'
+      s.score = 5
+    end
+    assert_not_nil(yahoo_japan.key)
+    assert_true(yahoo_japan.save)
+  end
+
   def test_update
     groonga_id = @bookmark_records[:groonga].id
     groonga = Bookmark.find(groonga_id)
