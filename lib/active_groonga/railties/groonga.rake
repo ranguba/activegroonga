@@ -86,6 +86,30 @@ namespace :groonga do
       migrator.migrate(version)
       Rake::Task["groonga:schema:dump"].invoke
     end
+
+    desc "Display status of migration"
+    task :status => [:environment, "groonga:load_config"] do
+      schema_table = ActiveGroonga::Migrator.new(:up, migrations_path.call).management_table
+      db_list = schema_table.migrated_versions
+      db_list.map! { |version| "%.3d" % version }
+      file_list = []
+      Dir.foreach(migrations_path.call).each do |path|
+        if /([0-9]+)_([_a-z0-9]+)\.rb/ =~ path
+          status = db_list.delete($1) ? "up" : "down"
+          file_list << [status, $1, $2.humanize]
+        end
+      end
+      db_list.map! do |version|
+        ["up", version, "********** NO FILE **********"]
+      end
+      puts "\n"
+      puts "#{'Status'.center(8)}  #{'Migration ID'.ljust(14)}  Migration Name"
+      puts "-" * 50
+      (db_list + file_list).sort_by {|migration| migration[1]}.each do |migration|
+        puts "#{migration[0].center(8)}  #{migration[1].ljust(14)}  #{migration[2]}"
+      end
+      puts
+    end
   end
 
   namespace :schema do
