@@ -18,3 +18,8 @@
 source "https://rubygems.org"
 
 gemspec
+
+if ENV["USE_RROONGA_GITHUB_REPO"]
+  puts ENV["USE_RRONGA_GITHUB_REPO"]
+  gem 'rroonga', github: ENV["USE_RROONGA_GITHUB_REPO"]
+end
