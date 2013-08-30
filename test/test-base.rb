@@ -49,9 +49,9 @@ class TestBase < Test::Unit::TestCase
 
   def test_new_with_block
     yahoo_japan = Site.new do |s|
-      s.key = 'http://www.yahoo.co.jp/'
+      s.key = "http://www.yahoo.co.jp/"
     end
-    assert_equal('http://www.yahoo.co.jp/', yahoo_japan.key)
+    assert_equal("http://www.yahoo.co.jp/", yahoo_japan.key)
   end
 
   def test_update
