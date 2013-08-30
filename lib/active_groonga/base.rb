@@ -95,8 +95,7 @@ module ActiveGroonga
             create(nested_attributes, &block)
           end
         else
-          object = new(attributes)
-          yield(object) if block_given?
+          object = new(attributes, &block)
           object.save
           object
         end
@@ -272,6 +271,7 @@ module ActiveGroonga
         reload_attributes
         self.attributes = (record_or_attributes || {})
       end
+      yield self if block_given?
     end
 
     def have_column?(name)
