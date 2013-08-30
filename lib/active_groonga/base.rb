@@ -271,7 +271,7 @@ module ActiveGroonga
         reload_attributes
         self.attributes = (record_or_attributes || {})
       end
-      yield self if block_given?
+      yield(self) if block_given?
     end
 
     def have_column?(name)
