@@ -47,14 +47,11 @@ class TestBase < Test::Unit::TestCase
     assert_equal("send mails", send_mail.name)
   end
 
-  def test_create_with_block
+  def test_new_with_block
     yahoo_japan = Site.new do |s|
       s.key = 'http://www.yahoo.co.jp/'
-      s.title = 'Yahoo! Japan'
-      s.score = 5
     end
-    assert_not_nil(yahoo_japan.key)
-    assert_true(yahoo_japan.save)
+    assert_equal('http://www.yahoo.co.jp/', yahoo_japan.key)
   end
 
   def test_update
