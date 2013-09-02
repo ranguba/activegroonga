@@ -141,6 +141,16 @@ class TestResultSet < Test::Unit::TestCase
     end
   end
 
+  class TestEach < self
+    def test_records_of_hash_without_score
+      groonga = Site.create(:key => "http://groonga.org/",
+                            :title => "groonga")
+      Page.create(:key => "http://groonga.org/doc/",
+                  :site => groonga)
+      assert_nothing_raised { Page.select.each { |r| r } }
+    end
+  end
+
   class TestEmpty < self
     def test_have_records
       all_bookmarks = Bookmark.all
