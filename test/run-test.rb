@@ -32,7 +32,7 @@ test_dir = base_dir + "test"
 
 rroonga_dir = base_dir.parent + "rroonga"
 rroonga_makefile = rroonga_dir + "Makefile"
-if rroonga_dir.exist? && rroonga_makefile.exist?
+if rroonga_makefile.exist?
   make = nil
   if system("which gmake > /dev/null")
     make = "gmake"
