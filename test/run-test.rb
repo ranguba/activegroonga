@@ -27,12 +27,11 @@ require "test/unit/notify"
 
 base_dir = Pathname(__FILE__).dirname.parent.expand_path
 
-rroonga_dir = base_dir.parent + "rroonga"
 lib_dir = base_dir + "lib"
 test_dir = base_dir + "test"
 
+rroonga_dir = base_dir.parent + "rroonga"
 rroonga_makefile = rroonga_dir + "Makefile"
-
 if rroonga_dir.exist? && rroonga_makefile.exist?
   make = nil
   if system("which gmake > /dev/null")
