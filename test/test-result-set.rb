@@ -148,7 +148,12 @@ class TestResultSet < Test::Unit::TestCase
                               :title => "groonga")
         Page.create(:key => "http://groonga.org/doc/",
                     :site => groonga)
-        assert_nothing_raised {Page.select.each {|r| r}}
+        sites = Page.all.collect do |page|
+          site = page.site
+          [site, site.score]
+        end
+        assert_equal([[groonga, nil]],
+                     sites)
       end
     end
   end
