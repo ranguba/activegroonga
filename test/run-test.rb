@@ -31,7 +31,7 @@ rroonga_dir = base_dir.parent + "rroonga"
 lib_dir = base_dir + "lib"
 test_dir = base_dir + "test"
 
-rroonga_makefile = rroonga_dir.join("Makefile")
+rroonga_makefile = rroonga_dir + "Makefile"
 
 if rroonga_dir.exist? && rroonga_makefile.exist?
   make = nil
