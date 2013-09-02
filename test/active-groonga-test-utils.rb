@@ -89,8 +89,7 @@ module ActiveGroongaTestUtils
   def setup_users_table
     @users_path = @tables_dir + "users"
     @users = Groonga::Array.create(:name => "users",
-                                   :path => @users_path.to_s,
-                                   :sub_records => true)
+                                   :path => @users_path.to_s)
 
     columns_dir = @tables_dir + "users.columns"
     columns_dir.mkpath
@@ -103,8 +102,7 @@ module ActiveGroongaTestUtils
   def setup_bookmarks_table
     @bookmarks_path = @tables_dir + "bookmarks"
     @bookmarks = Groonga::Array.create(:name => "bookmarks",
-                                       :path => @bookmarks_path.to_s,
-                                       :sub_records => true)
+                                       :path => @bookmarks_path.to_s)
 
     columns_dir = @tables_dir + "bookmarks.columns"
     columns_dir.mkpath
@@ -175,8 +173,7 @@ module ActiveGroongaTestUtils
   def setup_tasks_table
     @tasks_path = @tables_dir + "tasks"
     @tasks = Groonga::Array.create(:name => "tasks",
-                                   :path => @tasks_path.to_s,
-                                   :sub_records => true)
+                                   :path => @tasks_path.to_s)
 
     columns_dir = @tables_dir + "tasks.columns"
     columns_dir.mkpath
