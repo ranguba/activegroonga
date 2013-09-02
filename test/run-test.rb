@@ -31,9 +31,9 @@ rroonga_dir = base_dir.parent + "rroonga"
 lib_dir = base_dir + "lib"
 test_dir = base_dir + "test"
 
-makefile = rroonga_dir.join("Makefile")
+rroonga_makefile = rroonga_dir.join("Makefile")
 
-if rroonga_dir.exist? && makefile.exist?
+if rroonga_dir.exist? && rroonga_makefile.exist?
   make = nil
   if system("which gmake > /dev/null")
     make = "gmake"
