@@ -143,7 +143,7 @@ class TestResultSet < Test::Unit::TestCase
 
   class TestEach < self
     class TestNoScore < self
-      def test_records_of_hash_without_score
+      def test_have_key_table
         groonga = Site.create(:key => "http://groonga.org/",
                               :title => "groonga")
         Page.create(:key => "http://groonga.org/doc/",
