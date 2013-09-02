@@ -15,7 +15,7 @@ alternative of ActiveRecord + RDB.
 ActiveGroonga is based on rroonga. See the following URLs
 about rroonga and groonga.
 
-* "rroonga":http://groonga.rubyforge.org/
+* "rroonga":http://ranguba.org/
 * "groonga":http://groonga.org/
 
 h2. Authors
@@ -42,8 +42,8 @@ h2. Install
 
 h2. Documents
 
-* "Reference manual in English":http://groonga.rubyforge.org/rroonga/en/
-* "Reference manual in Japanese":http://groonga.rubyforge.org/rroonga/ja/
+* "Reference manual in English":http://ranguba.org/activegroonga/en/
+* "Reference manual in Japanese":http://ranguba.org/activegroonga/ja/
 
 h2. Mailing list
 
