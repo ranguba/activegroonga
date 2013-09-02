@@ -155,6 +155,25 @@ class TestResultSet < Test::Unit::TestCase
         assert_equal([[groonga, nil]],
                      sites)
       end
+
+      def test_no_key_table
+        expected_users = @bookmark_records.collect do |key, bookmark|
+          user = bookmark.user
+          score = nil
+          score = user.score if user.support_score?
+          [user.name, score]
+        end
+        actual_users = Bookmark.all.collect do |bookmark|
+          user = bookmark.user
+          [user.name, user.score]
+        end
+
+        sort_key = lambda do |(name, _)|
+          name
+        end
+        assert_equal(expected_users.sort_by(&sort_key),
+                     actual_users.sort_by(&sort_key))
+      end
     end
   end
 
