@@ -136,8 +136,8 @@ ActiveGroonga::Schema.define(:version => 0) do |schema|
     end
 
     change_table("terms") do |table|
-      table.index("bookmarks", "comment", :name => "bookmarks_comment")
-      table.index("bookmarks", "content", :name => "bookmarks_content")
+      table.index("bookmarks", "comment", :name => "bookmarks_comment", :with_position => true)
+      table.index("bookmarks", "content", :name => "bookmarks_content", :with_position => true)
     end
   end
 end
