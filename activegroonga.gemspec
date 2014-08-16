@@ -27,7 +27,6 @@ end
 Gem::Specification.new do |spec|
   spec.name = "activegroonga"
   spec.version = ActiveGroonga::VERSION::STRING.dup
-  spec.rubyforge_project = "groonga"
   spec.homepage = "http://ranguba.org/#about-active-groonga"
   spec.authors = ["Kouhei Sutou"]
   spec.email = ["kou@clear-code.com"]
