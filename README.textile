@@ -12,10 +12,10 @@ Groonga provides both of full text search and column store
 features. ActiveGroonga + Groonga can be used as an
 alternative of ActiveRecord + RDB.
 
-ActiveGroonga is based on rroonga. See the following URLs
-about rroonga and Groonga.
+ActiveGroonga is based on Rroonga. See the following URLs
+about Rroonga and Groonga.
 
-* "rroonga":http://ranguba.org/
+* "Rroonga":http://ranguba.org/
 * "Groonga":http://groonga.org/
 
 h2. Authors
@@ -31,7 +31,7 @@ contributed patches.)
 
 h2. Dependencies
 
-* rroonga
+* Rroonga
 
 h2. Install
 
