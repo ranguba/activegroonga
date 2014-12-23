@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ActiveGroonga 1.0.5\n"
-"PO-Revision-Date: 2013-08-29 11:25+0900\n"
+"PO-Revision-Date: 2014-12-23 11:47+0900\n"
 "Last-Translator: Kouhei Sutou <kou@claer-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -22,24 +22,21 @@ msgstr ""
 msgid "h2. Description"
 msgstr "h2. 説明"
 
-#, fuzzy
 msgid "A library to use Groonga with ActiveRecord like API."
-msgstr "ActiveRecord風のAPIを使ってgroongaを使うためのライブラリです。"
+msgstr "ActiveRecord風のAPIを使ってGroongaを使うためのライブラリです。"
 
-#, fuzzy
 msgid ""
 "Groonga provides both of full text search and column store\n"
 "features. ActiveGroonga + Groonga can be used as an\n"
 "alternative of ActiveRecord + RDB."
 msgstr ""
-"groongaは全文検索機能とカラムストアの機能を提供しています。ActiveRecordとRDBの組み合わせの代わりに、ActiveGroongaとgro"
+"Groongaは全文検索機能とカラムストアの機能を提供しています。ActiveRecordとRDBの組み合わせの代わりに、ActiveGroongaとGro"
 "ongaの組み合わせを使うことができます。"
 
-#, fuzzy
 msgid ""
 "ActiveGroonga is based on Rroonga. See the following URLs\n"
 "about Rroonga and Groonga."
-msgstr "rroongaをベースとしています。rroongaとgroongaに関する情報は以下を参照して下さい。"
+msgstr "Rroongaをベースとしています。RroongaとGroongaに関する情報は以下を参照して下さい。"
 
 msgid ""
 "* \"Rroonga\":http://ranguba.org/\n"
@@ -82,26 +79,24 @@ msgstr ""
 msgid "h2. Documents"
 msgstr "h2. ドキュメント"
 
-#, fuzzy
 msgid ""
 "* \"Reference manual in English\":http://ranguba.org/activegroonga/en/\n"
 "* \"Reference manual in Japanese\":http://ranguba.org/activegroonga/ja/"
 msgstr ""
-"* \"英語\":http://groonga.rubyforge.org/rroonga/en/\n"
-"* \"日本語\":http://groonga.rubyforge.org/rroonga/ja/"
+"* \"英語\":http://ranguba.org/activegroonga/en/\n"
+"* \"日本語\":http://ranguba.org/activegroonga/ja/"
 
 msgid "h2. Mailing list"
 msgstr "h2. メーリングリスト"
 
-#, fuzzy
 msgid ""
 "* English: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groong"
 "a-talk\n"
 "* Japanese: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga"
 "-dev"
 msgstr ""
-"* 英語: \"groonga-users-en\":http://rubyforge.org/mailman/listinfo/groonga-users-e"
-"n\n"
+"* 英語: \"groonga-talk\":http://lists.sourceforge.net/mailman/listinfo/groonga-tal"
+"k\n"
 "* 日本語: \"groonga-dev\":http://lists.sourceforge.jp/mailman/listinfo/groonga-dev"
 
 msgid "h2. Thanks"
@@ -821,11 +816,12 @@ msgstr ""
 msgid "h3. Thanks"
 msgstr "h3. 感謝"
 
-#, fuzzy
 msgid ""
 "* Eito Katagiri\n"
 "* niku"
-msgstr "* Eito Katagiriさん"
+msgstr ""
+"* Eito Katagiriさん\n"
+"* nikuさん"
 
 msgid "h2(#4-0-0). 4.0.0: 2013-08-29"
 msgstr ""
