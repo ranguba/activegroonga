@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -104,7 +104,9 @@ module ActiveGroonga
       else
         record = table.add(attributes)
       end
-      record["created_at"] = Time.now if record.have_column?("created_at")
+      current_time = Time.now
+      record["created_at"] = current_time if record.have_column?("created_at")
+      record["updated_at"] = current_time if record.have_column?("updated_at")
       reload_attributes(record)
       @id = record.id
       @key = record.key if record.support_key?

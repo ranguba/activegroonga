@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2010  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -200,7 +200,7 @@ class TestBase < Test::Unit::TestCase
     google = Bookmark.create("uri" => "http://google.com/",
                              "comment" => "a search engine")
     assert_not_equal(Time.at(0), google.created_at)
-    assert_equal(Time.at(0), google.updated_at)
+    assert_not_equal(Time.at(0), google.updated_at)
   end
 
   def test_reload
