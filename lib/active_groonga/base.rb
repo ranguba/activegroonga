@@ -135,7 +135,8 @@ module ActiveGroonga
         records = table.select do |record|
           yield(record)
         end
-        create_result_set(records, :expression => records.expression)
+        create_result_set(records,
+                          options.merge(:expression => records.expression))
       end
 
       def all(options={})
