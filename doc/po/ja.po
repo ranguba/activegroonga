@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ActiveGroonga 1.0.5\n"
-"PO-Revision-Date: 2014-12-23 11:47+0900\n"
+"PO-Revision-Date: 2014-12-23 11:50+0900\n"
 "Last-Translator: Kouhei Sutou <kou@claer-code.com>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -1175,7 +1175,6 @@ msgid ""
 "key is an array of sort key column name and order."
 msgstr ""
 
-#, fuzzy
 msgid "paginated result set."
 msgstr "結果セットをページネーションします。"
 
@@ -1225,13 +1224,11 @@ msgid ""
 "                    :offset => 4)"
 msgstr ""
 
-#, fuzzy
 msgid ""
 "The array of sort key for sort. Each sort\n"
 "key is an array of sort key column name and order."
 msgstr "ソートキーの配列。各ソートキーは配列で、中身はソートに使うカラムの名前と昇順か降順の指定。"
 
-#, fuzzy
 msgid "sorted result set."
 msgstr "結果セットをソートします。"
 
