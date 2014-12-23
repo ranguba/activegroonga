@@ -5,7 +5,7 @@ h2(#4-2-0). 4.2.0: 2014-12-23
 h3. Improvements
 
 * Supported Rails 4.2.0.
-* [GitHub#11] Supported yielding block on {ActiveGroonga::Base.new}.
+* [GitHub#11] Supported yielding block on {ActiveGroonga::Base#initialize}.
   [Patch by Eito Katagiri]
 * [GitHub#13][development] Reduced needless @make@ on testing.
   [Patch by Eito Katagiri]
@@ -19,7 +19,7 @@ h3. Fixes
   [Patch by Eito Katagiri]
 * [GitHub#15] Fixed a bug that @Groonga::NoSuchColumn@ is raised when
   iterating {ActiveGroonga::ResultSet} that is created with
-  {ActiveGroonga::Base#select} of @Groonga::Hash@ table.
+  {ActiveGroonga::Base.select} of @Groonga::Hash@ table.
   [Patch by Eito Katagiri]
 * [GitHub#16] Fixed indentation in generated migration file.
   [Patch by Eito Katagiri]
