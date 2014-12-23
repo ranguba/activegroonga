@@ -1,5 +1,36 @@
 h1. NEWS
 
+h2(#4-2-0). 4.2.0: 2014-12-23
+
+h3. Improvements
+
+* Supported Rails 4.2.0.
+* [GitHub#11] Supported yielding block on {ActiveGroonga::Base.new}.
+  [Patch by Eito Katagiri]
+* [GitHub#13][development] Reduced needless @make@ on testing.
+  [Patch by Eito Katagiri]
+* [GitHub#17] Added @groonga:migrate:status@ task that is similar to
+  @db:migrate:status@ task.
+  [Patch by Eito Katagiri]
+
+h3. Fixes
+
+* [GitHub#14] Fixed URL in document.
+  [Patch by Eito Katagiri]
+* [GitHub#15] Fixed a bug that @Groonga::NoSuchColumn@ is raised when
+  iterating {ActiveGroonga::ResultSet} that is created with
+  {ActiveGroonga::Base#select} of @Groonga::Hash@ table.
+  [Patch by Eito Katagiri]
+* [GitHub#16] Fixed indentation in generated migration file.
+  [Patch by Eito Katagiri]
+* Fixed a bug that @updated_at@ isn't updated on creating a record.
+  [Reported by niku]
+
+h3. Thanks
+
+* Eito Katagiri
+* niku
+
 h2(#4-0-0). 4.0.0: 2013-08-29
 
 h3. Improvements
