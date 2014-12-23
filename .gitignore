@@ -5,4 +5,5 @@
 /Gemfile.lock
 /.yardoc/
 /doc/po/*.pot
+/doc/po/*/
 /test/tmp
