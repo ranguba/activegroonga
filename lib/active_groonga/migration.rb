@@ -70,6 +70,17 @@ module ActiveGroonga
       puts("== #{text} #{'=' * rest_length}")
     end
 
+    def root_directory
+      case
+      when defined? Rails
+        Rails.root
+      when defined? Padrino
+        Padrino.root
+      else
+        Pathname.pwd
+      end
+    end
+
     def method_missing(name, *args, &block)
       if @schema.respond_to?(name)
         @schema.send(name, *args, &block)
