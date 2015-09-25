@@ -64,7 +64,7 @@ module ActiveGroonga
 
     private
     def report(message)
-      relative_path = @path.relative_path_from(Rails.root)
+      relative_path = @path.relative_path_from(root_directory)
       text = "#{@version} #{name} (#{relative_path}): #{message}"
       rest_length = [0, 75 - text.length].max
       puts("== #{text} #{'=' * rest_length}")
