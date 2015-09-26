@@ -64,10 +64,21 @@ module ActiveGroonga
 
     private
     def report(message)
-      relative_path = @path.relative_path_from(Rails.root)
+      relative_path = @path.relative_path_from(root_directory)
       text = "#{@version} #{name} (#{relative_path}): #{message}"
       rest_length = [0, 75 - text.length].max
       puts("== #{text} #{'=' * rest_length}")
+    end
+
+    def root_directory
+      case
+      when defined? Rails
+        Rails.root
+      when defined? Padrino
+        Padrino.root
+      else
+        Pathname.pwd
+      end
     end
 
     def method_missing(name, *args, &block)
