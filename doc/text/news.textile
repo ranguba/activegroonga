@@ -1,5 +1,16 @@
 h1. NEWS
 
+h2(#4-2-1). 4.2.1: 2015-09-26
+
+h3. Improvements
+
+* [GitHub#18] Supported non Rails environment such as Padrino.
+  [Patch by KITAITI Makoto]
+
+h3. Thanks
+
+* KITAITI Makoto
+
 h2(#4-2-0). 4.2.0: 2014-12-23
 
 h3. Improvements
