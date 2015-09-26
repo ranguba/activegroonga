@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2015  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -17,7 +17,7 @@ module ActiveGroonga
   module VERSION
     MAJOR = 4
     MINOR = 2
-    TINY  = 1
+    TINY  = 2
 
     STRING = [MAJOR, MINOR, TINY].join(".")
   end
