@@ -71,10 +71,9 @@ module ActiveGroonga
     end
 
     def root_directory
-      case
-      when defined? Rails
+      if defined?(Rails)
         Rails.root
-      when defined? Padrino
+      elsif defined?(Padrino)
         Padrino.root
       else
         Pathname.pwd
