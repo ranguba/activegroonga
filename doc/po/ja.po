@@ -780,11 +780,25 @@ msgstr ""
 msgid "h1. NEWS"
 msgstr ""
 
-msgid "h2(#4-2-0). 4.2.0: 2014-12-23"
+msgid "h2(#4-2-1). 4.2.1: 2015-09-26"
 msgstr ""
 
 msgid "h3. Improvements"
 msgstr "h3. 改良"
+
+msgid ""
+"* [GitHub#18] Supported non Rails environment such as Padrino.\n"
+"  [Patch by KITAITI Makoto]"
+msgstr ""
+
+msgid "h3. Thanks"
+msgstr "h3. 感謝"
+
+msgid "* KITAITI Makoto"
+msgstr ""
+
+msgid "h2(#4-2-0). 4.2.0: 2014-12-23"
+msgstr ""
 
 msgid ""
 "* Supported Rails 4.2.0.\n"
@@ -812,9 +826,6 @@ msgid ""
 "* Fixed a bug that @updated_at@ isn't updated on creating a record.\n"
 "  [Reported by niku]"
 msgstr ""
-
-msgid "h3. Thanks"
-msgstr "h3. 感謝"
 
 msgid ""
 "* Eito Katagiri\n"
