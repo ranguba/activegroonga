@@ -2,9 +2,7 @@ notifications:
   recipients:
     - groonga-commit@lists.sourceforge.jp
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1
-  - 2.2
+  - 2.4.4
+  - 2.5.1
 before_install:
   - curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
