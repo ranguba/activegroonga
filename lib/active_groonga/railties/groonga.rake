@@ -21,6 +21,7 @@ namespace :groonga do
     configurations = Rails.application.config.groonga_configurations
     ActiveGroonga::Base.configurations = configurations
     ActiveGroonga::Base.configure(Rails.env)
+    ActiveGroonga::Base.database.ensure_available
   end
 
   desc "Drops the database."
