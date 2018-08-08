@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2013  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2010-2018  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -32,8 +32,8 @@ class TestPersistence < Test::Unit::TestCase
 
   class TestCreate < self
     def test_hash
-      groonga = Site.create(:key => "http://groonga.org/",
-                            :title => "groonga")
+      Site.create(:key => "http://groonga.org/",
+                  :title => "groonga")
       found_groonga = Site.find("http://groonga.org/")
       assert_equal(["http://groonga.org/", "groonga"],
                    [found_groonga.key, found_groonga.title])
@@ -43,8 +43,8 @@ class TestPersistence < Test::Unit::TestCase
       def test_have_key
         groonga = Site.create(:key => "http://groonga.org/",
                               :title => "groonga")
-        doc = Page.create(:key => "http://groonga.org/doc/",
-                          :site => groonga)
+        Page.create(:key => "http://groonga.org/doc/",
+                    :site => groonga)
         found_doc = Page.find("http://groonga.org/doc/")
         assert_equal(groonga.key, found_doc.site.key)
       end

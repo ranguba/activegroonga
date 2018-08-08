@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2014  Kouhei Sutou <kou@clear-code.com>
+# Copyright (C) 2009-2018  Kouhei Sutou <kou@clear-code.com>
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -43,7 +43,7 @@ class TestBase < Test::Unit::TestCase
     assert_true(send_mail.save)
     assert_not_nil(send_mail.id)
 
-    reloaded_send_mail = Task.find(send_mail.id)
+    _reloaded_send_mail = Task.find(send_mail.id)
     assert_equal("send mails", send_mail.name)
   end
 
