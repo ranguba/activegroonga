@@ -18,7 +18,7 @@ module ActiveGroonga
     include Rake::DSL
 
     def initialize
-      @migration_path = Rails.root + "db" + "groonga" + "migrate"
+      @migrations_path = Rails.root + "db" + "groonga" + "migrate"
       schema_path = ENV["SCHEMA"]
       schema_path ||= Rails.root + "db" + "groonga" + "schema.rb"
       @schema_path = Pathname.new(schema_path)
@@ -73,7 +73,7 @@ module ActiveGroonga
       desc "Migrate the database (options: VERSION=x)."
       task :migrate => :environment do
         version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
-        migrator = Migrator.new(:up, migrations_path.call)
+        migrator = Migrator.new(:up, @migrations_path)
         migrator.migrate(version)
         Rake::Task["groonga:schema:dump"].invoke
       end
@@ -83,7 +83,7 @@ module ActiveGroonga
       desc 'Rolls the schema back to the previous version (specify steps w/ STEP=n).'
       task :rollback => :environment do
         step = ENV['STEP'] ? ENV['STEP'].to_i : 1
-        migrator = Migrator.new(:down, migrations_path.call)
+        migrator = Migrator.new(:down, @migrations_path)
         version, migrated_at = migrator.migrated_versions[-step]
         migrator.migrate(version)
         Rake::Task["groonga:schema:dump"].invoke
@@ -117,7 +117,7 @@ module ActiveGroonga
       task :up => :environment do
         version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
         raise "VERSION is required" unless version
-        migrator = Migrator.new(:up, migrations_path.call)
+        migrator = Migrator.new(:up, @migrations_path)
         migrator.migrate(version)
         Rake::Task["groonga:schema:dump"].invoke
       end
@@ -128,7 +128,7 @@ module ActiveGroonga
       task :down => :environment do
         version = ENV["VERSION"] ? ENV["VERSION"].to_i : nil
         raise "VERSION is required" unless version
-        migrator = Migrator.new(:down, migrations_path.call)
+        migrator = Migrator.new(:down, @migrations_path)
         migrator.migrate(version)
         Rake::Task["groonga:schema:dump"].invoke
       end
@@ -137,11 +137,11 @@ module ActiveGroonga
     def define_migrate_status_task
       desc "Display status of migration"
       task :status => [:environment, "groonga:load_config"] do
-        schema_table = Migrator.new(:up, migrations_path.call).management_table
+        schema_table = Migrator.new(:up, @migrations_path).management_table
         db_list = schema_table.migrated_versions
         db_list.collect! {|version| "%.3d" % version}
         file_list = []
-        Dir.foreach(migrations_path.call).each do |path|
+        Dir.foreach(@migrations_path).each do |path|
           if /([0-9]+)_([_a-z0-9]+)\.rb/ =~ path
             status = db_list.delete($1) ? "up" : "down"
             file_list << [status, $1, $2.humanize]
