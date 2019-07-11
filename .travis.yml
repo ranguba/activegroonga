@@ -1,8 +1,13 @@
 notifications:
-  recipients:
-    - groonga-commit@lists.sourceforge.jp
-rvm:
-  - 2.4.4
-  - 2.5.1
+  webhooks:
+    - https://webhook.commit-email.info/
+matrix:
+  include:
+    - name: "Ruby 2.4"
+      rvm: 2.4
+    - name: "Ruby 2.5"
+      rvm: 2.5
+    - name: "Ruby 2.6"
+      rvm: 2.6
 before_install:
   - curl --silent --location https://github.com/groonga/groonga/raw/master/data/travis/setup.sh | sh
