@@ -56,9 +56,6 @@ module ActiveGroonga
       task :drop => :load_config do
         database = Base.database
         database.remove if database
-        database_path = Base.database_path
-        tables_path = Pathname.new("#{database_path}.tables")
-        rm_rf(tables_path) if tables_path.exist?
       end
     end
 
